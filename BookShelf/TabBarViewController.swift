@@ -6,7 +6,6 @@
 //
 
 import UIKit
-//importはひとつ記入すればいいの？
 import PinLayout
 import XLPagerTabStrip
 
@@ -36,6 +35,7 @@ class TabBarViewController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(BarcodeKandokuUpdate), name: Notification.Name("BarcodeKandokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(BarcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ManualInputData), name: Notification.Name("ManualInput"), object: nil)
+        selectedIndex = 1
     }
     @objc private func SerchKandokuUpdate(_ notification: Notification) {
         guard let book: Item = notification.userInfo?["serchBook"] as? Item else { return }

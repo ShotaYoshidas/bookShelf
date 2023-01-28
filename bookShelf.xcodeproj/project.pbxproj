@@ -23,6 +23,7 @@
 		6A40178028A935C5002E62C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A40177E28A935C5002E62C0 /* LaunchScreen.storyboard */; };
 		6A40178A28AA27C1002E62C0 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40178928AA27C1002E62C0 /* TabBarViewController.swift */; };
 		6A40178C28AA284A002E62C0 /* BookShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */; };
+		6A43278E29852C3B0057251B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A43278D29852C3B0057251B /* GoogleService-Info.plist */; };
 		6A524FF728DD789600DDEC2A /* BarCodeReaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */; };
 		6A524FFC28DD8AB000DDEC2A /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */; };
 		6A52500128DEB16600DDEC2A /* BookSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A52500028DEB16600DDEC2A /* BookSelectViewController.swift */; };
@@ -53,6 +54,7 @@
 		6A40178128A935C5002E62C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A40178928AA27C1002E62C0 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookShelfViewController.swift; sourceTree = "<group>"; };
+		6A43278D29852C3B0057251B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeReaderModel.swift; sourceTree = "<group>"; };
 		6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
 		6A52500028DEB16600DDEC2A /* BookSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSelectViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				6A40177C28A935C5002E62C0 /* Assets.xcassets */,
 				6A40177E28A935C5002E62C0 /* LaunchScreen.storyboard */,
 				6A40178128A935C5002E62C0 /* Info.plist */,
+				6A43278D29852C3B0057251B /* GoogleService-Info.plist */,
 			);
 			path = BookShelf;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 			files = (
 				6A40178028A935C5002E62C0 /* LaunchScreen.storyboard in Resources */,
 				6A40177D28A935C5002E62C0 /* Assets.xcassets in Resources */,
+				6A43278E29852C3B0057251B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
