@@ -29,7 +29,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         i.layer.shadowOpacity = 0.8
         i.layer.shadowRadius = 0.9
         i.layer.cornerRadius = 0.9
-        i.image = UIImage(named:"006722.smpl.png")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+        i.image = UIImage(named:"bookimage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         return i
     }()
     

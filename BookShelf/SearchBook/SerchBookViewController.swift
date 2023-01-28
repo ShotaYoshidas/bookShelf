@@ -85,7 +85,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)
         // GADBannerViewのプロパティを設定
-        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
 //        テスト：ca-app-pub-3940256099942544/6300978111
 //        本番：ca-app-pub-1273760422540329/1826776892
         bannerView.rootViewController = self

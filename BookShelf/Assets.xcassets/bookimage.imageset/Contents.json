@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "outline_settings_black_36pt_1x.png",
+      "filename" : "playstore.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "outline_settings_black_36pt_2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "outline_settings_black_36pt_3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -19,8 +17,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "template-rendering-intent" : "template"
   }
 }
