@@ -21,8 +21,8 @@ class SettingViewController: UIViewController {
     }()
     var sections = ["アプリについて","その他"]
     var array: [[String]] = [
-        ["アプリについて"],["レビューする","シェアする"]]
-    var cellImage = [["apple.logo"],["ellipsis.bubble","shareplay"]]
+        ["アプリについて"],["レビューする","シェアする","test"]]
+    var cellImage = [["apple.logo"],["ellipsis.bubble","shareplay","apple.logo"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,11 +71,7 @@ extension SettingViewController: UITableViewDelegate,UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 0 && indexPath.section == 0 {
             let ex = ExplanationViewController()
-            
             navigationController?.pushViewController(ex, animated: true)
-        } else if indexPath.row == 1 && indexPath.section == 0 {
-            let dv = DevelopViewController()
-            navigationController?.pushViewController(dv, animated: true)
         } else if indexPath.row == 0 && indexPath.section == 1 {
             SKStoreReviewController.requestReview()
         } else if indexPath.row == 1 && indexPath.section == 1 {
@@ -84,7 +80,13 @@ extension SettingViewController: UITableViewDelegate,UITableViewDataSource {
             activityViewController.popoverPresentationController?.sourceView = self.view
             let screenSize = UIScreen.main.bounds
             activityViewController.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
-        }
+            
+        } else if indexPath.row == 2 && indexPath.section == 1 {
+            let c = CustomViewController()
+            
+            navigationController?.pushViewController(c, animated: true)
+                
+            }
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section]

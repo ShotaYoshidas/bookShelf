@@ -11,6 +11,8 @@ import CoreMedia
 import AVFoundation
 import XLPagerTabStrip
 
+
+
 class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider {
     
     private var layoutType:LayoutType = .list
@@ -21,6 +23,9 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
     func deleteBook(id: String) {
         model.deleteBook(id: id)
     }
+    
+    weak var deleteDelegate: BookShelfModelDeleteDelegate? = nil
+    
     private let model: BookShelfModel = .init()
     private let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -31,7 +36,6 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         cv.backgroundColor = .systemGray6
         return cv
     }()
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,12 +45,16 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
+        
+       
+        
     }
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
     }
+   
     
     @objc private func updateCollectionView1(_ notification: Notification) {
         collectionView.reloadData()
@@ -112,6 +120,8 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        print("model.roadBooks.count\(model.roadBooks.count)")
+//        print("countindexPath.row\(indexPath.row)")
         guard model.roadBooks.count > indexPath.row else { return UICollectionViewCell() }
         
         switch layoutType {
@@ -135,8 +145,22 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
         navigationController?.pushViewController(bs, animated: true)
         bs.delegate = self
         bs.deleteDelegate = self
+        
+        print("aaaaa\(indexPath.row)")
     }
-    
+   
+   
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+        let delete = UIAction(title: "削除", image: UIImage(systemName: "trash")) { action in
+        self.deleteBook(id: self.model.roadBooks[indexPath.row].id)
+                }
+    return UIMenu(title: "Menu", children: [delete])
+            })
+        
+        }
+
+        
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:

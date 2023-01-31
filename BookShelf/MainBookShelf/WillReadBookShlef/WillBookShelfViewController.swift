@@ -135,6 +135,20 @@ extension WillBookShelfViewController: UICollectionViewDataSource, UICollectionV
         navigationController?.pushViewController(bs, animated: true)
     }
     
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+           
+            let move = UIAction(title: "移動", image: UIImage(systemName: "books.vertical.fill")) { action in
+                self.moveBook(id: self.WillModel.willBooks[indexPath.row].id)
+            }
+            let delete = UIAction(title: "削除", image: UIImage(systemName: "trash")) { action in
+                self.deleteBook(id: self.WillModel.willBooks[indexPath.row].id)
+            }
+            return UIMenu(title: "Menu", children: [move,delete])
+        })
+        
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:

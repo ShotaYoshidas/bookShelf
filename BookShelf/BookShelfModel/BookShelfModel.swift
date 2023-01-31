@@ -138,7 +138,9 @@ final class BookShelfModel {
     }
     
     func deleteBook(id: String) {
+        
         let realm = try! Realm()
+        print("11111\(realm.objects(BookObject.self))")
         let deleteBook = realm.objects(BookObject.self).filter({ $0.id == id })
         do{
             try realm.write{
@@ -148,6 +150,7 @@ final class BookShelfModel {
             print("Error \(error)")
         }
         NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        print("11111\(realm.objects(BookObject.self))")
     }
     
     func dateSort() {
