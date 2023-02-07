@@ -21,8 +21,8 @@ class SettingViewController: UIViewController {
     }()
     var sections = ["アプリについて","その他"]
     var array: [[String]] = [
-        ["アプリについて"],["レビューする","シェアする","test"]]
-    var cellImage = [["apple.logo"],["ellipsis.bubble","shareplay","apple.logo"]]
+        ["アプリについて"],["レビューする","シェアする"]]
+    var cellImage = [["apple.logo"],["ellipsis.bubble","shareplay"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,12 +81,8 @@ extension SettingViewController: UITableViewDelegate,UITableViewDataSource {
             let screenSize = UIScreen.main.bounds
             activityViewController.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
             
-        } else if indexPath.row == 2 && indexPath.section == 1 {
-            let c = CustomViewController()
+        }
             
-            navigationController?.pushViewController(c, animated: true)
-                
-            }
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section]

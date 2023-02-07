@@ -26,10 +26,10 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         i.isUserInteractionEnabled = true
         i.layer.shadowColor = UIColor.black.cgColor
         i.layer.masksToBounds = false
-        i.layer.shadowOpacity = 0.8
+        i.layer.shadowOpacity = 0.4
         i.layer.shadowRadius = 0.9
         i.layer.cornerRadius = 0.9
-        i.image = UIImage(named:"bookimage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+        i.image = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         return i
     }()
     

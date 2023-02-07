@@ -10,12 +10,16 @@ import PinLayout
 import CoreMedia
 import AVFoundation
 import XLPagerTabStrip
+import RealmSwift
 
 
-
-class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider {
+class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate {
+    func moveBook(id: String) {
+        model.moveBook(id: id)
+    }
     
-    private var layoutType:LayoutType = .list
+    
+    private var layoutType:LayoutType = .grid
     func updateText(memo: String, id: String) {
         model.updateText(memo: memo, id: id)
     }
@@ -36,7 +40,7 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         cv.backgroundColor = .systemGray6
         return cv
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar15()
@@ -46,7 +50,16 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
         
-       
+//        //ロングタップインスタンスの生成
+//        let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTap(gesture:)))
+//        //viewにtapGestureを追加
+//        collectionView.addGestureRecognizer(longTapGesture)
+//        //デリゲートをセット
+//        longTapGesture.delegate = self
+//        //tap時間
+////        longTapGesture.minimumPressDuration = 2
+//
+        
         
     }
     
@@ -54,7 +67,32 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
     }
-   
+//    @objc func longTap(gesture: UILongPressGestureRecognizer) {
+//        switch gesture.state {
+//        case .began:
+//            //開始認知
+//            guard let selectedIndexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else {
+//                break
+//            }
+//            print("code:began")
+//            collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+//        case .changed:
+//            //アイテムの位置を更新
+//            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view))
+//            print("code:changed")
+//        case .ended:
+//            //終了認知
+//            print("code:ended")
+//            //ターゲット アイテムを新しい場所に移動
+//            collectionView.endInteractiveMovement()
+//
+//        default:
+//            collectionView.cancelInteractiveMovement()
+//            print("code:default")
+//        }
+//
+//    }
+
     
     @objc private func updateCollectionView1(_ notification: Notification) {
         collectionView.reloadData()
@@ -81,7 +119,7 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         return itemInfo
     }
     
-   
+    
     func SerchKandokuUpdate(newBook1: Item) {
         model.SerchKandokuUpdate(newBook1: newBook1)
     }
@@ -120,10 +158,7 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        print("model.roadBooks.count\(model.roadBooks.count)")
-//        print("countindexPath.row\(indexPath.row)")
         guard model.roadBooks.count > indexPath.row else { return UICollectionViewCell() }
-        
         switch layoutType {
         case .list:
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
@@ -131,7 +166,6 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
                 return cell
             }
         case .grid:
-            //新規作CollectionViewCell１
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Gridcell", for: indexPath) as? GridCollectionViewCell {
                 cell.gridConfigure(imageData: model.roadBooks[indexPath.row].imageData)
                 return cell
@@ -140,42 +174,61 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
         return UICollectionViewCell()
     }
     
+    
+    //
+//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        print("yosi\(model.roadBooks)")
+//        print("yosi\(model.roadBooks[sourceIndexPath.row].title)")
+//    let item = model.roadBooks.remove(at: sourceIndexPath.row)
+//            model.roadBooks.insert(item, at: destinationIndexPath.row)
+//        print("yosi\(pokemons.insert(item, at: destinationIndexPath.row))")
+//            }
+   
+        
+    
+    
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bs = BookSelectViewController(titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author, imageData: model.roadBooks[indexPath.row].imageData,id: model.roadBooks[indexPath.row].id,memo:model.roadBooks[indexPath.row].memo,saveTime: model.roadBooks[indexPath.row].saveTime,vc: 1)
         navigationController?.pushViewController(bs, animated: true)
         bs.delegate = self
         bs.deleteDelegate = self
-        
-        print("aaaaa\(indexPath.row)")
+        bs.moveBookDelegate = self
     }
-   
-   
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
-        let delete = UIAction(title: "削除", image: UIImage(systemName: "trash")) { action in
-        self.deleteBook(id: self.model.roadBooks[indexPath.row].id)
+    
+        //longtapと共存できず
+        func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+                let move = UIAction(title: "積読書へ移動", image: UIImage(systemName: "books.vertical")) { action in
+                    self.moveBook(id: self.model.roadBooks[indexPath.row].id)
                 }
-    return UIMenu(title: "Menu", children: [delete])
+                let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"),attributes: .destructive) { action in
+                    self.deleteBook(id: self.model.roadBooks[indexPath.row].id)
+                }
+                return UIMenu(title: "Menu", children: [move,delete])
             })
-        
         }
 
-        
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:
-            return CGSize(width: UIScreen.main.bounds.width * 0.85, height: UIScreen.main.bounds.height * 0.2)
+            return CGSize(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.height * 0.2)
             
         case .grid:
             let w = UIScreen.main.bounds.width / 5
             return CGSize(width: w, height: w * 1.5)
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         UIScreen.main.bounds.width * 0.02
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacing section: Int) -> CGFloat {
         UIScreen.main.bounds.width * 0.02
     }

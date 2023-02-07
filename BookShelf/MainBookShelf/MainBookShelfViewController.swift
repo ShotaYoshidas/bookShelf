@@ -48,6 +48,15 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         let i = UIImage(systemName: "arrow.up.arrow.down")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         return i
     }()
+    
+    let saveImage: UIImage = {
+        let i = UIImage(systemName: "square.and.arrow.down")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+        return i
+    }()
+    
+   
+    
+    
     private let bc: BookShelfViewController = .init()
     private let wbc:WillBookShelfViewController = .init()
     override func viewDidLoad() {
@@ -62,9 +71,11 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         settings.style.selectedBarHeight = 2
         super.viewDidLoad()
         navigationBar15()
-        let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(taped))
+        let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
         let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
+//        let saveLayoutButton = UIBarButtonItem(image: saveImage, style: .plain, target: self, action: #selector(saveLayout))
         self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
+//        self.navigationItem.leftBarButtonItems = [saveLayoutButton]
         view.addSubview(collectionView)
         view.addSubview(scrollView)
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
@@ -82,31 +93,32 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         return [bc, wbc]
     }
+    @objc func saveLayout() {
+        
+    }
     
     @objc func layoutChange(sender: UIButton) {
         NotificationCenter.default.post(name: Notification.Name("layoutChange"), object: nil, userInfo: .none)
         
         switch layoutType {
         case .list:
-            print("list")
             self.layoutType = .grid
-            
-            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(taped))
+            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
             let layoutChangeBarButtonItem = UIBarButtonItem(image: gridImage, style: .plain, target: self, action: #selector(layoutChange))
+//            let saveLayoutButton = UIBarButtonItem(image: saveImage, style: .plain, target: self, action: #selector(saveLayout))
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-           
+//            self.navigationItem.leftBarButtonItems = [saveLayoutButton]
         case .grid:
-            print("gird")
             self.layoutType = .list
-            
-            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(taped))
+            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
             let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
+//            let saveLayoutButton = UIBarButtonItem(image: saveImage, style: .plain, target: self, action: #selector(saveLayout))
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-           
+//            self.navigationItem.leftBarButtonItems = [saveLayoutButton]
         }
         }
         
-    @objc func taped(sender: UIButton) {
+    @objc func sort(sender: UIButton) {
         let alert = UIAlertController(title: .none, message: "並び替え", preferredStyle: .actionSheet)
         alert.popoverPresentationController?.sourceView = self.view
                     let screenSize = UIScreen.main.bounds

@@ -54,7 +54,7 @@ class BookSelectViewController: UIViewController {
         return u
     }()
     
-    var usegeButton1: UIBarButtonItem = {
+    var moveButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
         u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
         return u
@@ -75,7 +75,7 @@ class BookSelectViewController: UIViewController {
     let countLabel: UILabel = {
         let l = UILabel()
         l.backgroundColor = .clear
-        l.textColor = .darkGray
+        l.textColor = .lightGray
         l.font =  UIFont.boldSystemFont(ofSize: 15)
         return l
     }()
@@ -90,16 +90,9 @@ class BookSelectViewController: UIViewController {
                                target: self,//なんかでる(FIXするとビルド時エラー)
                                action: #selector(didTapDoneButton))
     
-    
-    let moveButton: UIButton = {
-        let m = UIButton()
-        m.backgroundColor = .white
-        m.setTitle("完読書へ移動", for: .normal) // ボタンのタイトル
-        m.setTitleColor(UIColor.darkGray, for: .normal) // タイトルの色
-        m.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 15)
-        m.layer.cornerRadius = 10
-        m.addTarget(nil, action: #selector(edit(sender:)), for: .touchUpInside)
-        return m
+    let edit: UIImage = {
+        let i = UIImage(systemName: "ellipsis.circle")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+        return i
     }()
     
     let collectionView: UICollectionView = {
@@ -110,14 +103,14 @@ class BookSelectViewController: UIViewController {
         cv.backgroundColor = .clear
         return cv
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray4
+        view.backgroundColor = .systemGray5
         navigationItem.title  = titleName
         view.addSubview(collectionView)
         view.addSubview(memoTextView)
         view.addSubview(countLabel)
-        view.addSubview(moveButton)
         collectionView.delegate = self
         collectionView.dataSource = self
         toolbar.items = [space, done]
@@ -126,24 +119,18 @@ class BookSelectViewController: UIViewController {
         memoTextView.text = memo
         let commentNum = memoTextView.text.count
         countLabel.text = "文字数：\(commentNum)"
-        usegeButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(taped))
-        self.navigationItem.rightBarButtonItem = usegeButton
+        usegeButton =  UIBarButtonItem(image: edit, style: UIBarButtonItem.Style.done, target: self, action: #selector(taped))
         self.navigationItem.rightBarButtonItems = [usegeButton]
-        if vc == 1{
-            moveButton.isHidden = true
-        } else if vc == 2{
-            moveButton.isHidden = false
-        }
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
     }
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         collectionView.pin.topCenter().width(UIScreen.main.bounds.width).height(UIScreen.main.bounds.height * 0.35)
-        memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.85).height(UIScreen.main.bounds.width * 0.70)
-        countLabel.pin.below(of: memoTextView, aligned: .right).width(UIScreen.main.bounds.width / 4).height(UIScreen.main.bounds.width / 10)
-        moveButton.pin.below(of: memoTextView,aligned: .center).width(UIScreen.main.bounds.width * 0.33).height(UIScreen.main.bounds.width * 0.12).margin(28)
+        memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.95).height(UIScreen.main.bounds.width * 0.70).margin(10)
+        countLabel.pin.below(of: memoTextView, aligned: .left).width(UIScreen.main.bounds.width / 4).sizeToFit(.width).margin(2)
     }
+    
     @objc func didTapDoneButton() {
         memoTextView.resignFirstResponder()
         delegate?.updateText(memo: memoTextView.text,id: id)
@@ -153,40 +140,41 @@ class BookSelectViewController: UIViewController {
     
     
     @objc func taped(sender: UIButton) {
-        let alert = UIAlertController(title: .none, message: "本当に削除しますか？", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .none, message: "Menu", preferredStyle: .actionSheet)
         alert.popoverPresentationController?.sourceView = self.view
-                    let screenSize = UIScreen.main.bounds
-                    alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
-        let delete = UIAlertAction(title: "削除する", style: .default) { [self] (action) in
+        let screenSize = UIScreen.main.bounds
+        alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
+        if vc == 1 {
+            let moveToTumidoku = UIAlertAction(title: "積読書へ移動する", style: .default) { [self] (action) in
+                moveBookDelegate?.moveBook(id: self.id)
+                self.navigationController?.popViewController(animated: false)
+            }
+            
+            alert.addAction(moveToTumidoku)
+        } else {
+            let moveToKandoku = UIAlertAction(title: "完読書へ移動する", style: .default) { [self] (action) in
+                moveBookDelegate?.moveBook(id: self.id)
+                self.navigationController?.popViewController(animated: false)
+            }
+            
+            alert.addAction(moveToKandoku)
+            
+        }
+        let delete = UIAlertAction(title: "削除する", style: .destructive) { [self] (action) in
             deleteDelegate?.deleteBook(id: self.id)
             self.navigationController?.popViewController(animated: false)
         }
+        let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (acrion) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        
         alert.addAction(delete)
-        let cancel = UIAlertAction(title: "やめておく", style: .cancel) { (acrion) in
-            alert.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(cancel)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @objc func edit(sender: UIButton) {
-        let alert = UIAlertController(title: .none, message: "完読書に移動しますか？", preferredStyle: .actionSheet)
-        alert.popoverPresentationController?.sourceView = self.view
-                    let screenSize = UIScreen.main.bounds
-                    alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
-        let move = UIAlertAction(title: "はい", style: .default) { [self] (action) in
-            moveBookDelegate?.moveBook(id: self.id)
-            self.navigationController?.popViewController(animated: false)
-        }
-        alert.addAction(move)
-        let cancel = UIAlertAction(title: "いいえ", style: .cancel) { (acrion) in
-            alert.dismiss(animated: true, completion: nil)
-        }
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
     }
     
 }
+
 extension BookSelectViewController: UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
@@ -201,11 +189,11 @@ extension BookSelectViewController: UICollectionViewDataSource,UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)
+        return CGSize(width: view.frame.size.width * 0.95, height: view.frame.size.height * 0.2)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 10, left: UIScreen.main.bounds.width/2 - 80, bottom: 0, right: UIScreen.main.bounds.width/2 - 80)
+        UIEdgeInsets(top: 25, left: UIScreen.main.bounds.width/2 - 80, bottom: 0, right: UIScreen.main.bounds.width/2 - 80)
     }
     
     

@@ -9,7 +9,7 @@ import UIKit
 import XLPagerTabStrip
 
 class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate {
-    private var layoutType:LayoutType = .list
+    private var layoutType:LayoutType = .grid
     func moveBook(id: String) {
         WillModel.moveBook(id: id)
         
@@ -137,11 +137,10 @@ extension WillBookShelfViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
-           
-            let move = UIAction(title: "移動", image: UIImage(systemName: "books.vertical.fill")) { action in
+            let move = UIAction(title: "完読書へ移動", image: UIImage(systemName: "books.vertical")) { action in
                 self.moveBook(id: self.WillModel.willBooks[indexPath.row].id)
             }
-            let delete = UIAction(title: "削除", image: UIImage(systemName: "trash")) { action in
+            let delete = UIAction(title: "削除", image: UIImage(systemName: "trash"),attributes: .destructive) { action in
                 self.deleteBook(id: self.WillModel.willBooks[indexPath.row].id)
             }
             return UIMenu(title: "Menu", children: [move,delete])
@@ -152,7 +151,7 @@ extension WillBookShelfViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:
-            return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)
+            return CGSize(width: view.frame.size.width * 0.95, height: view.frame.size.height * 0.2)
         case .grid:
             return CGSize(width: (view.frame.size.width - 75) / 4, height: (view.frame.size.width) / 3)
         }

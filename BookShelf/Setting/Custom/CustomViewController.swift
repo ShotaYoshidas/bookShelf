@@ -1,83 +1,105 @@
-//
-//  Custom]ViewController.swift
-//  bookShelf
-//
-//  Created by shota yoshida on 2022/12/30.
-//
-
 import UIKit
-//test用！！！！！！！！！！！！！！！！！！！！！！！
-class CustomViewController: UIViewController {
 
-    
-    let feedbackGenerator = UINotificationFeedbackGenerator()
-    var myCollectionView : UICollectionView!
-    var colors: [UIColor] = []
-    
-       override func viewDidLoad() {
-           super.viewDidLoad()
-           let layout = UICollectionViewFlowLayout()
-                   layout.itemSize = CGSize(width: view.bounds.size.width / 4, height: view.bounds.size.width / 4)
-                   layout.sectionInset = UIEdgeInsets.zero
-                   layout.minimumInteritemSpacing = 0.0
-                   layout.minimumLineSpacing = 0.0
-                   layout.headerReferenceSize = CGSize(width:0,height:0)
-           let collectionFrame = view.bounds
-                   myCollectionView = UICollectionView(frame: collectionFrame, collectionViewLayout: layout)
-                   myCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
-                   myCollectionView.delegate = self
-                   myCollectionView.dataSource = self
-                   view.addSubview(myCollectionView)
-           for _ in 0..<100 {
-                       colors.append(makeColor())
-                   }
-           
-       }
-    override func viewDidLayoutSubviews(){
-        super.viewDidLayoutSubviews()
-        
+struct Pokemon: Equatable {
+let name: String
+let imageName: String
+}
+class CustumCollectionViewCell: UICollectionViewCell {
+lazy var textLabel = UILabel()
+required init(coder aDecoder: NSCoder) {
+super.init(coder: aDecoder)!
     }
-    func makeColor() -> UIColor {
-    let r: CGFloat = CGFloat(arc4random_uniform(255)+1) / 255.0
-    let g: CGFloat = CGFloat(arc4random_uniform(255)+1) / 255.0
-    let b: CGFloat = CGFloat(arc4random_uniform(255)+1) / 255.0
-    let color: UIColor = UIColor(red: r, green: g, blue: b, alpha: 1.0)
-    return color
+override init(frame: CGRect) {
+super.init(frame: frame)
+        backgroundColor = .white
+        textLabel = UILabel(frame: CGRect(x: 0, y: frame.height-20, width: frame.width, height: 20))
+        textLabel.backgroundColor = UIColor.black
+        textLabel.textAlignment = NSTextAlignment.center
+        textLabel.textColor = UIColor.white
+        contentView.addSubview(textLabel)
+    }
+func setCell(name: String, imageName: String) {
+        textLabel.text = name
+let image = UIImage(named: imageName)
+        backgroundView = UIImageView(image: image)
+    }
+}
+class aViewController: UIViewController {
+var pokemons: [Pokemon] = [
+Pokemon(name: "Snorlax", imageName: "bookImage"),
+Pokemon(name: "Diglett", imageName: "bookImage"),
+Pokemon(name: "Quagsire", imageName: "bookImage"),
+Pokemon(name: "Slowpoke", imageName: "bookImage"),
+Pokemon(name: "Ditto", imageName: "bookImage"),
+Pokemon(name: "Eevee", imageName: "bookImage"),
+Pokemon(name: "Meowth", imageName: "bookImage"),
+Pokemon(name: "Oddish", imageName: "bookImage"),
+Pokemon(name: "Paras", imageName: "bookImage"),
+    ]
+var collectionView : UICollectionView!
+override func viewDidLoad() {
+super.viewDidLoad()
+let viewWidth = view.frame.width
+let viewHeight = view.frame.height
+// CollectionView layout
+        let layout = UICollectionViewFlowLayout()
+// cell size
+        layout.itemSize = CGSize(width:viewWidth/4, height:viewWidth/4)
+// cell margin
+        layout.sectionInset = UIEdgeInsets.zero
+// cell vertical margin
+        layout.minimumInteritemSpacing = 0.0
+// cell horizontal margin
+        layout.minimumLineSpacing = 0.0
+// section header size
+        layout.headerReferenceSize = CGSize(width: 0, height: 0)
+// CollectionView
+        let collectionFrame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        collectionView = UICollectionView(frame: collectionFrame, collectionViewLayout: layout)
+// register cell class
+        collectionView.register(CustumCollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(CustumCollectionViewCell.self))
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        view.addSubview(collectionView)
+let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTap(gesture:)))
+        collectionView.addGestureRecognizer(longTapGesture)
+    }
+@objc func longTap(gesture: UILongPressGestureRecognizer) {
+switch gesture.state {
+case .began:
+guard let selectedIndexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else {
+break
+            }
+            collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view))
+case .ended:
+            collectionView.endInteractiveMovement()
+default:
+            collectionView.cancelInteractiveMovement()
         }
     }
-    extension CustomViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return colors.count
-        }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell : UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(UICollectionViewCell.self), for: indexPath as IndexPath)
-            cell.backgroundColor = colors[indexPath.row]
-    return cell
-        }
+}
+extension aViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+print("yos:\(pokemons[indexPath.row])")
     }
-    extension CustomViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    print("Num: \(indexPath.row)")
-        }
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-    return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
-    let fight = UIAction(title: "FIGHT", image: UIImage(systemName: "figure.wave")) { action in
-    print("fight")
-                }
-    let bag = UIAction(title: "BAG", image: UIImage(systemName: "bag")) { action in
-    print("bag")
-                }
-    let pokemon = UIAction(title: "POKEMON", image: UIImage(systemName: "hare")) { action in
-    print("pokemon")
-                }
-    let run = UIAction(title: "RUN", image: UIImage(systemName: "figure.walk")) { action in
-    print("run")
-                }
-    return UIMenu(title: "Menu", children: [fight, bag, pokemon, run])
-            })
-        }
+func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+return pokemons.count
     }
-
-
-
-
+func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+let cell : CustumCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(CustumCollectionViewCell.self), for: indexPath) as! CustumCollectionViewCell
+let pokemon = pokemons[indexPath.row]
+        cell.setCell(name: pokemon.name, imageName: pokemon.imageName)
+return cell
+    }
+func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    print("yosi\(pokemons.remove(at: sourceIndexPath.row))")
+let item = pokemons.remove(at: sourceIndexPath.row)
+        pokemons.insert(item, at: destinationIndexPath.row)
+    print("yosi\(pokemons.insert(item, at: destinationIndexPath.row))")
+    }
+func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+return true
+    }
+}

@@ -20,13 +20,14 @@ class CollectionViewCell: UICollectionViewCell {
     
     let thumnailImage:UIImageView = {
         let cv = UIImageView()
-        cv.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        cv.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
         cv.layer.shadowColor = UIColor.black.cgColor
         cv.layer.masksToBounds = false
-        cv.layer.shadowOpacity = 0.8
-        cv.layer.shadowRadius = 0.9
+        cv.layer.shadowOpacity = 0.3
+        cv.layer.shadowRadius = 0.5
         cv.layer.cornerRadius = 0.9
         cv.isUserInteractionEnabled = true
+        cv.contentMode = .scaleAspectFit
         return cv
     }()
     
@@ -52,7 +53,7 @@ class CollectionViewCell: UICollectionViewCell {
         return t
     }()
     
-    let nillImage: UIImage = UIImage(named:"006722.smpl.png")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+    let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
@@ -70,7 +71,7 @@ class CollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         thumnailImage.pin.top().left().bottom().margin(15).width(UIScreen.main.bounds.width * 0.2)
-        title.pin.right(of: thumnailImage).topLeft().topRight().margin(15).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
+        title.pin.right(of: thumnailImage).topLeft().topRight().margin(25).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
         author.pin.below(of: title,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
     }
     
@@ -106,25 +107,22 @@ class CollectionViewCell: UICollectionViewCell {
 class GridCollectionViewCell: UICollectionViewCell {
     let thumnailImage:UIImageView = {
         let cv = UIImageView()
-        cv.backgroundColor  = .white
-        cv.layer.masksToBounds = false
-        cv.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        cv.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
         cv.layer.shadowColor = UIColor.black.cgColor
         cv.layer.masksToBounds = false
-        cv.layer.shadowOpacity = 0.8
-        cv.layer.shadowRadius = 0.9
+        cv.layer.shadowOpacity = 0.3
+        cv.layer.shadowRadius = 0.5
         cv.layer.cornerRadius = 0.9
         cv.isUserInteractionEnabled = true
+        cv.contentMode = .scaleAspectFit
         return cv
     }()
-    let nillImage: UIImage = UIImage(named:"006722.smpl.png")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+    let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .white
-        self.layer.borderColor = UIColor.white.cgColor
-        self.layer.cornerRadius = 10
+        self.backgroundColor = .systemGray6
        addSubview(thumnailImage)
         
     }
@@ -140,6 +138,7 @@ class GridCollectionViewCell: UICollectionViewCell {
     func gridConfigure(imageData: Data) {//realm保存仕様の為、imageをデータ型に
         
         guard let image = UIImage(data: imageData)
+                
         else {
             thumnailImage.image = nillImage
             return
@@ -156,15 +155,18 @@ class BookSelectCell: UICollectionViewCell {
         t.numberOfLines = 4
         return t
     }()
+    
     let thumnailImage:UIImageView = {
         let cv = UIImageView()
-        cv.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        cv.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
         cv.layer.shadowColor = UIColor.black.cgColor
         cv.layer.masksToBounds = false
-        cv.layer.shadowOpacity = 0.8
-        cv.layer.shadowRadius = 0.9
+        cv.layer.shadowOpacity = 0.3
+        cv.layer.shadowRadius = 0.5
         cv.layer.cornerRadius = 0.9
         cv.isUserInteractionEnabled = true
+        cv.contentMode = .scaleAspectFit
+        
         return cv
     }()
     
@@ -193,7 +195,7 @@ class BookSelectCell: UICollectionViewCell {
         return t
     }()
     
-    let nillImage: UIImage = UIImage(named:"006722.smpl.png")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+    let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -212,7 +214,7 @@ class BookSelectCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         thumnailImage.pin.top().left().bottom().margin(15).width(UIScreen.main.bounds.width * 0.2)
-        title.pin.right(of: thumnailImage).topLeft().topRight().margin(15).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
+        title.pin.right(of: thumnailImage).topLeft().topRight().margin(25).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
         author.pin.below(of: title,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
         saveTimeLabel.pin.below(of: author,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
     }
@@ -230,21 +232,4 @@ class BookSelectCell: UICollectionViewCell {
         thumnailImage.image = image
     }
     
-}
-class SettingViewCell: UICollectionViewCell {
-   
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.backgroundColor = .white
-        self.layer.borderColor = UIColor.white.cgColor
-        self.layer.cornerRadius = 10
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        
-    }
 }

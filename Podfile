@@ -13,6 +13,7 @@ target 'bookShelf' do
   pod 'XLPagerTabStrip'
   pod 'IQKeyboardManagerSwift'
   pod 'Google-Mobile-Ads-SDK'
+  pod 'Instruction'
 
   # Pods for bookShelf
 

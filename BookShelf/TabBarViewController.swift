@@ -27,6 +27,42 @@ class TabBarViewController: UITabBarController {
         return sv
     }()
     
+    let overlay:UIView = {
+        let ol = UIView()
+        ol.backgroundColor = .black.withAlphaComponent(0.9)
+        
+        return ol
+    }()
+    
+    
+    let userDefaults = UserDefaults.standard
+    
+    let text:UITextView = {
+        let t = UITextView()
+        t.textColor = .white
+        t.text = "＜使用方法＞\n「どこでも本棚」のご利用ありがとうございます。\n本の画像を長押しすると選択メニューが表示され、本棚間の移動と削除が可能になりました。"
+        t.textAlignment = .left
+        t.font = UIFont.systemFont(ofSize: 18)
+        t.isEditable = false
+        t.backgroundColor = .clear
+        return t
+    }()
+    
+    let uiImageView:UIImageView = {
+        let i = UIImageView()
+        i.layer.masksToBounds = false
+        i.image = UIImage(named:"MenuImage2")
+        i.contentMode = .scaleAspectFit
+        return i
+    }()
+    
+    let button:UIButton = {
+        let b = UIButton()
+        b.layer.cornerRadius = 4
+        b.backgroundColor = .darkGray
+        return b
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTab()
@@ -36,7 +72,46 @@ class TabBarViewController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(BarcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ManualInputData), name: Notification.Name("ManualInput"), object: nil)
         selectedIndex = 1
+        
+        setup()
+        view.addSubview(overlay)
+        overlay.addSubview(text)
+        overlay.addSubview(uiImageView)
+        overlay.addSubview(button)
+        
+        button.setTitle("OK", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(self.tapButton(_:)), for: UIControl.Event.touchUpInside)
     }
+    
+    override func viewWillLayoutSubviews() {
+        overlay.pin.all()
+        text.pin.topCenter(60).size(CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.2))
+        
+        uiImageView.pin.below(of: text,aligned: .center).size(CGSize(width: UIScreen.main.bounds.width * 0.81, height: UIScreen.main.bounds.height * 0.5))
+        
+        button.pin.below(of: uiImageView,aligned: .center).size(CGSize(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.height * 0.06)).margin(8)
+    }
+    @objc func tapButton(_ sender: UIButton){
+        overlay.isHidden = true
+    }
+             
+    func setup() {
+//        UserDefaults.standard.set(false, forKey: "visit") //リセット用
+        let visit = UserDefaults.standard.bool(forKey: "visit")
+        if visit {
+            //二回目以降
+            overlay.isHidden = true
+            print("二回目以降")
+        } else {
+            //初回アクセス
+            print("初回起動")
+            
+            UserDefaults.standard.set(true, forKey: "visit")
+        }
+    }
+    
+    
     @objc private func SerchKandokuUpdate(_ notification: Notification) {
         guard let book: Item = notification.userInfo?["serchBook"] as? Item else { return }
         mv.SerchKandokuUpdate(newBook1: book)
@@ -57,7 +132,7 @@ class TabBarViewController: UITabBarController {
         guard let book: Book = notification.userInfo?["serchBook"] as? Book else { return }
         mv.BarcodeTumidokuUpdate(newBook4: book)
     }
-   
+    
     @objc private func ManualInputData(_ notification: Notification) {
         guard let title = notification.userInfo?["title"] as? String else { return }
         guard let author = notification.userInfo?["author"] as? String else { return }
@@ -70,12 +145,12 @@ class TabBarViewController: UITabBarController {
         let mbs = UINavigationController(rootViewController: mv)
         let nsv = UINavigationController(rootViewController: sv)
         if #available(iOS 15, *) {
-                    let appearance: UITabBarAppearance = .init()
-                    appearance.configureWithOpaqueBackground()
+            let appearance: UITabBarAppearance = .init()
+            appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = .systemGray6
-                    UITabBar.appearance().standardAppearance = appearance
-                    UITabBar.appearance().scrollEdgeAppearance = appearance
-                }
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
         UITabBar.appearance().tintColor = .darkGray
         viewControllers = [nsb,mbs,nsv]
     }

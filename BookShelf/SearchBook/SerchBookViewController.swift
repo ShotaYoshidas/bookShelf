@@ -85,7 +85,8 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)
         // GADBannerViewのプロパティを設定
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
+        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
+//        bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
 //        テスト：ca-app-pub-3940256099942544/6300978111
 //        本番：ca-app-pub-1273760422540329/1826776892
         bannerView.rootViewController = self
@@ -223,7 +224,8 @@ extension SerchBookViewController: UICollectionViewDataSource {
 
 extension SerchBookViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)
+//        return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)
+        return CGSize(width: view.frame.size.width * 0.95, height: view.frame.size.height * 0.2)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

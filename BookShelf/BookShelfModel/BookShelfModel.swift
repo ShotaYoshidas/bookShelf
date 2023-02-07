@@ -12,6 +12,8 @@ class BookObject: Object {
     @objc dynamic var readKey: Int = 0
 }
 
+let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+
 final class BookShelfModel {
     private(set) var books: Results<BookObject>
     private(set) var roadBooks: Results<BookObject>
@@ -24,43 +26,70 @@ final class BookShelfModel {
     }
     
     func SerchKandokuUpdate(newBook1: Item) {
-        guard let url = URL(string: newBook1.volumeInfo?.imageLinks?.thumbnail! ?? "") else {
-            return
-        }
-        let fileData = try! Data(contentsOf: url)
-        let realm = try! Realm()
-        let object: BookObject = {
-            let object = BookObject()
-            object.title = newBook1.volumeInfo?.title ?? ""
-            object.author = newBook1.volumeInfo?.authors?[0] ?? ""
-            object.imageData = fileData
-            object.saveTime = getNowClockString()
-            object.readKey = 0
-            return object
-        }()
-        try! realm.write() {
-            realm.add(object)
+        if let url = URL(string: newBook1.volumeInfo?.imageLinks?.thumbnail! ?? "") {
+            let fileData = try! Data(contentsOf: url)
+            let realm = try! Realm()
+            let object: BookObject = {
+                let object = BookObject()
+                object.title = newBook1.volumeInfo?.title ?? ""
+                object.author = newBook1.volumeInfo?.authors?[0] ?? ""
+                object.imageData = fileData
+                object.saveTime = getNowClockString()
+                object.readKey = 0
+                return object
+            }()
+            try! realm.write() {
+                realm.add(object)
+            }
+        } else {
+            let realm = try! Realm()
+            let object: BookObject = {
+                let object = BookObject()
+                object.title = newBook1.volumeInfo?.title ?? ""
+                object.author = newBook1.volumeInfo?.authors?[0] ?? ""
+                object.imageData = nillImage.pngData() ?? Data()
+                object.saveTime = getNowClockString()
+                object.readKey = 0
+                return object
+            }()
+            try! realm.write() {
+                realm.add(object)
+            }
         }
         NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
     }
     func SerchTumidokuUpdate(newBook2: Item) {
-        guard let url = URL(string: newBook2.volumeInfo?.imageLinks?.thumbnail! ?? "") else {
-            return
+        if let url = URL(string: newBook2.volumeInfo?.imageLinks?.thumbnail! ?? "") {
+            let fileData = try! Data(contentsOf: url)
+            let realm = try! Realm()
+            let object: BookObject = {
+                let object = BookObject()
+                object.title = newBook2.volumeInfo?.title ?? ""
+                object.author = newBook2.volumeInfo?.authors?[0] ?? ""
+                object.imageData = fileData
+                object.saveTime = getNowClockString()
+                object.readKey = 1
+                return object
+            }()
+            try! realm.write() {
+                realm.add(object)
+            }
+        } else {
+            let realm = try! Realm()
+            let object: BookObject = {
+                let object = BookObject()
+                object.title = newBook2.volumeInfo?.title ?? ""
+                object.author = newBook2.volumeInfo?.authors?[0] ?? ""
+                object.imageData = nillImage.pngData() ?? Data()
+                object.saveTime = getNowClockString()
+                object.readKey = 1
+                return object
+            }()
+            try! realm.write() {
+                realm.add(object)
+            }
         }
-        let fileData = try! Data(contentsOf: url)
-        let realm = try! Realm()
-        let object: BookObject = {
-            let object = BookObject()
-            object.title = newBook2.volumeInfo?.title ?? ""
-            object.author = newBook2.volumeInfo?.authors?[0] ?? ""
-            object.imageData = fileData
-            object.saveTime = getNowClockString()
-            object.readKey = 1
-            return object
-        }()
-        try! realm.write() {
-            realm.add(object)
-        }
+        
         NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
         }
         
@@ -138,9 +167,7 @@ final class BookShelfModel {
     }
     
     func deleteBook(id: String) {
-        
         let realm = try! Realm()
-        print("11111\(realm.objects(BookObject.self))")
         let deleteBook = realm.objects(BookObject.self).filter({ $0.id == id })
         do{
             try realm.write{
@@ -150,7 +177,6 @@ final class BookShelfModel {
             print("Error \(error)")
         }
         NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
-        print("11111\(realm.objects(BookObject.self))")
     }
     
     func dateSort() {
@@ -159,7 +185,6 @@ final class BookShelfModel {
         willBooks = realm.objects(BookObject.self).filter("readKey == 1 ")
         let temp1 = roadBooks.sorted(byKeyPath: "saveTime", ascending: false)
         let temp2 = willBooks.sorted(byKeyPath: "saveTime", ascending: false)
-        
         do{
             try! realm.write() {
                 roadBooks = temp1
@@ -189,7 +214,11 @@ final class BookShelfModel {
         guard let temp = realm.objects(BookObject.self).filter({ $0.id == id }).compactMap({ $0 }).first else { return }
         do {
             try realm.write{
-                temp.readKey = 0
+                if temp.readKey == 0 {
+                    temp.readKey = 1
+                } else {
+                    temp.readKey = 0
+                }
             }
         } catch {
             print("Error \(error)")
