@@ -34,14 +34,12 @@ struct ImageLinks: Codable {
 class SerchBookViewController: UIViewController,UISearchBarDelegate {
     private let searchmodel: SearchBookModel = .init()
     var bannerView: GADBannerView!
-    var usegeButton: UIBarButtonItem = {
+    var cameraButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
-        u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
         return u
     }()
-    var usegeButton2: UIBarButtonItem = {
+    var pencilButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
-        u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
         return u
     }()
     
@@ -49,7 +47,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         let s = UISearchBar()
         s.showsCancelButton = true
         s.backgroundImage = UIImage()
-        s.backgroundColor = .systemGray6
+        s.backgroundColor = .mainColor()
         s.layer.cornerRadius = 4
         s.showsCancelButton = true
         s.placeholder = "本を検索"
@@ -61,19 +59,15 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         cv.alwaysBounceVertical = true
         cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = UIColor.systemGray6
+        cv.backgroundColor = .mainColor()
         return cv
     }()
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .mainColor()
         navigationBar15()
-        let image1 = UIImage(systemName: "camera.fill")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        let image2 = UIImage(systemName: "pencil.line")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        usegeButton = UIBarButtonItem(image: image1, style: .plain, target: self, action: #selector(camera))
-        usegeButton2 = UIBarButtonItem(image: image2, style: .plain, target: self, action: #selector(taped))
-        self.navigationItem.rightBarButtonItems = [usegeButton2,usegeButton]
+        UIBarButtonSet()
         view.addSubview(searchBooksField)
         searchBooksField.delegate = self
         searchmodel.delegate = self
@@ -81,25 +75,36 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         collectionView.delegate = self
         collectionView.dataSource = self
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
-        //GADBannerViewの作成
+        GoogleMobile()
+    }
+    
+    override func viewDidLayoutSubviews(){
+        super.viewDidLayoutSubviews()
+        searchBooksField.pin.top(UIScreen.main.bounds.height * 0.12).left(UIScreen.main.bounds.width * 0.01).right(UIScreen.main.bounds.width * 0.01).height(UIScreen.main.bounds.height * 0.05)
+        collectionView.pin.below(of: searchBooksField).all()
+    }
+    
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    func UIBarButtonSet(){
+        let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))
+        let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))
+        cameraButton = UIBarButtonItem(image: cameraImage, style: .plain, target: self, action: #selector(camera))
+        pencilButton = UIBarButtonItem(image: pencilImage, style: .plain, target: self, action: #selector(taped))
+        self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
+    }
+    
+    func GoogleMobile(){
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)
-        // GADBannerViewのプロパティを設定
 //        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
         bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
 //        テスト：ca-app-pub-3940256099942544/6300978111
 //        本番：ca-app-pub-1273760422540329/1826776892
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
-        
-    }
-    override func viewDidLayoutSubviews(){
-        super.viewDidLayoutSubviews()
-        searchBooksField.pin.top(UIScreen.main.bounds.height * 0.12).left(UIScreen.main.bounds.width * 0.01).right(UIScreen.main.bounds.width * 0.01).height(UIScreen.main.bounds.height * 0.05)
-        collectionView.pin.below(of: searchBooksField).all()
-    }
-    @objc func dismissKeyboard() {
-        self.view.endEditing(true)
     }
     
     func addBannerViewToView(_ bannerView: GADBannerView) {
@@ -127,7 +132,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor.systemGray6
+            appearance.backgroundColor = .mainColor()
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -140,6 +145,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         let encodedString = searchBar.text!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         searchmodel.getBooks(encodedString: encodedString ?? "")
     }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
     }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftyJSON
+//SwiftyJSON不使用
 
 class GoogleBooksAPI {
     enum GoogleBooksAPIError : Error {

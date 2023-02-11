@@ -106,7 +106,7 @@ class BookSelectViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray5
+        view.backgroundColor = .bookSelectColor()
         navigationItem.title  = titleName
         view.addSubview(collectionView)
         view.addSubview(memoTextView)

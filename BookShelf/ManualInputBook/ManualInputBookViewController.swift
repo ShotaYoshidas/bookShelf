@@ -35,7 +35,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
     
     lazy var scrollView:UIScrollView = {
         let sc = UIScrollView()
-        sc.backgroundColor = .systemGray6
+        sc.backgroundColor = .mainColor()
         return sc
     }()
     
@@ -45,7 +45,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         t.textColor = UIColor.lightGray
         t.font = UIFont.systemFont(ofSize: 15)
         t.textAlignment = .left
-        t.backgroundColor = .systemGray6
+        t.backgroundColor = .mainColor()
         return t
     }()
     
@@ -55,7 +55,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         t.textColor = UIColor.lightGray
         t.font = UIFont.systemFont(ofSize: 15)
         t.textAlignment = .left
-        t.backgroundColor = .systemGray6
+        t.backgroundColor = .mainColor()
         return t
     }()
     
@@ -92,7 +92,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .mainColor()
         self.view.addSubview(scrollView)
         view.addSubview(thumbnailView)
         scrollView.addSubview(titleLabel)

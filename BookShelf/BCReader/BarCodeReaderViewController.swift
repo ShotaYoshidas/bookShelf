@@ -7,7 +7,7 @@
 import UIKit
 import PinLayout
 import AVFoundation
-import SwiftyJSON
+//import SwiftyJSON
 import RealmSwift
 
 struct Book {
@@ -29,12 +29,12 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         cv.alwaysBounceVertical = true
         cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 255/255, alpha: 1)
+        cv.backgroundColor = .mainColor()
         return cv
     }()
     let aboveOverlay:UIView = {
         let ol = UIView()
-        ol.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 255/255, alpha: 1)
+        ol.backgroundColor = .mainColor()
         return ol
     }()
     let closeBtn:UIButton = {
@@ -46,11 +46,8 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         return cb
     }()
     
-   
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
         model.delegate = self //トラックの配送先
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,

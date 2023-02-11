@@ -24,6 +24,7 @@
 		6A40178C28AA284A002E62C0 /* BookShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */; };
 		6A4F48A929963D1E0044DD7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F48A829963D1E0044DD7F /* GoogleService-Info.plist */; };
 		6A4F48AC29963E510044DD7F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6A4F48AB29963E510044DD7F /* FirebaseAnalytics */; };
+		6A4F48B129979BAF0044DD7F /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F48B029979BAE0044DD7F /* UIColor.swift */; };
 		6A524FF728DD789600DDEC2A /* BarCodeReaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */; };
 		6A524FFC28DD8AB000DDEC2A /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */; };
 		6A52500128DEB16600DDEC2A /* BookSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A52500028DEB16600DDEC2A /* BookSelectViewController.swift */; };
@@ -54,6 +55,7 @@
 		6A40178928AA27C1002E62C0 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookShelfViewController.swift; sourceTree = "<group>"; };
 		6A4F48A829963D1E0044DD7F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6A4F48B029979BAE0044DD7F /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeReaderModel.swift; sourceTree = "<group>"; };
 		6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
 		6A52500028DEB16600DDEC2A /* BookSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSelectViewController.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				6A1B35EB290822CB002F6FE6 /* UIImage.swift */,
+				6A4F48B029979BAE0044DD7F /* UIColor.swift */,
 			);
 			path = Extention;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A52FE10291A849C002F31B9 /* ManualInputBookViewController.swift in Sources */,
+				6A4F48B129979BAF0044DD7F /* UIColor.swift in Sources */,
 				6A1B35F229133AFE002F6FE6 /* WillBookShelfViewController.swift in Sources */,
 				6A40178A28AA27C1002E62C0 /* TabBarViewController.swift in Sources */,
 				6A40177828A935C4002E62C0 /* SerchBookViewController.swift in Sources */,

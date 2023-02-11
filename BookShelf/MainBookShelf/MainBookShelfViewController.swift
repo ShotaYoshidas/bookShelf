@@ -15,48 +15,34 @@ enum LayoutType {
 
 class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollectionViewDelegateFlowLayout {
     private var layoutType:LayoutType = .list
-    
     lazy var collectionView: ButtonBarView = {
         let cv = buttonBarView
         return cv!
     }()
-    
     lazy var scrollView: UIScrollView = {
         let sv = containerView
         return sv!
     }()
-    var usegeButton: UIBarButtonItem = {
-        let u = UIBarButtonItem()
-        u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
-        return u
-    }()
-    
-    var usegeButton2: UIBarButtonItem = {
-        let u = UIBarButtonItem()
-        u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
-        return u
-    }()
     let listImage: UIImage = {
-        let i = UIImage(systemName: "line.3.horizontal")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        return i
+        let i = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))
+        return i ?? UIImage()
     }()
     let gridImage: UIImage = {
-        let i = UIImage(systemName: "square.grid.3x3.fill")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        return i
+        let i = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))
+        return i ?? UIImage()
     }()
     let sortImage: UIImage = {
-        let i = UIImage(systemName: "arrow.up.arrow.down")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        return i
+        let i = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))
+        return i ?? UIImage()
     }()
-    
     let saveImage: UIImage = {
-        let i = UIImage(systemName: "square.and.arrow.down")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        return i
+        let i = UIImage(systemName: "square.and.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))
+        return i ?? UIImage()
     }()
     private let bc: BookShelfViewController = .init()
     private let wbc:WillBookShelfViewController = .init()
     override func viewDidLoad() {
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .mainColor()
         settings.style.buttonBarMinimumLineSpacing = -1
         settings.style.buttonBarLeftContentInset = 0
         settings.style.buttonBarRightContentInset = 0
@@ -87,9 +73,7 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         return [bc, wbc]
     }
-    @objc func saveLayout() {
-        
-    }
+    
     
     @objc func layoutChange(sender: UIButton) {
         NotificationCenter.default.post(name: Notification.Name("layoutChange"), object: nil, userInfo: .none)
@@ -136,7 +120,7 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor.systemGray6
+            appearance.backgroundColor = .mainColor()
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance

@@ -16,7 +16,6 @@ final class BarCodeReaderModel {
     
     func addNewBook(newBook: Book) {
         books.append(newBook)
-        
         delegate?.updateCollectionView()
     }
 }

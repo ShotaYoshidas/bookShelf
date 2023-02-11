@@ -43,7 +43,7 @@ class SettingViewController: UIViewController {
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor.systemGray6
+            appearance.backgroundColor = .mainColor()
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
