@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-class GoogleBooksAPI2 {
+class GoogleBooksAPI {
     enum GoogleBooksAPIError : Error {
         case invalidURLString
         case notFound
@@ -21,9 +21,9 @@ class GoogleBooksAPI2 {
     }
     
     func getBookData() async throws -> TopTier {
-        let data = try await downloadData(urlString: baseURL + keyword)
-        let jsonString = String(data: data, encoding: .utf8)!
-        let json = try! JSONDecoder().decode(TopTier.self, from: jsonString.data(using: .utf8)!)
+        let data = try await downloadData(urlString: baseURL + keyword)//detaRequest
+        let jsonString = String(data: data, encoding: .utf8)!//Data→String
+        let json = try! JSONDecoder().decode(TopTier.self, from: jsonString.data(using: .utf8)!)//JSON→Swift(TopTier)
         return TopTier(kind:json.kind, totalItems: json.totalItems, items: json.items)
     }
     
@@ -32,10 +32,7 @@ class GoogleBooksAPI2 {
             throw GoogleBooksAPIError.invalidURLString
         }
         let (data,_) = try await URLSession.shared.data(from: url)
+        //(data,_)＝Data, URLResponseがリターンされる
         return data
     }
-    
-    
-    
-    
 }

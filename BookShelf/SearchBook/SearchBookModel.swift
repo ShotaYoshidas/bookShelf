@@ -23,9 +23,9 @@ final class SearchBookModel {
     }
     
     func getBooks(encodedString: String) {
-        let GoogleAPI = GoogleBooksAPI2(keyword: encodedString)
+        let GoogleBooksAPI = GoogleBooksAPI(keyword: encodedString)
         Task {
-            self.response = try await GoogleAPI.getBookData()
+            self.response = try await GoogleBooksAPI.getBookData()
         }
     }
     

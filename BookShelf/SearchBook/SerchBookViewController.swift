@@ -12,19 +12,19 @@ import RealmSwift
 
 struct TopTier : Codable {
     var kind: String?
-    var totalItems: Int?  // " " (ダブルクォート)で囲われていない数値なので Int
-    var items: [Item]?    // JSON 上で [ ] (ブラケット)で囲われているので配列にする
+    var totalItems: Int?
+    var items: [Item]?
 }
 struct Item: Codable {
-    var volumeInfo: VolumeInfo?   // 上記 Item と同じく構造体で入れ子になっているので別途定義
+    var volumeInfo: VolumeInfo?
     
 }
 struct VolumeInfo: Codable {
     var title: String?
-    var subtitle: String?    // 検索によってそもそも値が存在しない可能性がある場合、nil はオプショナル
-    var authors: [String]?   // 配列&文字列なので Array ついでに検索によって無い場合があるのでオプショナル
+//    var subtitle: String?
+    var authors: [String]?
     var imageLinks: ImageLinks?
-    var int:Int?
+//    var int:Int?
 }
 struct ImageLinks: Codable {
     var thumbnail:String?
@@ -85,12 +85,11 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)
         // GADBannerViewのプロパティを設定
-        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
-//        bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
+//        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
+        bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
 //        テスト：ca-app-pub-3940256099942544/6300978111
 //        本番：ca-app-pub-1273760422540329/1826776892
         bannerView.rootViewController = self
-        // 広告読み込み
         bannerView.load(GADRequest())
         
     }
@@ -123,7 +122,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
                                 constant: 0)
             ])
     }
-    //    15以外の設定してない
+    
     func navigationBar15(){
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
@@ -180,7 +179,6 @@ extension SerchBookViewController: UICollectionViewDataSource {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
             cell.searchConfigure(titleName: searchmodel.response?.items![indexPath.row].volumeInfo!.title! ?? "",authorName: searchmodel.response?.items![indexPath.row].volumeInfo!.authors?[0] ?? "",imageUrl:  searchmodel.response?.items![indexPath.row].volumeInfo?.imageLinks?.thumbnail ?? "")
             return cell
-            
         }
         return UICollectionViewCell()
     }
@@ -224,7 +222,6 @@ extension SerchBookViewController: UICollectionViewDataSource {
 
 extension SerchBookViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)
         return CGSize(width: view.frame.size.width * 0.95, height: view.frame.size.height * 0.2)
     }
     

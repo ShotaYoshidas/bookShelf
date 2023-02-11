@@ -53,10 +53,6 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         let i = UIImage(systemName: "square.and.arrow.down")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         return i
     }()
-    
-   
-    
-    
     private let bc: BookShelfViewController = .init()
     private let wbc:WillBookShelfViewController = .init()
     override func viewDidLoad() {
@@ -73,9 +69,7 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         navigationBar15()
         let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
         let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
-//        let saveLayoutButton = UIBarButtonItem(image: saveImage, style: .plain, target: self, action: #selector(saveLayout))
         self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-//        self.navigationItem.leftBarButtonItems = [saveLayoutButton]
         view.addSubview(collectionView)
         view.addSubview(scrollView)
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
@@ -105,16 +99,12 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
             self.layoutType = .grid
             let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
             let layoutChangeBarButtonItem = UIBarButtonItem(image: gridImage, style: .plain, target: self, action: #selector(layoutChange))
-//            let saveLayoutButton = UIBarButtonItem(image: saveImage, style: .plain, target: self, action: #selector(saveLayout))
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-//            self.navigationItem.leftBarButtonItems = [saveLayoutButton]
         case .grid:
             self.layoutType = .list
             let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
             let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
-//            let saveLayoutButton = UIBarButtonItem(image: saveImage, style: .plain, target: self, action: #selector(saveLayout))
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-//            self.navigationItem.leftBarButtonItems = [saveLayoutButton]
         }
         }
         

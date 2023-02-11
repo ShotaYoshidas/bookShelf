@@ -30,12 +30,8 @@ class TabBarViewController: UITabBarController {
     let overlay:UIView = {
         let ol = UIView()
         ol.backgroundColor = .black.withAlphaComponent(0.9)
-        
         return ol
     }()
-    
-    
-    let userDefaults = UserDefaults.standard
     
     let text:UITextView = {
         let t = UITextView()
@@ -66,22 +62,9 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTab()
-        NotificationCenter.default.addObserver(self, selector: #selector(SerchKandokuUpdate), name: Notification.Name("SerchKandokuUpdate"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SerchTumidokuUpdate), name: Notification.Name("SerchTumidokuUpdate"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BarcodeKandokuUpdate), name: Notification.Name("BarcodeKandokuUpdate"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(BarcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ManualInputData), name: Notification.Name("ManualInput"), object: nil)
+        notification()
         selectedIndex = 1
-        
-        setup()
-        view.addSubview(overlay)
-        overlay.addSubview(text)
-        overlay.addSubview(uiImageView)
-        overlay.addSubview(button)
-        
-        button.setTitle("OK", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(self.tapButton(_:)), for: UIControl.Event.touchUpInside)
+        tutorialSetup()
     }
     
     override func viewWillLayoutSubviews() {
@@ -96,50 +79,6 @@ class TabBarViewController: UITabBarController {
         overlay.isHidden = true
     }
              
-    func setup() {
-//        UserDefaults.standard.set(false, forKey: "visit") //リセット用
-        let visit = UserDefaults.standard.bool(forKey: "visit")
-        if visit {
-            //二回目以降
-            overlay.isHidden = true
-            print("二回目以降")
-        } else {
-            //初回アクセス
-            print("初回起動")
-            
-            UserDefaults.standard.set(true, forKey: "visit")
-        }
-    }
-    
-    
-    @objc private func SerchKandokuUpdate(_ notification: Notification) {
-        guard let book: Item = notification.userInfo?["serchBook"] as? Item else { return }
-        mv.SerchKandokuUpdate(newBook1: book)
-    }
-    
-    @objc private func SerchTumidokuUpdate(_ notification: Notification) {
-        guard let book: Item = notification.userInfo?["serchBook"] as? Item else { return }
-        mv.SerchTumidokuUpdate(newBook2: book)
-    }
-    
-    
-    @objc private func BarcodeKandokuUpdate(_ notification: Notification) {
-        guard let book: Book = notification.userInfo?["serchBook"] as? Book else { return }
-        mv.BarcodeKandokuUpdate(newBook3: book)
-    }
-    
-    @objc private func BarcodeTumidokuUpdate(_ notification: Notification) {
-        guard let book: Book = notification.userInfo?["serchBook"] as? Book else { return }
-        mv.BarcodeTumidokuUpdate(newBook4: book)
-    }
-    
-    @objc private func ManualInputData(_ notification: Notification) {
-        guard let title = notification.userInfo?["title"] as? String else { return }
-        guard let author = notification.userInfo?["author"] as? String else { return }
-        guard let thumnail = notification.userInfo?["thumnail"] as? UIImage else { return }
-        mv.manualInputData(title: title, author: author, thumnail: thumnail)
-    }
-    
     func setupTab() {
         let nsb = UINavigationController(rootViewController: sb)
         let mbs = UINavigationController(rootViewController: mv)
@@ -154,5 +93,61 @@ class TabBarViewController: UITabBarController {
         UITabBar.appearance().tintColor = .darkGray
         viewControllers = [nsb,mbs,nsv]
     }
+    
+    func notification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(serchKandokuUpdate), name: Notification.Name("SerchKandokuUpdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(serchTumidokuUpdate), name: Notification.Name("SerchTumidokuUpdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(barcodeKandokuUpdate), name: Notification.Name("BarcodeKandokuUpdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(barcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(manualInputData), name: Notification.Name("ManualInput"), object: nil)
+    }
+    
+    func tutorialSetup() {
+        view.addSubview(overlay)
+        overlay.addSubview(text)
+        overlay.addSubview(uiImageView)
+        overlay.addSubview(button)
+        button.setTitle("OK", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(self.tapButton(_:)), for: UIControl.Event.touchUpInside)
+//        UserDefaults.standard.set(false, forKey: "visit") //リセット用
+        let visit = UserDefaults.standard.bool(forKey: "visit")
+        if visit {
+            //二回目以降
+            overlay.isHidden = true
+        } else {
+            UserDefaults.standard.set(true, forKey: "visit")
+        }
+    }
+    
+    @objc private func serchKandokuUpdate(_ notification: Notification) {
+        guard let book: Item = notification.userInfo?["serchBook"] as? Item else { return }
+        mv.SerchKandokuUpdate(newBook1: book)
+    }
+    
+    @objc private func serchTumidokuUpdate(_ notification: Notification) {
+        guard let book: Item = notification.userInfo?["serchBook"] as? Item else { return }
+        mv.SerchTumidokuUpdate(newBook2: book)
+    }
+    
+    
+    @objc private func barcodeKandokuUpdate(_ notification: Notification) {
+        guard let book: Book = notification.userInfo?["serchBook"] as? Book else { return }
+        mv.BarcodeKandokuUpdate(newBook3: book)
+    }
+    
+    @objc private func barcodeTumidokuUpdate(_ notification: Notification) {
+        guard let book: Book = notification.userInfo?["serchBook"] as? Book else { return }
+        mv.BarcodeTumidokuUpdate(newBook4: book)
+    }
+    
+    @objc private func manualInputData(_ notification: Notification) {
+        guard let title = notification.userInfo?["title"] as? String else { return }
+        guard let author = notification.userInfo?["author"] as? String else { return }
+        guard let thumnail = notification.userInfo?["thumnail"] as? UIImage else { return }
+        mv.manualInputData(title: title, author: author, thumnail: thumnail)
+    }
+    
+    
 }
 

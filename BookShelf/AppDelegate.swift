@@ -8,6 +8,8 @@
 import UIKit
 import IQKeyboardManagerSwift
 import GoogleMobileAds
+import FirebaseCore
+import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         IQKeyboardManager.shared.enable = true
         GADMobileAds.sharedInstance().start(completionHandler: nil)
+        FirebaseApp.configure()
         return true
     }
     
