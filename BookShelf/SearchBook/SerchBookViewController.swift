@@ -63,9 +63,29 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         return cv
     }()
    
+    
+    @objc func call(_ notification: Notification) {
+        view.backgroundColor = .mainColor()
+        
+        collectionView.backgroundColor = .mainColor()
+        searchBooksField.backgroundColor = .mainColor()
+        collectionView.reloadData()
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            self.navigationController?.navigationBar.standardAppearance = appearance
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+    }
+    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainColor()
+        searchBooksField.backgroundColor = .mainColor()
         navigationBar15()
         UIBarButtonSet()
         view.addSubview(searchBooksField)
@@ -76,7 +96,10 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         collectionView.dataSource = self
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
         GoogleMobile()
+        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("aaa"), object: nil)
+        
     }
+    
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
@@ -87,6 +110,10 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
+   
+
+    
+   
     
     func UIBarButtonSet(){
         let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.UIBarButtonColor()]))

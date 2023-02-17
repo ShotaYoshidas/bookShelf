@@ -41,7 +41,6 @@ override func viewDidLoad() {
 super.viewDidLoad()
 let viewWidth = view.frame.width
 let viewHeight = view.frame.height
-// CollectionView layout
         let layout = UICollectionViewFlowLayout()
 // cell size
         layout.itemSize = CGSize(width:viewWidth/4, height:viewWidth/4)

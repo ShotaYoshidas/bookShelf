@@ -59,6 +59,7 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         view.addSubview(collectionView)
         view.addSubview(scrollView)
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
+        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
         
     }
     override func viewWillLayoutSubviews() {
@@ -72,6 +73,21 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         return [bc, wbc]
+    }
+   
+    @objc func call() {
+        view.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainColor()
+        collectionView.reloadData()
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            self.navigationController?.navigationBar.standardAppearance = appearance
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+        print("よばれた")
     }
     
     

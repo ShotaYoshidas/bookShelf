@@ -63,7 +63,7 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         setupTab()
         notification()
-        selectedIndex = 1
+        selectedIndex = 2
         tutorialSetup()
     }
     
@@ -79,7 +79,7 @@ class TabBarViewController: UITabBarController {
         overlay.isHidden = true
     }
              
-    func setupTab() {
+    @objc func setupTab() {
         let nsb = UINavigationController(rootViewController: sb)
         let mbs = UINavigationController(rootViewController: mv)
         let nsv = UINavigationController(rootViewController: sv)
@@ -93,13 +93,28 @@ class TabBarViewController: UITabBarController {
         UITabBar.appearance().tintColor = .darkGray
         viewControllers = [nsb,mbs,nsv]
     }
-    
+    @objc func tabc() {
+        let nsb = UINavigationController(rootViewController: sb)
+        let mbs = UINavigationController(rootViewController: mv)
+        let nsv = UINavigationController(rootViewController: sv)
+        if #available(iOS 15, *) {
+            let appearance: UITabBarAppearance = .init()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .mainColor()
+            UITabBar.appearance().standardAppearance = appearance
+            UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
+        UITabBar.appearance().tintColor = .darkGray
+        viewControllers = [nsb,mbs,nsv]
+    }
     func notification() {
         NotificationCenter.default.addObserver(self, selector: #selector(serchKandokuUpdate), name: Notification.Name("SerchKandokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(serchTumidokuUpdate), name: Notification.Name("SerchTumidokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(barcodeKandokuUpdate), name: Notification.Name("BarcodeKandokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(barcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(manualInputData), name: Notification.Name("ManualInput"), object: nil)
+        
+        
     }
     
     func tutorialSetup() {

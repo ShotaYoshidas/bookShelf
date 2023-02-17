@@ -37,10 +37,12 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         super.viewDidLoad()
         navigationBar15()
         view.addSubview(collectionView)
+        collectionView.backgroundColor = .mainColor()
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: Notification.Name("bookupdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
         
     }
     
@@ -48,6 +50,20 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
     }
+    @objc func call() {
+        view.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainColor()
+        collectionView.reloadData()
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            self.navigationController?.navigationBar.standardAppearance = appearance
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+    }
+    
     
     @objc private func updateCollectionView2(_ notification: Notification) {
         collectionView.reloadData()

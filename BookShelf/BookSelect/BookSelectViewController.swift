@@ -87,7 +87,7 @@ class BookSelectViewController: UIViewController {
                                 action: nil)
     let done = UIBarButtonItem(title: "完了",
                                style: .done,
-                               target: self,//なんかでる(FIXするとビルド時エラー)
+                               target: self,
                                action: #selector(didTapDoneButton))
     
     let edit: UIImage = {
@@ -122,6 +122,7 @@ class BookSelectViewController: UIViewController {
         usegeButton =  UIBarButtonItem(image: edit, style: UIBarButtonItem.Style.done, target: self, action: #selector(taped))
         self.navigationItem.rightBarButtonItems = [usegeButton]
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
+        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
     }
     
     override func viewDidLayoutSubviews(){
@@ -136,6 +137,19 @@ class BookSelectViewController: UIViewController {
         delegate?.updateText(memo: memoTextView.text,id: id)
         let commentNum = memoTextView.text.count
         countLabel.text = "文字数：\(commentNum)"
+    }
+   
+    @objc func call() {
+        view.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainColor()
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            self.navigationController?.navigationBar.standardAppearance = appearance
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
     }
     
     

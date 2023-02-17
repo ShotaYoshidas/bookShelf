@@ -8,7 +8,6 @@
 import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
-    
     let height = UIScreen.main.bounds.height
     let width = UIScreen.main.bounds.width
     
@@ -17,7 +16,6 @@ class CollectionViewCell: UICollectionViewCell {
         t.numberOfLines = 4
         return t
     }()
-    
     let thumnailImage:UIImageView = {
         let cv = UIImageView()
         cv.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
@@ -30,7 +28,6 @@ class CollectionViewCell: UICollectionViewCell {
         cv.contentMode = .scaleAspectFit
         return cv
     }()
-    
     let title:UILabel = {
         let t  = UILabel()
         t.textColor = .black
@@ -38,25 +35,22 @@ class CollectionViewCell: UICollectionViewCell {
         t.numberOfLines = 0
         return t
     }()
-    
     let author: UILabel = {
         let l = UILabel()
         l.textColor = .gray
         l.font = UIFont.systemFont(ofSize: 13)
         return l
     }()
-    
     let saveTimeLabel: UILabel = {
         let t = UILabel()
         t.textColor = .black
         t.font = UIFont.systemFont(ofSize: 10)
         return t
     }()
-    
     let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .white
+        self.backgroundColor = .mainColor()
         self.layer.borderColor = UIColor.white.cgColor
         self.layer.cornerRadius = 10
         addSubview(thumnailImage)
@@ -84,23 +78,22 @@ class CollectionViewCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
-        
+        backgroundColor = .mainColor()
     }
-   
-    
     
     func barCodeConfigure(image: UIImage, titleName: String, authorName: String) {
         title.text = titleName
         author.text = authorName
         thumnailImage.image = image
+        backgroundColor = .mainColor()
     }
     
     func searchConfigure(titleName: String,authorName: String,imageUrl: String) {
         title.text = titleName
         author.text = authorName
         thumnailImage.loadImage(with: imageUrl)
+        backgroundColor = .mainColor()
     }
-    
     
 }
 
@@ -122,7 +115,7 @@ class GridCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .systemGray6
+        self.backgroundColor = .mainColor()
        addSubview(thumnailImage)
         
     }
@@ -144,6 +137,7 @@ class GridCollectionViewCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
+        backgroundColor = .mainColor()
         
     }
 }
@@ -199,7 +193,7 @@ class BookSelectCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .white
+        self.backgroundColor = .mainColor()
         self.layer.borderColor = UIColor.white.cgColor
         self.layer.cornerRadius = 10
         addSubview(thumnailImage)
@@ -230,6 +224,21 @@ class BookSelectCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
+        backgroundColor = .mainColor()
     }
     
 }
+
+class ThemeColorViewCell: UICollectionViewCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.layer.cornerRadius = 10
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+}
+

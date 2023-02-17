@@ -37,7 +37,7 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "Gridcell")
         cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = .systemGray6
+        cv.backgroundColor = .mainColor()
         return cv
     }()
     
@@ -45,21 +45,12 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         super.viewDidLoad()
         navigationBar15()
         view.addSubview(collectionView)
+        collectionView.backgroundColor = .mainColor()
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
-        
-//        //ロングタップインスタンスの生成
-//        let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTap(gesture:)))
-//        //viewにtapGestureを追加
-//        collectionView.addGestureRecognizer(longTapGesture)
-//        //デリゲートをセット
-//        longTapGesture.delegate = self
-//        //tap時間
-////        longTapGesture.minimumPressDuration = 2
-//
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
         
     }
     
@@ -67,32 +58,20 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
     }
-//    @objc func longTap(gesture: UILongPressGestureRecognizer) {
-//        switch gesture.state {
-//        case .began:
-//            //開始認知
-//            guard let selectedIndexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else {
-//                break
-//            }
-//            print("code:began")
-//            collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
-//        case .changed:
-//            //アイテムの位置を更新
-//            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view))
-//            print("code:changed")
-//        case .ended:
-//            //終了認知
-//            print("code:ended")
-//            //ターゲット アイテムを新しい場所に移動
-//            collectionView.endInteractiveMovement()
-//
-//        default:
-//            collectionView.cancelInteractiveMovement()
-//            print("code:default")
-//        }
-//
-//    }
-
+    
+    @objc func call() {
+        view.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainColor()
+        collectionView.reloadData()
+        if #available(iOS 15.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            self.navigationController?.navigationBar.standardAppearance = appearance
+            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        }
+    }
     
     @objc private func updateCollectionView1(_ notification: Notification) {
         collectionView.reloadData()
