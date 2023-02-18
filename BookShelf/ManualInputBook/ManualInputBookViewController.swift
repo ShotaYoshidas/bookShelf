@@ -110,7 +110,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         self.navigationItem.rightBarButtonItem = usegeButton
         self.navigationItem.rightBarButtonItems = [usegeButton]
         navigationItem.title = "入力画面"
-        self.navigationController?.navigationBar.tintColor = UIColor.darkGray
+        self.navigationController?.navigationBar.tintColor = .naviTintColor()
         
     }
     

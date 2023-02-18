@@ -45,7 +45,7 @@ class SettingViewController: UIViewController {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
             self.title = "その他"
@@ -59,7 +59,7 @@ class SettingViewController: UIViewController {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         }

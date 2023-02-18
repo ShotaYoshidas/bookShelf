@@ -63,7 +63,7 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         setupTab()
         notification()
-        selectedIndex = 2
+        selectedIndex = 1
         tutorialSetup()
     }
     
@@ -90,7 +90,7 @@ class TabBarViewController: UITabBarController {
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = appearance
         }
-        UITabBar.appearance().tintColor = .darkGray
+        UITabBar.appearance().tintColor = .naviTintColor()
         viewControllers = [nsb,mbs,nsv]
     }
     @objc func tabc() {
@@ -104,7 +104,7 @@ class TabBarViewController: UITabBarController {
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = appearance
         }
-        UITabBar.appearance().tintColor = .darkGray
+        UITabBar.appearance().tintColor = .naviTintColor()
         viewControllers = [nsb,mbs,nsv]
     }
     func notification() {
@@ -114,9 +114,13 @@ class TabBarViewController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(barcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(manualInputData), name: Notification.Name("ManualInput"), object: nil)
         
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("aaa"), object: nil)
     }
-    
+   
+    @objc func call(_ notification: Notification) {
+        self.tabBar.tintColor = .naviTintColor()
+        print("ああ")
+    }
     func tutorialSetup() {
         view.addSubview(overlay)
         overlay.addSubview(text)

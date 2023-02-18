@@ -47,10 +47,13 @@ class CollectionViewCell: UICollectionViewCell {
         t.font = UIFont.systemFont(ofSize: 10)
         return t
     }()
+    
+   
+    
     let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .mainColor()
+        self.backgroundColor = .cellColor()
         self.layer.borderColor = UIColor.white.cgColor
         self.layer.cornerRadius = 10
         addSubview(thumnailImage)
@@ -78,21 +81,21 @@ class CollectionViewCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
-        backgroundColor = .mainColor()
+        backgroundColor = .cellColor()
     }
     
     func barCodeConfigure(image: UIImage, titleName: String, authorName: String) {
         title.text = titleName
         author.text = authorName
         thumnailImage.image = image
-        backgroundColor = .mainColor()
+        backgroundColor = .cellColor()
     }
     
     func searchConfigure(titleName: String,authorName: String,imageUrl: String) {
         title.text = titleName
         author.text = authorName
         thumnailImage.loadImage(with: imageUrl)
-        backgroundColor = .mainColor()
+        backgroundColor = .cellColor()
     }
     
 }
@@ -193,7 +196,7 @@ class BookSelectCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .mainColor()
+        self.backgroundColor = .cellColor()
         self.layer.borderColor = UIColor.white.cgColor
         self.layer.cornerRadius = 10
         addSubview(thumnailImage)
@@ -224,21 +227,37 @@ class BookSelectCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
-        backgroundColor = .mainColor()
+        backgroundColor = .cellColor()
     }
     
 }
 
 class ThemeColorViewCell: UICollectionViewCell {
+    let ThemeTitle:UILabel = {
+        let t  = UILabel()
+        t.textColor = .black
+//        t.text = "知的なあなた"
+        t.font = UIFont.boldSystemFont(ofSize: 12)
+        t.numberOfLines = 1
+        return t
+    }()
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.cornerRadius = 10
+        addSubview(ThemeTitle)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     override func layoutSubviews() {
         super.layoutSubviews()
+        ThemeTitle.pin.all()
+    }
+    
+    func colorConfigure(themeName: String,themeColor: UIColor){
+        ThemeTitle.text = themeName
+        backgroundColor = themeColor
+        
     }
 }
 

@@ -109,11 +109,11 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 255/255, alpha: 1)
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)]
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            self.title = "本棚"
+//            self.title = "本棚"
         }
     }
     

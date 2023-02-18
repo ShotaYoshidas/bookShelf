@@ -50,22 +50,22 @@ class BookSelectViewController: UIViewController {
     
     var usegeButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
-        u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
+        u.tintColor = .naviTintColor()
         return u
     }()
     
     var moveButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
-        u.tintColor = UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)
+        u.tintColor = .naviTintColor()
         return u
     }()
     
     let memoTextView: UITextView = {
         let qt =  UITextView()
-        qt.layer.borderColor = UIColor.white.cgColor
-        qt.layer.borderWidth = 1
+//        qt.layer.borderColor = UIColor.clear.c
+//        qt.layer.borderWidth = 1
         qt.textColor = .black
-        qt.backgroundColor = .white
+        qt.backgroundColor = .cellColor()
         qt.font = UIFont.systemFont(ofSize: 17)
         qt.layer.cornerRadius = 10
         qt.isEditable = true
@@ -87,7 +87,7 @@ class BookSelectViewController: UIViewController {
                                 action: nil)
     let done = UIBarButtonItem(title: "完了",
                                style: .done,
-                               target: self,
+                               target: self,//なんかでる(FIXするとビルド時エラー)
                                action: #selector(didTapDoneButton))
     
     let edit: UIImage = {
@@ -106,7 +106,7 @@ class BookSelectViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .bookSelectColor()
+        view.backgroundColor = .mainColor()
         navigationItem.title  = titleName
         view.addSubview(collectionView)
         view.addSubview(memoTextView)
@@ -121,7 +121,7 @@ class BookSelectViewController: UIViewController {
         countLabel.text = "文字数：\(commentNum)"
         usegeButton =  UIBarButtonItem(image: edit, style: UIBarButtonItem.Style.done, target: self, action: #selector(taped))
         self.navigationItem.rightBarButtonItems = [usegeButton]
-        self.navigationController?.navigationBar.tintColor = UIColor.darkGray
+        self.navigationController?.navigationBar.tintColor = .naviTintColor()
         NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
     }
     
@@ -142,6 +142,7 @@ class BookSelectViewController: UIViewController {
     @objc func call() {
         view.backgroundColor = .mainColor()
         collectionView.backgroundColor = .mainColor()
+        memoTextView.backgroundColor = .cellColor()
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()

@@ -52,7 +52,7 @@ class ExplanationViewController: UIViewController {
         super.viewDidLoad()
        view.addSubview(thumbnailView)
         thumbnailView.addSubview(text)
-        self.navigationController?.navigationBar.tintColor = UIColor.darkGray
+        self.navigationController?.navigationBar.tintColor = .naviTintColor()
     }
     
     

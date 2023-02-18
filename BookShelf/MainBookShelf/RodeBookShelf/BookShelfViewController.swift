@@ -67,7 +67,7 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         }
@@ -122,11 +122,10 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 255/255, alpha: 1)
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(red: 119/255, green: 136/255, blue: 153/255, alpha: 1)]
+            appearance.backgroundColor = .mainColor()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            self.title = "本棚"
         }
     }
 }
@@ -154,17 +153,6 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     
-    //
-//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        print("yosi\(model.roadBooks)")
-//        print("yosi\(model.roadBooks[sourceIndexPath.row].title)")
-//    let item = model.roadBooks.remove(at: sourceIndexPath.row)
-//            model.roadBooks.insert(item, at: destinationIndexPath.row)
-//        print("yosi\(pokemons.insert(item, at: destinationIndexPath.row))")
-//            }
-   
-        
-    
     
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         return true
@@ -179,7 +167,6 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
         bs.moveBookDelegate = self
     }
     
-        //longtapと共存できず
         func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
                 let move = UIAction(title: "積読書へ移動", image: UIImage(systemName: "books.vertical")) { action in
