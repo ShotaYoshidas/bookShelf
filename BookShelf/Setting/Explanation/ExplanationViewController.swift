@@ -13,7 +13,7 @@ class ExplanationViewController: UIViewController {
     
     let thumbnailView:UIImageView = {
         let i = UIImageView()
-        i.backgroundColor = .white
+        i.backgroundColor = .mainBackground
         i.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
         i.isUserInteractionEnabled = true
         i.layer.shadowColor = UIColor.black.cgColor
@@ -21,13 +21,13 @@ class ExplanationViewController: UIViewController {
         i.layer.shadowOpacity = 0.8
         i.layer.shadowRadius = 0.9
         i.layer.cornerRadius = 0.9
-        i.image = UIImage(named:"F5682CAE-8A2A-4F43-9D9B-82B8664E3850")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+//        i.image = UIImage(named:"F5682CAE-8A2A-4F43-9D9B-82B8664E3850")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         return i
     }()
     
     let text:UITextView = {
         let t = UITextView()
-        t.textColor = .black
+        t.textColor = .naviTintColor
         t.text = """
             アプリ「どこでも本棚」ダウンロードありがとうございます。
 
@@ -52,7 +52,8 @@ class ExplanationViewController: UIViewController {
         super.viewDidLoad()
        view.addSubview(thumbnailView)
         thumbnailView.addSubview(text)
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
+        navigationItem.title = "アプリについて"
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
     }
     
     
@@ -62,11 +63,11 @@ class ExplanationViewController: UIViewController {
         text.pin.topCenter().size(CGSize(width: UIScreen.main.bounds.width * 0.9, height: UIScreen.main.bounds.height * 0.65 )).margin(UIScreen.main.bounds.height * 0.2)
     }
   
-    override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
-            navigationController?.navigationBar.scrollEdgeAppearance?.configureWithTransparentBackground()
-            navigationController?.navigationBar.compactAppearance?.configureWithTransparentBackground()
-            navigationController?.navigationBar.compactScrollEdgeAppearance?.configureWithTransparentBackground()
-        }
+//    override func viewWillAppear(_ animated: Bool) {
+//            super.viewWillAppear(animated)
+//            navigationController?.navigationBar.standardAppearance.configureWithTransparentBackground()
+//            navigationController?.navigationBar.scrollEdgeAppearance?.configureWithTransparentBackground()
+//            navigationController?.navigationBar.compactAppearance?.configureWithTransparentBackground()
+//            navigationController?.navigationBar.compactScrollEdgeAppearance?.configureWithTransparentBackground()
+//        }
 }

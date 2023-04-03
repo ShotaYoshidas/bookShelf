@@ -50,34 +50,24 @@ class BookSelectViewController: UIViewController {
     
     var usegeButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
-        u.tintColor = .naviTintColor()
+        u.tintColor = .naviTintColor
         return u
     }()
     
     var moveButton: UIBarButtonItem = {
         let u = UIBarButtonItem()
-        u.tintColor = .naviTintColor()
+        u.tintColor = .naviTintColor
         return u
     }()
     
     let memoTextView: UITextView = {
         let qt =  UITextView()
-//        qt.layer.borderColor = UIColor.clear.c
-//        qt.layer.borderWidth = 1
-        qt.textColor = .black
-        qt.backgroundColor = .cellColor()
+        qt.textColor = .naviTintColor
+        qt.backgroundColor = .cellColor
         qt.font = UIFont.systemFont(ofSize: 17)
         qt.layer.cornerRadius = 10
         qt.isEditable = true
         return qt
-    }()
-    
-    let countLabel: UILabel = {
-        let l = UILabel()
-        l.backgroundColor = .clear
-        l.textColor = .lightGray
-        l.font =  UIFont.boldSystemFont(ofSize: 15)
-        return l
     }()
     
     let toolbar = UIToolbar()
@@ -106,53 +96,32 @@ class BookSelectViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
         navigationItem.title  = titleName
         view.addSubview(collectionView)
         view.addSubview(memoTextView)
-        view.addSubview(countLabel)
         collectionView.delegate = self
         collectionView.dataSource = self
         toolbar.items = [space, done]
         toolbar.sizeToFit()
         memoTextView.inputAccessoryView = toolbar
         memoTextView.text = memo
-        let commentNum = memoTextView.text.count
-        countLabel.text = "文字数：\(commentNum)"
         usegeButton =  UIBarButtonItem(image: edit, style: UIBarButtonItem.Style.done, target: self, action: #selector(taped))
         self.navigationItem.rightBarButtonItems = [usegeButton]
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
-        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
     }
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
-        collectionView.pin.topCenter().width(UIScreen.main.bounds.width).height(UIScreen.main.bounds.height * 0.35)
-        memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.95).height(UIScreen.main.bounds.width * 0.70).margin(10)
-        countLabel.pin.below(of: memoTextView, aligned: .left).width(UIScreen.main.bounds.width / 4).sizeToFit(.width).margin(2)
+        collectionView.pin.topCenter().width(UIScreen.main.bounds.width).height(UIScreen.main.bounds.height * 0.38)
+        memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.95).height(UIScreen.main.bounds.width * 0.8).margin(10)
     }
     
     @objc func didTapDoneButton() {
         memoTextView.resignFirstResponder()
         delegate?.updateText(memo: memoTextView.text,id: id)
-        let commentNum = memoTextView.text.count
-        countLabel.text = "文字数：\(commentNum)"
+        collectionView.reloadData()
     }
-   
-    @objc func call() {
-        view.backgroundColor = .mainColor()
-        collectionView.backgroundColor = .mainColor()
-        memoTextView.backgroundColor = .cellColor()
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
-            self.navigationController?.navigationBar.standardAppearance = appearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        }
-    }
-    
     
     @objc func taped(sender: UIButton) {
         let alert = UIAlertController(title: .none, message: "Menu", preferredStyle: .actionSheet)
@@ -197,7 +166,7 @@ extension BookSelectViewController: UICollectionViewDataSource,UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? BookSelectCell {
-            cell.BookSelectConfigure(imageData: imageData, titleName: titleName,authorName: authorName,saveTime: saveTime)
+            cell.BookSelectConfigure(imageData: imageData, titleName: titleName,authorName: authorName,saveTime: saveTime, memoCount: memoTextView.text.count)
             return cell
         }
         return UICollectionViewCell()
@@ -208,7 +177,7 @@ extension BookSelectViewController: UICollectionViewDataSource,UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 25, left: UIScreen.main.bounds.width/2 - 80, bottom: 0, right: UIScreen.main.bounds.width/2 - 80)
+        UIEdgeInsets(top: 45, left: UIScreen.main.bounds.width/2 - 80, bottom: 0, right: UIScreen.main.bounds.width/2 - 80)
     }
     
     

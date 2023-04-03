@@ -30,7 +30,7 @@ class CollectionViewCell: UICollectionViewCell {
     }()
     let title:UILabel = {
         let t  = UILabel()
-        t.textColor = .black
+        t.textColor = .naviTintColor
         t.font = UIFont.boldSystemFont(ofSize: 16)
         t.numberOfLines = 0
         return t
@@ -53,7 +53,7 @@ class CollectionViewCell: UICollectionViewCell {
     let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .cellColor()
+        self.backgroundColor = .cellColor
         self.layer.borderColor = UIColor.white.cgColor
         self.layer.cornerRadius = 10
         addSubview(thumnailImage)
@@ -81,21 +81,21 @@ class CollectionViewCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
-        backgroundColor = .cellColor()
+        backgroundColor = .cellColor
     }
     
     func barCodeConfigure(image: UIImage, titleName: String, authorName: String) {
         title.text = titleName
         author.text = authorName
         thumnailImage.image = image
-        backgroundColor = .cellColor()
+        backgroundColor = .cellColor
     }
     
     func searchConfigure(titleName: String,authorName: String,imageUrl: String) {
         title.text = titleName
         author.text = authorName
         thumnailImage.loadImage(with: imageUrl)
-        backgroundColor = .cellColor()
+        backgroundColor = .cellColor
     }
     
 }
@@ -118,7 +118,7 @@ class GridCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .mainColor()
+        self.backgroundColor = .mainBackground
        addSubview(thumnailImage)
         
     }
@@ -140,7 +140,7 @@ class GridCollectionViewCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
-        backgroundColor = .mainColor()
+        backgroundColor = .mainBackground
         
     }
 }
@@ -169,7 +169,7 @@ class BookSelectCell: UICollectionViewCell {
     
     let title:UILabel = {
         let t  = UILabel()
-        t.textColor = .black
+        t.textColor = .naviTintColor
         t.font = UIFont.boldSystemFont(ofSize: 15)
         t.numberOfLines = 4
         return t
@@ -178,31 +178,38 @@ class BookSelectCell: UICollectionViewCell {
     let author: UILabel = {
         let l = UILabel()
         l.textColor = .gray
-        l.font = UIFont.systemFont(ofSize: 12)
+        l.font = UIFont.systemFont(ofSize: 14)
         
         return l
     }()
     
     let saveTimeLabel: UILabel = {
         let t = UILabel()
-        t.textColor = .black
-        
-        t.font = UIFont.systemFont(ofSize: 10)
+        t.textColor = .gray
+        t.font = UIFont.systemFont(ofSize: 13)
         
         return t
+    }()
+    
+    let memoCountLabel: UILabel = {
+        let a = UILabel()
+        a.textColor = .gray
+        a.font = UIFont.systemFont(ofSize: 13)
+        return a
     }()
     
     let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .cellColor()
+        self.backgroundColor = .cellColor
         self.layer.borderColor = UIColor.white.cgColor
         self.layer.cornerRadius = 10
         addSubview(thumnailImage)
         addSubview(title)
         addSubview(author)
         addSubview(saveTimeLabel)
+        addSubview(memoCountLabel)
         
     }
     required init?(coder: NSCoder) {
@@ -214,11 +221,13 @@ class BookSelectCell: UICollectionViewCell {
         title.pin.right(of: thumnailImage).topLeft().topRight().margin(25).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
         author.pin.below(of: title,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
         saveTimeLabel.pin.below(of: author,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
+        memoCountLabel.pin.below(of: saveTimeLabel,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
     }
    
-    func BookSelectConfigure(imageData: Data, titleName: String, authorName: String, saveTime: String ){
+    func BookSelectConfigure(imageData: Data, titleName: String, authorName: String, saveTime: String, memoCount: Int){
         title.text = titleName
         author.text = authorName
+        memoCountLabel.text = "文字数:\(memoCount)"
         let prefixStr: Substring = saveTime.prefix(10)
         saveTimeLabel.text = "登録日:\(prefixStr)"
         guard let image = UIImage(data: imageData)
@@ -227,37 +236,8 @@ class BookSelectCell: UICollectionViewCell {
             return
         }
         thumnailImage.image = image
-        backgroundColor = .cellColor()
+        backgroundColor = .cellColor
     }
     
-}
-
-class ThemeColorViewCell: UICollectionViewCell {
-    let ThemeTitle:UILabel = {
-        let t  = UILabel()
-        t.textColor = .black
-//        t.text = "知的なあなた"
-        t.font = UIFont.boldSystemFont(ofSize: 12)
-        t.numberOfLines = 1
-        return t
-    }()
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.layer.cornerRadius = 10
-        addSubview(ThemeTitle)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        ThemeTitle.pin.all()
-    }
-    
-    func colorConfigure(themeName: String,themeColor: UIColor){
-        ThemeTitle.text = themeName
-        backgroundColor = themeColor
-        
-    }
 }
 

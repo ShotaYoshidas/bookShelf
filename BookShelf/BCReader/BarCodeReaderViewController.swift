@@ -29,19 +29,19 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         cv.alwaysBounceVertical = true
         cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = .mainColor()
+        cv.backgroundColor = .mainBackground
         return cv
     }()
     let aboveOverlay:UIView = {
         let ol = UIView()
-        ol.backgroundColor = .mainColor()
+        ol.backgroundColor = .mainBackground
         return ol
     }()
     let closeBtn:UIButton = {
         let cb = UIButton()
         cb.setTitle("閉じる", for: UIControl.State.normal)
         cb.backgroundColor = UIColor.clear
-        cb.setTitleColor(UIColor.darkGray, for: UIControl.State.normal)
+        cb.setTitleColor(.naviTintColor, for: UIControl.State.normal)
         cb.addTarget(nil, action: #selector(closeTaped(sender:)), for: .touchUpInside)
         return cb
     }()

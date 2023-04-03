@@ -57,6 +57,7 @@ final class BookShelfModel {
             }
         }
         NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     func SerchTumidokuUpdate(newBook2: Item) {
         if let url = URL(string: newBook2.volumeInfo?.imageLinks?.thumbnail! ?? "") {

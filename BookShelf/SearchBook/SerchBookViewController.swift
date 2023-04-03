@@ -15,10 +15,12 @@ struct TopTier : Codable {
     var totalItems: Int?
     var items: [Item]?
 }
+
 struct Item: Codable {
     var volumeInfo: VolumeInfo?
     
 }
+
 struct VolumeInfo: Codable {
     var title: String?
 //    var subtitle: String?
@@ -47,7 +49,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         let s = UISearchBar()
         s.showsCancelButton = true
         s.backgroundImage = UIImage()
-        s.backgroundColor = .mainColor()
+        s.backgroundColor = .mainBackground
         s.layer.cornerRadius = 4
         s.showsCancelButton = true
         s.placeholder = "本を検索"
@@ -59,18 +61,15 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         cv.alwaysBounceVertical = true
         cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = .mainColor()
+        cv.backgroundColor = .mainBackground
         return cv
     }()
-   
-    
-   
-   
+  
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .mainColor()
-        collectionView.backgroundColor = .mainColor()
-        searchBooksField.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
+        collectionView.backgroundColor = .mainBackground
+        searchBooksField.backgroundColor = .mainBackground
         navigationBar15()
         UIBarButtonSet()
         view.addSubview(searchBooksField)
@@ -79,9 +78,9 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
         GoogleMobile()
-        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("aaa"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("colorSet"), object: nil)
         
     }
     
@@ -97,23 +96,23 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     }
    
     @objc func call(_ notification: Notification) {
-        view.backgroundColor = .mainColor()
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
-        collectionView.backgroundColor = .mainColor()
-        searchBooksField.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
+        collectionView.backgroundColor = .mainBackground
+        searchBooksField.backgroundColor = .mainBackground
         
         collectionView.reloadData()
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
+            appearance.backgroundColor = .mainBackground
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            UITabBar.appearance().tintColor = .naviTintColor()
+            UITabBar.appearance().tintColor = .naviTintColor
 //          コード修正する↓
-            let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
-            let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+            let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+            let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
             cameraButton = UIBarButtonItem(image: cameraImage, style: .plain, target: self, action: #selector(camera))
             pencilButton = UIBarButtonItem(image: pencilImage, style: .plain, target: self, action: #selector(taped))
             self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
@@ -121,8 +120,8 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     }
     
     func UIBarButtonSet(){
-        let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
-        let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+        let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         cameraButton = UIBarButtonItem(image: cameraImage, style: .plain, target: self, action: #selector(camera))
         pencilButton = UIBarButtonItem(image: pencilImage, style: .plain, target: self, action: #selector(taped))
         self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
@@ -164,8 +163,8 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
+            appearance.backgroundColor = .mainBackground
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
             self.title = "本を探す"

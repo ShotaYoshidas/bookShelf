@@ -35,7 +35,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
     
     lazy var scrollView:UIScrollView = {
         let sc = UIScrollView()
-        sc.backgroundColor = .mainColor()
+        sc.backgroundColor = .mainBackground
         return sc
     }()
     
@@ -45,7 +45,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         t.textColor = UIColor.lightGray
         t.font = UIFont.systemFont(ofSize: 15)
         t.textAlignment = .left
-        t.backgroundColor = .mainColor()
+        t.backgroundColor = .mainBackground
         return t
     }()
     
@@ -55,7 +55,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         t.textColor = UIColor.lightGray
         t.font = UIFont.systemFont(ofSize: 15)
         t.textAlignment = .left
-        t.backgroundColor = .mainColor()
+        t.backgroundColor = .mainBackground
         return t
     }()
     
@@ -92,7 +92,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
         self.view.addSubview(scrollView)
         view.addSubview(thumbnailView)
         scrollView.addSubview(titleLabel)
@@ -110,7 +110,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         self.navigationItem.rightBarButtonItem = usegeButton
         self.navigationItem.rightBarButtonItems = [usegeButton]
         navigationItem.title = "入力画面"
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
         
     }
     

@@ -24,28 +24,28 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         return sv!
     }()
     let listImage: UIImage = {
-        let i = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+        let i = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         return i ?? UIImage()
     }()
     let gridImage: UIImage = {
-        let i = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+        let i = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         return i ?? UIImage()
     }()
     let sortImage: UIImage = {
-        let i = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+        let i = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         return i ?? UIImage()
     }()
   
     private let bc: BookShelfViewController = .init()
     private let wbc:WillBookShelfViewController = .init()
     override func viewDidLoad() {
-        view.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
         settings.style.buttonBarMinimumLineSpacing = -1
         settings.style.buttonBarLeftContentInset = 0
         settings.style.buttonBarRightContentInset = 0
-        settings.style.selectedBarBackgroundColor = .naviTintColor()
-        settings.style.buttonBarItemBackgroundColor = .cellColor()
-        settings.style.buttonBarItemTitleColor = .naviTintColor()
+        settings.style.selectedBarBackgroundColor = .naviTintColor
+        settings.style.buttonBarItemBackgroundColor = .mainBackground
+        settings.style.buttonBarItemTitleColor = .naviTintColor
         settings.style.buttonBarItemFont = .boldSystemFont(ofSize: 15)
         settings.style.selectedBarHeight = 2
         super.viewDidLoad()
@@ -55,8 +55,8 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
         view.addSubview(collectionView)
         view.addSubview(scrollView)
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
-        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
+//        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("colorSet"), object: nil)
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -72,28 +72,27 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     }
    
     @objc func call() {
-        
-        settings.style.selectedBarBackgroundColor = .naviTintColor()
-        settings.style.buttonBarItemBackgroundColor = .cellColor()
-        settings.style.buttonBarItemTitleColor = .naviTintColor()
+        settings.style.selectedBarBackgroundColor = .naviTintColor
+        settings.style.buttonBarItemBackgroundColor = .cellColor
+        settings.style.buttonBarItemTitleColor = .naviTintColor
         super.viewDidLoad()
-        view.backgroundColor = .mainColor()
-        self.navigationController?.navigationBar.tintColor = .naviTintColor()
-        collectionView.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
+        collectionView.backgroundColor = .mainBackground
         collectionView.reloadData()
         
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
+            appearance.backgroundColor = .mainBackground
             
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            UITabBar.appearance().tintColor = .naviTintColor()
+            UITabBar.appearance().tintColor = .naviTintColor
             
-            let sortImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
-            let listImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+            let sortImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+            let listImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
             let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
             let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
@@ -103,9 +102,9 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     
     @objc func layoutChange(sender: UIButton) {
         NotificationCenter.default.post(name: Notification.Name("layoutChange"), object: nil, userInfo: .none)
-        let sortImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
-        let listImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
-        let gridImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor()]))
+        let sortImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        let listImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        let gridImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         switch layoutType {
         case .list:
             self.layoutType = .grid
@@ -148,8 +147,8 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
+            appearance.backgroundColor = .mainBackground
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
             self.title = "本棚"

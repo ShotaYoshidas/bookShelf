@@ -37,7 +37,7 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "Gridcell")
         cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = .mainColor()
+        cv.backgroundColor = .mainBackground
         return cv
     }()
     
@@ -45,32 +45,17 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         super.viewDidLoad()
         navigationBar15()
         view.addSubview(collectionView)
-        collectionView.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainBackground
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
         
     }
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
-    }
-    
-    @objc func call() {
-        view.backgroundColor = .mainColor()
-        collectionView.backgroundColor = .mainColor()
-        collectionView.reloadData()
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
-            self.navigationController?.navigationBar.standardAppearance = appearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        }
     }
     
     @objc private func updateCollectionView1(_ notification: Notification) {
@@ -122,8 +107,8 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
+            appearance.backgroundColor = .mainBackground
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         }

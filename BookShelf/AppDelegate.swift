@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = TabBarViewController()
         window?.makeKeyAndVisible()
+        window?.overrideUserInterfaceStyle = UserDefaults.standard.theme.userInterfaceStyle
         IQKeyboardManager.shared.enable = true
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         FirebaseApp.configure()

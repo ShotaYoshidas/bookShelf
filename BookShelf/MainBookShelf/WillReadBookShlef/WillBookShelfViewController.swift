@@ -37,12 +37,12 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         super.viewDidLoad()
         navigationBar15()
         view.addSubview(collectionView)
-        collectionView.backgroundColor = .mainColor()
+        collectionView.backgroundColor = .mainBackground
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: Notification.Name("bookupdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("aaa"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("colorSet"), object: nil)
         
     }
     
@@ -51,13 +51,13 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         collectionView.pin.all()
     }
     @objc func call() {
-        view.backgroundColor = .mainColor()
-        collectionView.backgroundColor = .mainColor()
+        view.backgroundColor = .mainBackground
+        collectionView.backgroundColor = .mainBackground
         collectionView.reloadData()
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
+            appearance.backgroundColor = .mainBackground
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
@@ -109,8 +109,8 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainColor()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor()]
+            appearance.backgroundColor = .mainBackground
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
 //            self.title = "本棚"
