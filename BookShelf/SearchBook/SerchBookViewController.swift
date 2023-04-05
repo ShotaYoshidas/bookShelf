@@ -23,10 +23,10 @@ struct Item: Codable {
 
 struct VolumeInfo: Codable {
     var title: String?
-//    var subtitle: String?
+    //    var subtitle: String?
     var authors: [String]?
     var imageLinks: ImageLinks?
-//    var int:Int?
+    //    var int:Int?
 }
 struct ImageLinks: Codable {
     var thumbnail:String?
@@ -64,7 +64,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         cv.backgroundColor = .mainBackground
         return cv
     }()
-  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .mainBackground
@@ -94,7 +94,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
-   
+    
     @objc func call(_ notification: Notification) {
         view.backgroundColor = .mainBackground
         self.navigationController?.navigationBar.tintColor = .naviTintColor
@@ -110,7 +110,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
             UITabBar.appearance().tintColor = .naviTintColor
-//          コード修正する↓
+            //          コード修正する↓
             let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
             let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
             cameraButton = UIBarButtonItem(image: cameraImage, style: .plain, target: self, action: #selector(camera))
@@ -130,10 +130,10 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     func GoogleMobile(){
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)
-//        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
+        //        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
         bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
-//        テスト：ca-app-pub-3940256099942544/6300978111
-//        本番：ca-app-pub-1273760422540329/1826776892
+        //        テスト：ca-app-pub-3940256099942544/6300978111
+        //        本番：ca-app-pub-1273760422540329/1826776892
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
     }
@@ -222,10 +222,13 @@ extension SerchBookViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
         let alert = UIAlertController(title: .none, message: .none, preferredStyle: .actionSheet)
-       
+        
         alert.popoverPresentationController?.sourceView = self.view
-                    let screenSize = UIScreen.main.bounds
-                    alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
+        let screenSize = UIScreen.main.bounds
+        alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+        feedbackGenerator.prepare()
+        feedbackGenerator.impactOccurred()
         
         let realm = try! Realm()
         if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.searchmodel.response?.items![indexPath.row].volumeInfo!.title! && $0.author == searchmodel.response?.items![indexPath.row].volumeInfo!.authors?[0]}).first != nil){
@@ -237,11 +240,28 @@ extension SerchBookViewController: UICollectionViewDataSource {
                 let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: Notification.Name("SerchKandokuUpdate"), object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
+                let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
+                present(alert, animated: true, completion: nil)
+                //
+                let feedbackGenerator = UINotificationFeedbackGenerator()
+                feedbackGenerator.notificationOccurred(.success)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    //ここに処理
+                    alert.dismiss(animated: true, completion: nil)
+                }
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
                 let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: Notification.Name("SerchTumidokuUpdate"), object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
+                let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
+                present(alert, animated: true, completion: nil)
+                let feedbackGenerator = UINotificationFeedbackGenerator()
+                feedbackGenerator.notificationOccurred(.success)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    //ここに処理
+                    alert.dismiss(animated: true, completion: nil)
+                }
             }
             alert.addAction(bookShelf)
             alert.addAction(willBookShelf)
