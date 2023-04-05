@@ -9,7 +9,7 @@ import UIKit
 import XLPagerTabStrip
 
 class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate {
-    private var layoutType:LayoutType = .grid
+//    private var layoutType:LayoutType = .grid
     func moveBook(id: String) {
         WillModel.moveBook(id: id)
         
@@ -41,8 +41,7 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: Notification.Name("bookupdate"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("colorSet"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
         
     }
     
@@ -50,19 +49,7 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
     }
-    @objc func call() {
-        view.backgroundColor = .mainBackground
-        collectionView.backgroundColor = .mainBackground
-        collectionView.reloadData()
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainBackground
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.darkGray]
-            self.navigationController?.navigationBar.standardAppearance = appearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        }
-    }
+   
     
     
     @objc private func updateCollectionView2(_ notification: Notification) {
@@ -72,15 +59,15 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         }
     }
     
-    @objc func changeLayout(){
-        switch layoutType {
-        case .list:
-            self.layoutType = .grid
-        case .grid:
-            self.layoutType = .list
-        }
-        collectionView.reloadData()
-    }
+//    @objc func changeLayout(){
+//        switch layoutType {
+//        case .list:
+//            layoutType = .grid
+//        case .grid:
+//            layoutType = .list
+//        }
+//        collectionView.reloadData()
+//    }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         let itemInfo: IndicatorInfo = {
@@ -103,6 +90,10 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
     }
     func dateRsort(){
         WillModel.dateRsort()
+    }
+    
+    func layoutChange(){
+        collectionView.reloadData()
     }
     
     func navigationBar15() {

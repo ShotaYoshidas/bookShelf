@@ -18,8 +18,6 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         model.moveBook(id: id)
     }
     
-    
-    private var layoutType:LayoutType = .grid
     func updateText(memo: String, id: String) {
         model.updateText(memo: memo, id: id)
     }
@@ -49,8 +47,6 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
-        
     }
     
     override func viewDidLayoutSubviews(){
@@ -63,16 +59,6 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         if let pagerTabStrip = self.parent as? ButtonBarPagerTabStripViewController {
             pagerTabStrip.buttonBarView.reloadData()
         }
-    }
-    
-    @objc func changeLayout(){
-        switch layoutType {
-        case .list:
-            self.layoutType = .grid
-        case .grid:
-            self.layoutType = .list
-        }
-        collectionView.reloadData()
     }
     
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
@@ -102,7 +88,10 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
     func dateRsort(){
         model.dateRsort()
     }
-    
+   
+    func layoutChange(){
+        collectionView.reloadData()
+    }
     func navigationBar15() {
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
@@ -121,6 +110,7 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print("aaaarode\(layoutType)")
         guard model.roadBooks.count > indexPath.row else { return UICollectionViewCell() }
         switch layoutType {
         case .list:
@@ -168,9 +158,11 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:
+//            print("aaaa\(layoutType)")
             return CGSize(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.height * 0.2)
             
         case .grid:
+//            print("aaaa\(layoutType)")
             let w = UIScreen.main.bounds.width / 5
             return CGSize(width: w, height: w * 1.5)
         }

@@ -66,7 +66,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         qt.textColor = .black
         qt.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.width/20)
         qt.layer.cornerRadius = 10
-        qt.backgroundColor = .white
+        qt.backgroundColor = .cellColor
         return qt
     }()
     
@@ -77,7 +77,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         qt.textColor = .black
         qt.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.width/20)
         qt.layer.cornerRadius = 10
-        qt.backgroundColor = .white
+        qt.backgroundColor = .cellColor
         return qt
     }()
     
@@ -111,7 +111,6 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         self.navigationItem.rightBarButtonItems = [usegeButton]
         navigationItem.title = "入力画面"
         self.navigationController?.navigationBar.tintColor = .naviTintColor
-        
     }
     
     override func viewWillLayoutSubviews() {

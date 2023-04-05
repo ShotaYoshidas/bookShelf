@@ -12,9 +12,9 @@ enum LayoutType {
     case list
     case grid
 }
-
+var layoutType:LayoutType = .grid
 class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollectionViewDelegateFlowLayout {
-    private var layoutType:LayoutType = .list
+//    private var layoutType:LayoutType = .list
     lazy var collectionView: ButtonBarView = {
         let cv = buttonBarView
         return cv!
@@ -56,7 +56,6 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         view.addSubview(collectionView)
         view.addSubview(scrollView)
         self.navigationController?.navigationBar.tintColor = .naviTintColor
-//        NotificationCenter.default.addObserver(self, selector: #selector(call), name: Notification.Name("colorSet"), object: nil)
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -70,53 +69,25 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         return [bc, wbc]
     }
-   
-    @objc func call() {
-        settings.style.selectedBarBackgroundColor = .naviTintColor
-        settings.style.buttonBarItemBackgroundColor = .cellColor
-        settings.style.buttonBarItemTitleColor = .naviTintColor
-        super.viewDidLoad()
-        view.backgroundColor = .mainBackground
-        self.navigationController?.navigationBar.tintColor = .naviTintColor
-        collectionView.backgroundColor = .mainBackground
-        collectionView.reloadData()
-        
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainBackground
-            
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
-            self.navigationController?.navigationBar.standardAppearance = appearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            UITabBar.appearance().tintColor = .naviTintColor
-            
-            let sortImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-            let listImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
-            let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
-            self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-        }
-    }
-    
     
     @objc func layoutChange(sender: UIButton) {
-        NotificationCenter.default.post(name: Notification.Name("layoutChange"), object: nil, userInfo: .none)
-        let sortImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        let listImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        let sortImage = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        let listImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         let gridImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         switch layoutType {
         case .list:
-            self.layoutType = .grid
-            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
-            let layoutChangeBarButtonItem = UIBarButtonItem(image: gridImage, style: .plain, target: self, action: #selector(layoutChange))
-            self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-        case .grid:
-            self.layoutType = .list
+            layoutType = .grid
             let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
             let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
+        case .grid:
+            layoutType = .list
+            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
+            let layoutChangeBarButtonItem = UIBarButtonItem(image: gridImage, style: .plain, target: self, action: #selector(layoutChange))
+            self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
         }
+        bc.layoutChange()
+        wbc.layoutChange()
         }
         
     @objc func sort(sender: UIButton) {

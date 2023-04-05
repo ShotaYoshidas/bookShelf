@@ -114,7 +114,7 @@ class TabBarViewController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(barcodeTumidokuUpdate), name: Notification.Name("BarcodeTumidokuUpdate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(manualInputData), name: Notification.Name("ManualInput"), object: nil)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("colorSet"), object: nil)
+
     }
    
    
