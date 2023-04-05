@@ -133,9 +133,11 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alert, animated: true, completion: nil)
         } else {
+            
             let bookInfo = ["title": titleTextView.text ?? "nil","author": authorTextView.text ?? "nil","thumnail": thumbnailView.image ?? UIImage()] as [String : Any]
             NotificationCenter.default.post(name: Notification.Name("ManualInput"), object: nil, userInfo: bookInfo as [AnyHashable : Any])
             navigationController?.popViewController(animated: true)
+            NotificationCenter.default.post(name: Notification.Name("call"), object: nil, userInfo: .none)
         }
         
     }

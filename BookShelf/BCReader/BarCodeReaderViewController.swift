@@ -138,6 +138,9 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
         return UICollectionViewCell()
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+        feedbackGenerator.prepare()
+        feedbackGenerator.impactOccurred()
         let alert = UIAlertController(title: .none, message: .none, preferredStyle: .actionSheet)
         let realm = try! Realm()
         if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.model.books[indexPath.row].title && $0.author == model.books[indexPath.row].author}).first != nil){
@@ -149,6 +152,8 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
                 let userInfo = ["serchBook": model.books[indexPath.row]]
                 NotificationCenter.default.post(name: Notification.Name("BarcodeKandokuUpdate"), object: nil, userInfo: userInfo)
                 self.dismiss(animated: true, completion: nil)
+                NotificationCenter.default.post(name: Notification.Name("call"), object: nil, userInfo: .none)
+                
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
                 let userInfo = ["serchBook": model.books[indexPath.row]]
@@ -157,6 +162,7 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
             }
             alert.addAction(bookShelf)
             alert.addAction(willBookShelf)
+            
         }
         
         let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (acrion) in

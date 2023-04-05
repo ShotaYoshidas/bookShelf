@@ -80,7 +80,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         collectionView.dataSource = self
         self.navigationController?.navigationBar.tintColor = .naviTintColor
         GoogleMobile()
-        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("colorSet"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("call"), object: nil)
         
     }
     
@@ -96,27 +96,14 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     }
     
     @objc func call(_ notification: Notification) {
-        view.backgroundColor = .mainBackground
-        self.navigationController?.navigationBar.tintColor = .naviTintColor
-        collectionView.backgroundColor = .mainBackground
-        searchBooksField.backgroundColor = .mainBackground
-        
-        collectionView.reloadData()
-        if #available(iOS 15.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = .mainBackground
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
-            self.navigationController?.navigationBar.standardAppearance = appearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            UITabBar.appearance().tintColor = .naviTintColor
-            //          コード修正する↓
-            let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-            let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-            cameraButton = UIBarButtonItem(image: cameraImage, style: .plain, target: self, action: #selector(camera))
-            pencilButton = UIBarButtonItem(image: pencilImage, style: .plain, target: self, action: #selector(taped))
-            self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
-        }
+        let alert1 = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
+        present(alert1, animated: true, completion: {
+            let feedbackGenerator = UINotificationFeedbackGenerator()
+            feedbackGenerator.notificationOccurred(.success)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                alert1.dismiss(animated: true, completion: nil)
+            }
+        })
     }
     
     func UIBarButtonSet(){
@@ -241,27 +228,28 @@ extension SerchBookViewController: UICollectionViewDataSource {
                 NotificationCenter.default.post(name: Notification.Name("SerchKandokuUpdate"), object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
-                present(alert, animated: true, completion: nil)
-                //
                 let feedbackGenerator = UINotificationFeedbackGenerator()
                 feedbackGenerator.notificationOccurred(.success)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    //ここに処理
-                    alert.dismiss(animated: true, completion: nil)
-                }
+                present(alert, animated: true, completion: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        alert.dismiss(animated: true, completion: nil)
+                    }
+                })
+                
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
                 let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: Notification.Name("SerchTumidokuUpdate"), object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
-                present(alert, animated: true, completion: nil)
                 let feedbackGenerator = UINotificationFeedbackGenerator()
                 feedbackGenerator.notificationOccurred(.success)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    //ここに処理
-                    alert.dismiss(animated: true, completion: nil)
-                }
+                present(alert, animated: true, completion: {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        alert.dismiss(animated: true, completion: nil)
+                    }
+                })
+                
             }
             alert.addAction(bookShelf)
             alert.addAction(willBookShelf)
