@@ -14,6 +14,10 @@ import RealmSwift
 
 
 class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate {
+//    func tagOpion(tag: [String], id: String) {
+//        model.tagOption(tag: tag, id: id)
+//    }
+    
     func moveBook(id: String) {
         model.moveBook(id: id)
     }
@@ -69,7 +73,6 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         return itemInfo
     }
     
-    
     func SerchKandokuUpdate(newBook1: Item) {
         model.SerchKandokuUpdate(newBook1: newBook1)
     }
@@ -110,7 +113,6 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print("aaaarode\(layoutType)")
         guard model.roadBooks.count > indexPath.row else { return UICollectionViewCell() }
         switch layoutType {
         case .list:
@@ -136,7 +138,9 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bs = BookSelectViewController(titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author, imageData: model.roadBooks[indexPath.row].imageData,id: model.roadBooks[indexPath.row].id,memo:model.roadBooks[indexPath.row].memo,saveTime: model.roadBooks[indexPath.row].saveTime,vc: 1)
+        
         navigationController?.pushViewController(bs, animated: true)
+        
         bs.delegate = self
         bs.deleteDelegate = self
         bs.moveBookDelegate = self

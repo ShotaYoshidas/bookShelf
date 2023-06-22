@@ -163,7 +163,6 @@ class BookSelectCell: UICollectionViewCell {
         cv.layer.cornerRadius = 0.9
         cv.isUserInteractionEnabled = true
         cv.contentMode = .scaleAspectFit
-        
         return cv
     }()
     

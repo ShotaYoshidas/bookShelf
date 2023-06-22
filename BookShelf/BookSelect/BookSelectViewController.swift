@@ -9,6 +9,12 @@ import UIKit
 import Foundation
 import PinLayout
 import XLPagerTabStrip
+import RealmSwift
+
+//protocol tagOpionDelegate: AnyObject {
+//    func tagOpion(tag: [String],id: String)
+//
+//}
 protocol bookTextDelegate: AnyObject {
     func updateText(memo: String,id: String)
 }
@@ -21,8 +27,9 @@ protocol BookMoveDelegate: AnyObject {
     func moveBook(id: String)
 }
 
-class BookSelectViewController: UIViewController {
+class BookSelectViewController: UIViewController,UIAdaptivePresentationControllerDelegate {
     weak var delegate: bookTextDelegate? = nil
+//    weak var tagDelegate: tagOpionDelegate? = nil
     weak var deleteDelegate: BookShelfModelDeleteDelegate? = nil
     weak var moveBookDelegate: BookMoveDelegate? = nil
     let id: String
@@ -32,6 +39,7 @@ class BookSelectViewController: UIViewController {
     let memo: String
     let saveTime: String
     let vc:Int
+//    let tagList:List<tagObject>
     init(titleName: String,authorName: String,imageData: Data,id: String,memo: String,saveTime: String,vc: Int) {
         self.id = id
         self.titleName = titleName
@@ -40,6 +48,7 @@ class BookSelectViewController: UIViewController {
         self.memo = memo
         self.saveTime = saveTime
         self.vc = vc
+//        self.tagList = tagList
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -49,15 +58,28 @@ class BookSelectViewController: UIViewController {
     }
     
     var usegeButton: UIBarButtonItem = {
-        let u = UIBarButtonItem()
+        let u = UIButton()
         u.tintColor = .naviTintColor
-        return u
+        return UIBarButtonItem(customView: u)
     }()
     
-    var moveButton: UIBarButtonItem = {
-        let u = UIBarButtonItem()
+    var favButton: UIBarButtonItem = {
+        let u = UIButton()
         u.tintColor = .naviTintColor
-        return u
+        return UIBarButtonItem(customView: u)
+    }()
+    
+//    var tagButton: UIBarButtonItem = {
+//        let u = UIButton()
+//        u.tintColor = .naviTintColor
+//        return UIBarButtonItem(customView: u)
+//    }()
+    
+    var moveButton: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        u.tintColor = .naviTintColor
+        return UIBarButtonItem(customView: u)
     }()
     
     let memoTextView: UITextView = {
@@ -75,14 +97,25 @@ class BookSelectViewController: UIViewController {
     let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                 target: nil,
                                 action: nil)
+    
     let done = UIBarButtonItem(title: "完了",
                                style: .done,
                                target: self,//なんかでる(FIXするとビルド時エラー)
                                action: #selector(didTapDoneButton))
     
+    let tagImage: UIImage = {
+        let i = UIImage(systemName: "bookmark.square", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        return i ?? UIImage()
+    }()
+    
     let edit: UIImage = {
-        let i = UIImage(systemName: "ellipsis.circle")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
-        return i
+        let i = UIImage(systemName: "ellipsis.circle", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        return i ?? UIImage()
+    }()
+    
+    let favo: UIImage = {
+        let i = UIImage(systemName: "star.square", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
+        return i ?? UIImage()
     }()
     
     let collectionView: UICollectionView = {
@@ -97,7 +130,6 @@ class BookSelectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .mainBackground
-        navigationItem.title  = titleName
         view.addSubview(collectionView)
         view.addSubview(memoTextView)
         collectionView.delegate = self
@@ -106,22 +138,41 @@ class BookSelectViewController: UIViewController {
         toolbar.sizeToFit()
         memoTextView.inputAccessoryView = toolbar
         memoTextView.text = memo
+//        作業中
+//        tagButton = UIBarButtonItem(image: tagImage, style: UIBarButtonItem.Style.done, target: self, action: #selector(tagSet))
         usegeButton =  UIBarButtonItem(image: edit, style: UIBarButtonItem.Style.done, target: self, action: #selector(taped))
-        self.navigationItem.rightBarButtonItems = [usegeButton]
+        favButton =  UIBarButtonItem(image: favo, style: UIBarButtonItem.Style.done, target: self, action: #selector(favoSelect))
+        self.navigationItem.rightBarButtonItems = [usegeButton,favButton]
         self.navigationController?.navigationBar.tintColor = .naviTintColor
     }
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         collectionView.pin.topCenter().width(UIScreen.main.bounds.width).height(UIScreen.main.bounds.height * 0.38)
-        memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.95).height(UIScreen.main.bounds.width * 0.8).margin(10)
+        memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.95).height(UIScreen.main.bounds.width * 0.8).margin(30)
     }
     
     @objc func didTapDoneButton() {
         memoTextView.resignFirstResponder()
         delegate?.updateText(memo: memoTextView.text,id: id)
         collectionView.reloadData()
+        }
+
+    @objc func favoSelect(){
+        
     }
+//    @objc func tagSet(){
+//        tags = UserDefaults.standard.stringArray(forKey: "tags") ?? [String]()
+//        defaults.set(tags, forKey: "tags")
+//        tagDelegate?.tagOpion(tag: tags, id: id)
+//        let vc = TagViewController(tagList: tagList)
+//        vc.presentationController?.delegate = self
+//                if let sheet = vc.sheetPresentationController {
+//                    sheet.detents = [.medium()]
+//                    sheet.prefersGrabberVisible = false
+//                }
+//        present(vc, animated: true, completion: nil)
+//    }
     
     @objc func taped(sender: UIButton) {
         let alert = UIAlertController(title: .none, message: "Menu", preferredStyle: .actionSheet)
@@ -156,6 +207,10 @@ class BookSelectViewController: UIViewController {
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
     }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+          print("モーダルから戻ったよ")
+        }
     
 }
 

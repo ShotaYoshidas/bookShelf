@@ -7,9 +7,15 @@
 
 import UIKit
 import XLPagerTabStrip
+import RealmSwift
 
 class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate {
-//    private var layoutType:LayoutType = .grid
+    
+//    func tagOpion(tag: [String], id: String) {
+//        WillModel.tagOption(tag: tag, id: id)
+//    }
+
+
     func moveBook(id: String) {
         WillModel.moveBook(id: id)
         
@@ -59,16 +65,6 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         }
     }
     
-//    @objc func changeLayout(){
-//        switch layoutType {
-//        case .list:
-//            layoutType = .grid
-//        case .grid:
-//            layoutType = .list
-//        }
-//        collectionView.reloadData()
-//    }
-    
     func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
         let itemInfo: IndicatorInfo = {
             let info = IndicatorInfo.init(title: "積読書:\(WillModel.willBooks.count)冊")
@@ -104,7 +100,6 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.naviTintColor]
             self.navigationController?.navigationBar.standardAppearance = appearance
             self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//            self.title = "本棚"
         }
     }
     

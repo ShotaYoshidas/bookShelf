@@ -117,10 +117,10 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     func GoogleMobile(){
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)
-        //        bannerView.adUnitID = "ca-app-pub-1273760422540329/1826776892"
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
+      bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
+//        bannerView.adUnitID = "ca-app-pub-1273760422540329/4032757853"
         //        テスト：ca-app-pub-3940256099942544/6300978111
-        //        本番：ca-app-pub-1273760422540329/1826776892
+        //        本番：ca-app-pub-1273760422540329/4032757853
         bannerView.rootViewController = self
         bannerView.load(GADRequest())
     }
