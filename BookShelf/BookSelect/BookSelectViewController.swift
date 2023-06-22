@@ -69,12 +69,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         return UIBarButtonItem(customView: u)
     }()
     
-//    var tagButton: UIBarButtonItem = {
-//        let u = UIButton()
-//        u.tintColor = .naviTintColor
-//        return UIBarButtonItem(customView: u)
-//    }()
-    
     var moveButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
@@ -113,11 +107,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         return i ?? UIImage()
     }()
     
-    let favo: UIImage = {
-        let i = UIImage(systemName: "star.square", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        return i ?? UIImage()
-    }()
-    
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = false
@@ -130,6 +119,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .mainBackground
+        navigationItem.title = titleName
         view.addSubview(collectionView)
         view.addSubview(memoTextView)
         collectionView.delegate = self
@@ -138,11 +128,8 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         toolbar.sizeToFit()
         memoTextView.inputAccessoryView = toolbar
         memoTextView.text = memo
-//        作業中
-//        tagButton = UIBarButtonItem(image: tagImage, style: UIBarButtonItem.Style.done, target: self, action: #selector(tagSet))
         usegeButton =  UIBarButtonItem(image: edit, style: UIBarButtonItem.Style.done, target: self, action: #selector(taped))
-        favButton =  UIBarButtonItem(image: favo, style: UIBarButtonItem.Style.done, target: self, action: #selector(favoSelect))
-        self.navigationItem.rightBarButtonItems = [usegeButton,favButton]
+        self.navigationItem.rightBarButtonItems = [usegeButton]
         self.navigationController?.navigationBar.tintColor = .naviTintColor
     }
     
@@ -161,21 +148,9 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     @objc func favoSelect(){
         
     }
-//    @objc func tagSet(){
-//        tags = UserDefaults.standard.stringArray(forKey: "tags") ?? [String]()
-//        defaults.set(tags, forKey: "tags")
-//        tagDelegate?.tagOpion(tag: tags, id: id)
-//        let vc = TagViewController(tagList: tagList)
-//        vc.presentationController?.delegate = self
-//                if let sheet = vc.sheetPresentationController {
-//                    sheet.detents = [.medium()]
-//                    sheet.prefersGrabberVisible = false
-//                }
-//        present(vc, animated: true, completion: nil)
-//    }
     
     @objc func taped(sender: UIButton) {
-        let alert = UIAlertController(title: .none, message: "Menu", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: .none, message: "メニュー", preferredStyle: .actionSheet)
         alert.popoverPresentationController?.sourceView = self.view
         let screenSize = UIScreen.main.bounds
         alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
@@ -184,25 +159,38 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
                 moveBookDelegate?.moveBook(id: self.id)
                 self.navigationController?.popViewController(animated: false)
             }
-            
             alert.addAction(moveToTumidoku)
         } else {
             let moveToKandoku = UIAlertAction(title: "完読書へ移動する", style: .default) { [self] (action) in
                 moveBookDelegate?.moveBook(id: self.id)
                 self.navigationController?.popViewController(animated: false)
             }
-            
             alert.addAction(moveToKandoku)
-            
         }
-        let delete = UIAlertAction(title: "削除する", style: .destructive) { [self] (action) in
-            deleteDelegate?.deleteBook(id: self.id)
+        let favoSelect = UIAlertAction(title: "お気に入りに追加", style: .default) { [self] (action) in
+            
             self.navigationController?.popViewController(animated: false)
         }
-        let cancel = UIAlertAction(title: "キャンセル", style: .cancel) { (acrion) in
+        
+        let delete = UIAlertAction(title: "削除する", style: .destructive) { [self] (action) in
+            
+            
+            let deleteAlert = UIAlertController(title: "本当に削除しますか", message: .none, preferredStyle: .alert)
+            let ok = UIAlertAction(title: "はい", style: .default) { [self] (action) in
+                deleteDelegate?.deleteBook(id: self.id)
+                self.navigationController?.popViewController(animated: false)
+            }
+            let cancel = UIAlertAction(title: "いいえ", style: .cancel) { (acrion) in
+                self.dismiss(animated: true, completion: nil)
+            }
+            deleteAlert.addAction(cancel)
+            deleteAlert.addAction(ok)
+            present(deleteAlert, animated: true, completion: nil)
+        }
+        let cancel = UIAlertAction(title: "キャンセル", style: .default) { (acrion) in
             alert.dismiss(animated: true, completion: nil)
         }
-        
+        alert.addAction(favoSelect)
         alert.addAction(delete)
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
