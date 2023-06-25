@@ -36,15 +36,26 @@ struct ImageLinks: Codable {
 class SerchBookViewController: UIViewController,UISearchBarDelegate {
     private let searchmodel: SearchBookModel = .init()
     var bannerView: GADBannerView!
-    var cameraButton: UIBarButtonItem = {
-        let u = UIBarButtonItem()
-        return u
+    lazy var pencilButton: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        u.setImage(UIImage.init(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
+        u.addTarget(self, action: #selector(taped), for: UIControl.Event.touchUpInside)
+        u.imageView?.contentMode = .scaleAspectFit
+        u.contentHorizontalAlignment = .fill
+        u.contentVerticalAlignment = .fill
+        return UIBarButtonItem(customView: u)
     }()
-    var pencilButton: UIBarButtonItem = {
-        let u = UIBarButtonItem()
-        return u
+    lazy var cameraButton: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        u.setImage(UIImage.init(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
+        u.addTarget(self, action: #selector(camera), for: UIControl.Event.touchUpInside)
+        u.imageView?.contentMode = .scaleAspectFit
+        u.contentHorizontalAlignment = .fill
+        u.contentVerticalAlignment = .fill
+        return UIBarButtonItem(customView: u)
     }()
-    
     var searchBooksField: UISearchBar = {
         let s = UISearchBar()
         s.showsCancelButton = true
@@ -55,7 +66,6 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         s.placeholder = "本を検索"
         return s
     }()
-    
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
@@ -71,19 +81,18 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
         collectionView.backgroundColor = .mainBackground
         searchBooksField.backgroundColor = .mainBackground
         navigationBar15()
-        UIBarButtonSet()
         view.addSubview(searchBooksField)
         searchBooksField.delegate = self
         searchmodel.delegate = self
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
+        self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
         self.navigationController?.navigationBar.tintColor = .naviTintColor
         GoogleMobile()
         NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("call"), object: nil)
         
     }
-    
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
@@ -105,15 +114,7 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
             }
         })
     }
-    
-    func UIBarButtonSet(){
-        let cameraImage = UIImage(systemName: "camera.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        let pencilImage = UIImage(systemName: "pencil.line", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        cameraButton = UIBarButtonItem(image: cameraImage, style: .plain, target: self, action: #selector(camera))
-        pencilButton = UIBarButtonItem(image: pencilImage, style: .plain, target: self, action: #selector(taped))
-        self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
-    }
-    
+//    広告
     func GoogleMobile(){
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         addBannerViewToView(bannerView)

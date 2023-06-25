@@ -31,7 +31,6 @@ protocol BookFavoDelegate: AnyObject {
 
 class BookSelectViewController: UIViewController,UIAdaptivePresentationControllerDelegate {
     weak var delegate: bookTextDelegate? = nil
-    //    weak var tagDelegate: tagOpionDelegate? = nil
     weak var deleteDelegate: BookShelfModelDeleteDelegate? = nil
     weak var favoDeledate: BookFavoDelegate? = nil
     weak var moveBookDelegate: BookMoveDelegate? = nil
@@ -59,7 +58,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         fatalError("init(coder:) has not been implemented")
         
     }
-    
     lazy var usegeButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
@@ -70,28 +68,21 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         u.contentVerticalAlignment = .fill
         return UIBarButtonItem(customView: u)
     }()
-    
-    let images = UIImage(systemName: "star.fill")
-    
     lazy var favButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width:25, height: 25)
-//        u.setImage(UIImage.init(systemName: "star.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.orange])), for: .normal)
-        
         u.addTarget(self, action: #selector(satrTaped), for: UIControl.Event.touchUpInside)
         u.imageView?.contentMode = .scaleAspectFit
         u.contentHorizontalAlignment = .fill
         u.contentVerticalAlignment = .fill
         return UIBarButtonItem(customView: u)
     }()
-    
     var moveButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         u.tintColor = .naviTintColor
         return UIBarButtonItem(customView: u)
     }()
-    
     let memoTextView: UITextView = {
         let qt =  UITextView()
         qt.textColor = .naviTintColor
@@ -101,9 +92,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         qt.isEditable = true
         return qt
     }()
-    
     let toolbar = UIToolbar()
-    
     let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
                                 target: nil,
                                 action: nil)
@@ -139,7 +128,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         toolbar.sizeToFit()
         memoTextView.inputAccessoryView = toolbar
         memoTextView.text = memo
-        self.navigationController?.navigationBar.tintColor = .naviTintColor  
+        self.navigationController?.navigationBar.tintColor = .naviTintColor
         if let button = favButton.customView as? UIButton {
             
             if favo == 0 {
@@ -168,8 +157,21 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
             if favo == 0 {
                 button.setImage(UIImage(systemName: "star.slash.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
                 
+                let favoAlert = UIAlertController(title: "お気に入り解除しました", message: .none, preferredStyle: .alert)
+                present(favoAlert, animated: true, completion: {
+                        favoAlert.dismiss(animated: true, completion: nil)
+                })
+                
             } else {
                 button.setImage(UIImage(systemName: "star.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.orange])), for: UIControl.State.normal)
+                let favoAlert = UIAlertController(title: "お気に入りに追加しました", message: .none, preferredStyle: .alert)
+                present(favoAlert, animated: true, completion: {
+//                    let feedbackGenerator = UINotificationFeedbackGenerator()
+//                    feedbackGenerator.notificationOccurred(.success)
+//                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        favoAlert.dismiss(animated: true, completion: nil)
+//                    }
+                })
             }
         }
         self.navigationItem.rightBarButtonItems = [usegeButton,favButton]
@@ -222,7 +224,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     @objc func satrTaped(sender: UIButton) {
         if favo == 0 {
             favoDeledate?.favoSelect(id: self.id)
-            
         } else {
             favoDeledate?.favoSelect(id: self.id)
         }

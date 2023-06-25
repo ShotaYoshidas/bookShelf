@@ -22,20 +22,37 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         let sv = containerView
         return sv!
     }()
+    lazy var sortBarButtonItem: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        u.setImage(UIImage.init(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
+        u.addTarget(self, action: #selector(sort), for: UIControl.Event.touchUpInside)
+        u.imageView?.contentMode = .scaleAspectFit
+        u.contentHorizontalAlignment = .fill
+        u.contentVerticalAlignment = .fill
+        return UIBarButtonItem(customView: u)
+    }()
+    lazy var layoutChangeBarButtonItem: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        u.setImage(UIImage.init(systemName: "list.bullet", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
+        u.addTarget(self, action: #selector(layoutChange), for: UIControl.Event.touchUpInside)
+        u.imageView?.contentMode = .scaleAspectFit
+        u.contentHorizontalAlignment = .fill
+        u.contentVerticalAlignment = .fill
+        return UIBarButtonItem(customView: u)
+    }()
+    lazy var favoBarButtonItem: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        u.setImage(UIImage.init(systemName: "list.star", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
+        u.addTarget(self, action: #selector(favoSort), for: UIControl.Event.touchUpInside)
+        u.imageView?.contentMode = .scaleAspectFit
+        u.contentHorizontalAlignment = .fill
+        u.contentVerticalAlignment = .fill
+        return UIBarButtonItem(customView: u)
+    }()
     
-    let listImage: UIImage = {
-        let i = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        return i ?? UIImage()
-    }()
-    let gridImage: UIImage = {
-        let i = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        return i ?? UIImage()
-    }()
-    let sortImage: UIImage = {
-        let i = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        return i ?? UIImage()
-    }()
-  
     private let bc: BookShelfViewController = .init()
     private let wbc:WillBookShelfViewController = .init()
     override func viewDidLoad() {
@@ -50,10 +67,8 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         settings.style.selectedBarHeight = 2
         super.viewDidLoad()
         navigationBar15()
-        let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
-        let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
+        self.navigationItem.leftBarButtonItem = favoBarButtonItem
         self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
-        
         view.addSubview(collectionView)
         view.addSubview(scrollView)
         self.navigationController?.navigationBar.tintColor = .naviTintColor
@@ -72,19 +87,25 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
     }
     
     @objc func layoutChange(sender: UIButton) {
-        let sortImage = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        let listImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
-        let gridImage = UIImage(systemName: "square.grid.3x3.fill", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         switch layoutType {
         case .list:
             layoutType = .grid
-            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
-            let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
+            if let sButton = sortBarButtonItem.customView as? UIButton {
+                sButton.setImage(UIImage(systemName: "arrow.up.arrow.down",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
+                }
+            if let lButton = layoutChangeBarButtonItem.customView as? UIButton {
+                lButton.setImage(UIImage(systemName: "list.bullet",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
+                }
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
         case .grid:
             layoutType = .list
-            let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
-            let layoutChangeBarButtonItem = UIBarButtonItem(image: gridImage, style: .plain, target: self, action: #selector(layoutChange))
+            if let sButton = sortBarButtonItem.customView as? UIButton {
+                sButton.setImage(UIImage(systemName: "arrow.up.arrow.down",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
+                    
+                }
+            if let lButton = layoutChangeBarButtonItem.customView as? UIButton {
+                lButton.setImage(UIImage(systemName: "square.grid.3x3.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
+                }
             self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
         }
         bc.layoutChange()
@@ -115,6 +136,9 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         present(alert, animated: true, completion: nil)
     }
     
+    @objc func favoSort(sender :UIButton) {
+        
+    }
     func navigationBar15(){
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
