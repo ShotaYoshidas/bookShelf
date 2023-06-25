@@ -13,10 +13,11 @@ import XLPagerTabStrip
 import RealmSwift
 
 
-class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate {
-//    func tagOpion(tag: [String], id: String) {
-//        model.tagOption(tag: tag, id: id)
-//    }
+class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate, BookFavoDelegate {
+    
+    func favoSelect(id: String) {
+        model.favoSelct(id: id)
+    }
     
     func moveBook(id: String) {
         model.moveBook(id: id)
@@ -137,15 +138,16 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bs = BookSelectViewController(titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author, imageData: model.roadBooks[indexPath.row].imageData,id: model.roadBooks[indexPath.row].id,memo:model.roadBooks[indexPath.row].memo,saveTime: model.roadBooks[indexPath.row].saveTime,vc: 1)
+        let bs = BookSelectViewController(titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author, imageData: model.roadBooks[indexPath.row].imageData,id: model.roadBooks[indexPath.row].id,memo:model.roadBooks[indexPath.row].memo,saveTime: model.roadBooks[indexPath.row].saveTime,vc: 1,favo: model.roadBooks[indexPath.row].favoKey)
         
         navigationController?.pushViewController(bs, animated: true)
         
         bs.delegate = self
         bs.deleteDelegate = self
         bs.moveBookDelegate = self
+        bs.favoDeledate = self
     }
-    
+            
         func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
                 let move = UIAction(title: "積読書へ移動", image: UIImage(systemName: "books.vertical")) { action in

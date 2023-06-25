@@ -50,10 +50,8 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         settings.style.selectedBarHeight = 2
         super.viewDidLoad()
         navigationBar15()
-//        let tagButton = UIBarButtonItem(image: tagImage, style: .plain, target: self, action: .none)
         let sortBarButtonItem = UIBarButtonItem(image: sortImage, style: .plain, target: self, action: #selector(sort))
         let layoutChangeBarButtonItem = UIBarButtonItem(image: listImage, style: .plain, target: self, action: #selector(layoutChange))
-//        self.navigationItem.leftBarButtonItem = tagButton
         self.navigationItem.rightBarButtonItems = [sortBarButtonItem,layoutChangeBarButtonItem]
         
         view.addSubview(collectionView)
@@ -73,9 +71,6 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         return [bc, wbc]
     }
     
-    @objc func test() {
-        
-    }
     @objc func layoutChange(sender: UIButton) {
         let sortImage = UIImage(systemName: "arrow.up.arrow.down", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))
         let listImage = UIImage(systemName: "line.3.horizontal", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor]))

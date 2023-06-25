@@ -196,6 +196,11 @@ class BookSelectCell: UICollectionViewCell {
         a.font = UIFont.systemFont(ofSize: 13)
         return a
     }()
+   
+    let favoSelect: Int = {
+        let i = Int()
+        return i
+    }()
     
     let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     
@@ -223,7 +228,7 @@ class BookSelectCell: UICollectionViewCell {
         memoCountLabel.pin.below(of: saveTimeLabel,aligned: .center).width(UIScreen.main.bounds.width * 0.5).sizeToFit(.width)
     }
    
-    func BookSelectConfigure(imageData: Data, titleName: String, authorName: String, saveTime: String, memoCount: Int){
+    func BookSelectConfigure(imageData: Data, titleName: String, authorName: String, saveTime: String, memoCount: Int,favoSelect: Int){
         title.text = titleName
         author.text = authorName
         memoCountLabel.text = "文字数:\(memoCount)"

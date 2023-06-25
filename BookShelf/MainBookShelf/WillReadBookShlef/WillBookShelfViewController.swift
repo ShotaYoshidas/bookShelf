@@ -9,12 +9,17 @@ import UIKit
 import XLPagerTabStrip
 import RealmSwift
 
-class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate {
+class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate, BookFavoDelegate {
     
 //    func tagOpion(tag: [String], id: String) {
 //        WillModel.tagOption(tag: tag, id: id)
 //    }
 
+    func favoSelect(id: String) {
+        WillModel.favoSelct(id: id)
+    }
+    
+    
 
     func moveBook(id: String) {
         WillModel.moveBook(id: id)
@@ -130,10 +135,12 @@ extension WillBookShelfViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bs = BookSelectViewController(titleName: WillModel.willBooks[indexPath.row].title, authorName: WillModel.willBooks[indexPath.row].author, imageData: WillModel.willBooks[indexPath.row].imageData,id: WillModel.willBooks[indexPath.row].id,memo:WillModel.willBooks[indexPath.row].memo,saveTime: WillModel.willBooks[indexPath.row].saveTime, vc: 2)
+        let bs = BookSelectViewController(titleName: WillModel.willBooks[indexPath.row].title, authorName: WillModel.willBooks[indexPath.row].author, imageData: WillModel.willBooks[indexPath.row].imageData,id: WillModel.willBooks[indexPath.row].id,memo:WillModel.willBooks[indexPath.row].memo,saveTime: WillModel.willBooks[indexPath.row].saveTime, vc: 2,favo: WillModel.willBooks[indexPath.row].favoKey)
         bs.delegate = self
         bs.deleteDelegate = self
         bs.moveBookDelegate = self
+        bs.favoDeledate = self
+        
         navigationController?.pushViewController(bs, animated: true)
     }
     
