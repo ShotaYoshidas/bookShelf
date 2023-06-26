@@ -10,6 +10,7 @@ import IQKeyboardManagerSwift
 import GoogleMobileAds
 import FirebaseCore
 import Firebase
+import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +28,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func migration() {
+        Realm.Configuration.defaultConfiguration = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { migration, oldSchemaVersion in
+                if(oldSchemaVersion < 1) {
+                    migration.create(BookObject.className(), value: ["favoKey": 0])
+                }
+            })
+            }
+    let realm = try! Realm()
     
 }
 
