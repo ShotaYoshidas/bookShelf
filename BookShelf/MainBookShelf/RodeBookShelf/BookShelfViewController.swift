@@ -14,25 +14,7 @@ import RealmSwift
 
 
 class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate, BookFavoDelegate {
-    
-    func favoSelect(id: String) {
-        model.favoSelct(id: id)
-    }
-    
-    func moveBook(id: String) {
-        model.moveBook(id: id)
-    }
-    
-    func updateText(memo: String, id: String) {
-        model.updateText(memo: memo, id: id)
-    }
-    
-    func deleteBook(id: String) {
-        model.deleteBook(id: id)
-    }
-    
     weak var deleteDelegate: BookShelfModelDeleteDelegate? = nil
-    
     private let model: BookShelfModel = .init()
     private let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -74,6 +56,18 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         return itemInfo
     }
     
+    func moveBook(id: String) {
+        model.moveBook(id: id)
+    }
+    
+    func updateText(memo: String, id: String) {
+        model.updateText(memo: memo, id: id)
+    }
+    
+    func deleteBook(id: String) {
+        model.deleteBook(id: id)
+    }
+    
     func SerchKandokuUpdate(newBook1: Item) {
         model.SerchKandokuUpdate(newBook1: newBook1)
     }
@@ -85,17 +79,30 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         model.addNewBook3(title: title, author: author, thumnail: thumnail)
     }
     
-    func sort(){
-        model.dateSort()
+//    datesort
+    func sort(favoFilter: FavoFilter){
+        model.dateSort(favoFilter: favoFilter)
+    }
+    func dateRsort(favoFilter: FavoFilter){
+        model.dateRsort(favoFilter: favoFilter)
+    }
+//　　favosort
+    func favoSelect(id: String) {
+           model.favoSelct(id: id)
+        
+       }
+    func favofilterTrue() {
+        model.favofilterTrue()
+    }
+    func favoFilterCancel() {
+        model.favofilterCancel()
     }
     
-    func dateRsort(){
-        model.dateRsort()
-    }
-   
+//    layout
     func layoutChange(){
         collectionView.reloadData()
     }
+    
     func navigationBar15() {
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()

@@ -26,6 +26,7 @@ protocol BookMoveDelegate: AnyObject {
 
 protocol BookFavoDelegate: AnyObject {
     func favoSelect(id: String)
+
 }
 
 
@@ -140,7 +141,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
             }
         }
         self.navigationItem.rightBarButtonItems = [usegeButton,favButton]
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdateFavo"), object: nil)
     }
     
     override func viewDidLayoutSubviews(){
@@ -166,11 +167,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
                 button.setImage(UIImage(systemName: "star.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.orange])), for: UIControl.State.normal)
                 let favoAlert = UIAlertController(title: "お気に入りに追加しました", message: .none, preferredStyle: .alert)
                 present(favoAlert, animated: true, completion: {
-//                    let feedbackGenerator = UINotificationFeedbackGenerator()
-//                    feedbackGenerator.notificationOccurred(.success)
-//                    DispatchQueue.main.asyncAfter(deadline: .now()) {
                         favoAlert.dismiss(animated: true, completion: nil)
-//                    }
                 })
             }
         }
@@ -186,7 +183,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     @objc func menuTaped(sender: UIButton) {
         let alert = UIAlertController(title: .none, message: "Menu", preferredStyle: .actionSheet)
         if vc == 1 {
-            
             let moveToTumidoku = UIAlertAction(title: "積読書へ移動", style: .default) { [self] (action) in
                 moveBookDelegate?.moveBook(id: self.id)
                 self.navigationController?.popViewController(animated: false)
@@ -224,6 +220,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     @objc func satrTaped(sender: UIButton) {
         if favo == 0 {
             favoDeledate?.favoSelect(id: self.id)
+            
         } else {
             favoDeledate?.favoSelect(id: self.id)
         }

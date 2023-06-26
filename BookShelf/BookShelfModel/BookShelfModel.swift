@@ -25,7 +25,6 @@ final class BookShelfModel {
         books = realm.objects(BookObject.self)
         roadBooks = realm.objects(BookObject.self).filter("readKey == 0 ")
         willBooks = realm.objects(BookObject.self).filter("readKey == 1 ")
-        
     }
     
     func SerchKandokuUpdate(newBook1: Item) {
@@ -190,31 +189,41 @@ final class BookShelfModel {
         NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
     }
     
-    func dateSort() {
+    func dateSort(favoFilter: FavoFilter) {
         let realm = try! Realm()
-        roadBooks = realm.objects(BookObject.self).filter("readKey == 0 ")
-        willBooks = realm.objects(BookObject.self).filter("readKey == 1 ")
-        let temp1 = roadBooks.sorted(byKeyPath: "saveTime", ascending: false)
-        let temp2 = willBooks.sorted(byKeyPath: "saveTime", ascending: false)
+        switch favoFilter {
+        case .favo:
+            roadBooks = realm.objects(BookObject.self).filter("readKey == 0 && favoKey == 1").sorted(byKeyPath: "saveTime", ascending: true)
+            willBooks = realm.objects(BookObject.self).filter("readKey == 1 && favoKey == 1").sorted(byKeyPath: "saveTime", ascending: true)
+        case .all:
+            roadBooks = realm.objects(BookObject.self).filter("readKey == 0").sorted(byKeyPath: "saveTime", ascending: true)
+            willBooks = realm.objects(BookObject.self).filter("readKey == 1").sorted(byKeyPath: "saveTime", ascending: true)
+        }
+        
         do{
             try! realm.write() {
-                roadBooks = temp1
-                willBooks = temp2
+                realm.add(roadBooks)
+                realm.add(willBooks)
             }
             NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
         }
     }
     
-    func dateRsort() {
+    func dateRsort(favoFilter: FavoFilter) {
         let realm = try! Realm()
-        roadBooks = realm.objects(BookObject.self).filter("readKey == 0 ")
-        willBooks = realm.objects(BookObject.self).filter("readKey == 1 ")
-        let temp1 = roadBooks.sorted(byKeyPath: "saveTime", ascending: true)
-        let temp2 = willBooks.sorted(byKeyPath: "saveTime", ascending: true)
+        switch favoFilter {
+        case .favo:
+            roadBooks = realm.objects(BookObject.self).filter("readKey == 0 && favoKey == 1").sorted(byKeyPath: "saveTime", ascending: false)
+            willBooks = realm.objects(BookObject.self).filter("readKey == 1 && favoKey == 1").sorted(byKeyPath: "saveTime", ascending: false)
+        case .all:
+            roadBooks = realm.objects(BookObject.self).filter("readKey == 0").sorted(byKeyPath: "saveTime", ascending: false)
+            willBooks = realm.objects(BookObject.self).filter("readKey == 1").sorted(byKeyPath: "saveTime", ascending: false)
+        }
+        
         do{
             try! realm.write() {
-                roadBooks = temp1
-                willBooks = temp2
+                realm.add(roadBooks)
+                realm.add(willBooks)
             }
             NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
         }
@@ -242,7 +251,6 @@ final class BookShelfModel {
         guard let temp = realm.objects(BookObject.self).filter({ $0.id == id }).compactMap({ $0 }).first else { return }
         do {
             try realm.write{
-                
                 if temp.favoKey == 0 {
                     temp.favoKey = 1
                 } else {
@@ -252,12 +260,36 @@ final class BookShelfModel {
         } catch {
             print("Error \(error)")
         }
-        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: ["favoKey": temp.favoKey])
-   
-        
-        
-    
+        NotificationCenter.default.post(name: Notification.Name("bookupdateFavo"), object: nil, userInfo: ["favoKey": temp.favoKey])
+        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
     }
+    
+    func favofilterTrue() {
+        let realm = try! Realm()
+        roadBooks = realm.objects(BookObject.self).filter("readKey == 0 && favoKey == 1")
+        willBooks = realm.objects(BookObject.self).filter("readKey == 1 && favoKey == 1")
+        do{
+            try! realm.write() {
+                realm.add(roadBooks)
+                realm.add(willBooks)
+            }
+            NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        }
+        }
+    
+    func favofilterCancel() {
+        let realm = try! Realm()
+        roadBooks = realm.objects(BookObject.self).filter("readKey == 0 ")
+        willBooks = realm.objects(BookObject.self).filter("readKey == 1 ")
+        do{
+            try! realm.write() {
+                realm.add(roadBooks)
+                realm.add(willBooks)
+            }
+            NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        }
+        }
+    
     func getNowClockString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd' 'HH:mm:ss"

@@ -10,29 +10,9 @@ import XLPagerTabStrip
 import RealmSwift
 
 class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate, BookFavoDelegate {
-    
-//    func tagOpion(tag: [String], id: String) {
-//        WillModel.tagOption(tag: tag, id: id)
-//    }
 
-    func favoSelect(id: String) {
-        WillModel.favoSelct(id: id)
-    }
-    
-    
 
-    func moveBook(id: String) {
-        WillModel.moveBook(id: id)
-        
-    }
-    
-    func updateText(memo: String, id: String) {
-        WillModel.updateText(memo: memo, id: id)
-    }
-    
-    func deleteBook(id: String) {
-        WillModel.deleteBook(id: id)
-    }
+  
     
     private let WillModel: BookShelfModel = .init()
     private let collectionView: UICollectionView = {
@@ -44,6 +24,7 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         cv.backgroundColor = .systemGray6
         return cv
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar15()
@@ -52,17 +33,13 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         collectionView.delegate = self
         collectionView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: Notification.Name("bookupdate"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(changeLayout), name: Notification.Name("layoutChange"), object: nil)
-        
     }
     
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         collectionView.pin.all()
     }
-   
-    
-    
+
     @objc private func updateCollectionView2(_ notification: Notification) {
         collectionView.reloadData()
         if let pagerTabStrip = self.parent as? ButtonBarPagerTabStripViewController {
@@ -78,6 +55,19 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         return itemInfo
     }
     
+    func moveBook(id: String) {
+        WillModel.moveBook(id: id)
+        
+    }
+    
+    func updateText(memo: String, id: String) {
+        WillModel.updateText(memo: memo, id: id)
+    }
+    
+    func deleteBook(id: String) {
+        WillModel.deleteBook(id: id)
+    }
+    
     func SerchTumidokuUpdate(newBook2: Item) {
         WillModel.SerchTumidokuUpdate(newBook2: newBook2)
     }
@@ -86,15 +76,28 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         WillModel.BarcodeTumidokuUpdate(newBook4: newBook4)
     }
     
-    func sort(){
-        WillModel.dateSort()
-    }
-    func dateRsort(){
-        WillModel.dateRsort()
-    }
-    
     func layoutChange(){
         collectionView.reloadData()
+    }
+    
+    func sort(favoFilter: FavoFilter){
+        WillModel.dateSort(favoFilter: favoFilter)
+    }
+    
+    func dateRsort(favoFilter: FavoFilter){
+        WillModel.dateRsort(favoFilter: favoFilter)
+    }
+    
+    func favoSelect(id: String) {
+        WillModel.favoSelct(id: id)
+    }
+    
+    func favofilterTrue() {
+        WillModel.favofilterTrue()
+    }
+    
+    func favoFilterCancel() {
+        WillModel.favofilterCancel()
     }
     
     func navigationBar15() {

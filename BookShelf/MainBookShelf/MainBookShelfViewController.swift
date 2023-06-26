@@ -9,9 +9,15 @@ import UIKit
 import XLPagerTabStrip
 
 enum LayoutType {
-    case list
     case grid
+    case list
 }
+
+enum FavoFilter {
+    case favo
+    case all
+}
+var favoFilter:FavoFilter = .all
 var layoutType:LayoutType = .grid
 class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollectionViewDelegateFlowLayout {
     lazy var collectionView: ButtonBarView = {
@@ -46,13 +52,12 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
         u.setImage(UIImage.init(systemName: "list.star", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
-        u.addTarget(self, action: #selector(favoSort), for: UIControl.Event.touchUpInside)
+        u.addTarget(self, action: #selector(favofilterTrue), for: UIControl.Event.touchUpInside)
         u.imageView?.contentMode = .scaleAspectFit
         u.contentHorizontalAlignment = .fill
         u.contentVerticalAlignment = .fill
         return UIBarButtonItem(customView: u)
     }()
-    
     private let bc: BookShelfViewController = .init()
     private let wbc:WillBookShelfViewController = .init()
     override func viewDidLoad() {
@@ -118,13 +123,13 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
                     let screenSize = UIScreen.main.bounds
                     alert.popoverPresentationController?.sourceRect = CGRect(x: screenSize.size.width/2, y: screenSize.size.height, width: 0, height: 0)
         let newSave = UIAlertAction(title: "登録が新しい順", style: .default) { [self] (action) in
-            bc.sort()
-            wbc.sort()
+            bc.sort(favoFilter: favoFilter)
+            wbc.sort(favoFilter: favoFilter)
             
         }
         let oldSave = UIAlertAction(title: "登録が古い順", style: .default) { [self] (action) in
-            bc.dateRsort()
-            wbc.dateRsort()
+            bc.dateRsort(favoFilter: favoFilter)
+            wbc.dateRsort(favoFilter: favoFilter)
         }
         
         let cancel = UIAlertAction(title: "やめておく", style: .cancel) { (acrion) in
@@ -136,7 +141,25 @@ class MainBookShelfViewController: ButtonBarPagerTabStripViewController,UICollec
         present(alert, animated: true, completion: nil)
     }
     
-    @objc func favoSort(sender :UIButton) {
+    @objc func favofilterTrue(sender :UIButton) {
+        switch favoFilter {
+        case .favo:
+            favoFilter = .all
+            bc.favoFilterCancel()
+            wbc.favoFilterCancel()
+            if let fButton = favoBarButtonItem.customView as? UIButton {
+                fButton.setImage(UIImage(systemName: "list.star",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
+                self.navigationItem.leftBarButtonItem = favoBarButtonItem
+                }
+        case .all:
+            favoFilter = .favo
+            bc.favofilterTrue()
+            wbc.favofilterTrue()
+            if let fButton = favoBarButtonItem.customView as? UIButton {
+                fButton.setImage(UIImage(systemName: "list.star",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.orange])), for: UIControl.State.normal)
+                self.navigationItem.leftBarButtonItem = favoBarButtonItem
+                }
+        }
         
     }
     func navigationBar15(){

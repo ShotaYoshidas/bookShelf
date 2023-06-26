@@ -197,10 +197,7 @@ class BookSelectCell: UICollectionViewCell {
         return a
     }()
    
-    let favoSelect: Int = {
-        let i = Int()
-        return i
-    }()
+  
     
     let nillImage: UIImage = UIImage(named:"bookImage")!.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
     
