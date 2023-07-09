@@ -22,9 +22,7 @@
 		6A40178028A935C5002E62C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A40177E28A935C5002E62C0 /* LaunchScreen.storyboard */; };
 		6A40178A28AA27C1002E62C0 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40178928AA27C1002E62C0 /* TabBarViewController.swift */; };
 		6A40178C28AA284A002E62C0 /* BookShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */; };
-		6A4B88212A1F7CFA00888B3B /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 6A4B88202A1F7CFA00888B3B /* GoogleMobileAds */; };
 		6A4F48A929963D1E0044DD7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F48A829963D1E0044DD7F /* GoogleService-Info.plist */; };
-		6A4F48AC29963E510044DD7F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6A4F48AB29963E510044DD7F /* FirebaseAnalytics */; };
 		6A4F48B129979BAF0044DD7F /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F48B029979BAE0044DD7F /* UIColor.swift */; };
 		6A4F48B32997B06D0044DD7F /* ThemeColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F48B22997B06D0044DD7F /* ThemeColorViewController.swift */; };
 		6A524FF728DD789600DDEC2A /* BarCodeReaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */; };
@@ -79,8 +77,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A4B88212A1F7CFA00888B3B /* GoogleMobileAds in Frameworks */,
-				6A4F48AC29963E510044DD7F /* FirebaseAnalytics in Frameworks */,
 				589974BDE743D38C380E8138 /* Pods_bookShelf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,8 +285,6 @@
 			);
 			name = bookShelf;
 			packageProductDependencies = (
-				6A4F48AB29963E510044DD7F /* FirebaseAnalytics */,
-				6A4B88202A1F7CFA00888B3B /* GoogleMobileAds */,
 			);
 			productName = bookShelf;
 			productReference = 6A40177028A935C4002E62C0 /* bookShelf.app */;
@@ -321,8 +315,6 @@
 			);
 			mainGroup = 6A40176728A935C4002E62C0;
 			packageReferences = (
-				6A4F48AA29963E510044DD7F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				6A4B881F2A1F7CFA00888B3B /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 6A40177128A935C4002E62C0 /* Products */;
 			projectDirPath = "";
@@ -633,38 +625,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6A4B881F2A1F7CFA00888B3B /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
-			};
-		};
-		6A4F48AA29963E510044DD7F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6A4B88202A1F7CFA00888B3B /* GoogleMobileAds */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6A4B881F2A1F7CFA00888B3B /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
-			productName = GoogleMobileAds;
-		};
-		6A4F48AB29963E510044DD7F /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6A4F48AA29963E510044DD7F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6A40176828A935C4002E62C0 /* Project object */;
 }
