@@ -226,7 +226,7 @@ extension SerchBookViewController: UICollectionViewDataSource {
         } else {
             let bookShelf = UIAlertAction(title: "完読書に追加", style: .default) { [self] (action) in
                 let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
-                NotificationCenter.default.post(name: Notification.Name("SerchKandokuUpdate"), object: nil, userInfo: userInfo as [AnyHashable : Any])
+                NotificationCenter.default.post(name: .addKandokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
                 let feedbackGenerator = UINotificationFeedbackGenerator()
@@ -240,7 +240,7 @@ extension SerchBookViewController: UICollectionViewDataSource {
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
                 let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
-                NotificationCenter.default.post(name: Notification.Name("SerchTumidokuUpdate"), object: nil, userInfo: userInfo as [AnyHashable : Any])
+                NotificationCenter.default.post(name: .addTumidokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
                 let feedbackGenerator = UINotificationFeedbackGenerator()

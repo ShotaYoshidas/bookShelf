@@ -135,7 +135,7 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         } else {
             
             let bookInfo = ["title": titleTextView.text ?? "nil","author": authorTextView.text ?? "nil","thumnail": thumbnailView.image ?? UIImage()] as [String : Any]
-            NotificationCenter.default.post(name: Notification.Name("ManualInput"), object: nil, userInfo: bookInfo as [AnyHashable : Any])
+            NotificationCenter.default.post(name:.addManyuaruKandokBookShelf, object: nil, userInfo: bookInfo as [AnyHashable : Any])
             navigationController?.popViewController(animated: true)
             NotificationCenter.default.post(name: Notification.Name("call"), object: nil, userInfo: .none)
         }
