@@ -57,7 +57,8 @@ final class BookShelfModel {
                 realm.add(object)
             }
         }
-        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
+        
     }
     
     func SerchTumidokuUpdate(newBook2: Item) {
@@ -92,7 +93,7 @@ final class BookShelfModel {
             }
         }
         
-        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
         }
         
     func BarcodeKandokuUpdate(newBook3: Book) {
@@ -113,7 +114,7 @@ final class BookShelfModel {
             try! realm.write() {
                 realm.add(object)
             }
-            NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+            NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
         }
     }
     
@@ -133,7 +134,7 @@ final class BookShelfModel {
             try! realm.write() {
                 realm.add(object)
             }
-            NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+            NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
         }
     }
 
@@ -151,7 +152,7 @@ final class BookShelfModel {
         try! realm.write() {
             realm.add(object)
         }
-        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
     }
     
     func updateText(memo: String, id: String) {
@@ -177,7 +178,7 @@ final class BookShelfModel {
         }catch {
             print("Error \(error)")
         }
-        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
     }
     
     func dateSort() {
@@ -188,7 +189,7 @@ final class BookShelfModel {
                 realm.add(roadBooks)
                 realm.add(willBooks)
             }
-            NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+            NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
     }
     
     func dateRsort() {
@@ -199,7 +200,7 @@ final class BookShelfModel {
                 realm.add(roadBooks)
                 realm.add(willBooks)
             }
-            NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+            NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
     }
 
     func moveBook(id: String) {
@@ -216,7 +217,7 @@ final class BookShelfModel {
         } catch {
             print("Error \(error)")
         }
-        NotificationCenter.default.post(name: Notification.Name("bookupdate"), object: nil, userInfo: .none)
+        NotificationCenter.default.post(name: .reloadBookShelf, object: nil)
     }
     
     func getNowClockString() -> String {

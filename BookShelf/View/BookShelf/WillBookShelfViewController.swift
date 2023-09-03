@@ -29,7 +29,7 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         collectionView.backgroundColor = .mainBackground
         collectionView.delegate = self
         collectionView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: Notification.Name("bookupdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: .reloadBookShelf, object: nil)
     }
     
     override func viewDidLayoutSubviews(){

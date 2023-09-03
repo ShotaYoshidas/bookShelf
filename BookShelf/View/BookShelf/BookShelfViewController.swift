@@ -33,7 +33,8 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         collectionView.backgroundColor = .mainBackground
         collectionView.delegate = self
         collectionView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: .reloadBookShelf, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
     }
     
     override func viewDidLayoutSubviews(){
@@ -159,11 +160,9 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:
-//            print("aaaa\(layoutType)")
             return CGSize(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.height * 0.2)
             
         case .grid:
-//            print("aaaa\(layoutType)")
             let w = UIScreen.main.bounds.width / 5
             return CGSize(width: w, height: w * 1.5)
         }
