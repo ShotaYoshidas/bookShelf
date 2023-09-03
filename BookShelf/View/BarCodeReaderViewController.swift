@@ -152,14 +152,15 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
                 let userInfo = ["serchBook": model.books[indexPath.row]]
                 NotificationCenter.default.post(name:.addBarcodeKandokBookShelf, object: nil, userInfo: userInfo)
                 self.dismiss(animated: true, completion: nil)
-                NotificationCenter.default.post(name: Notification.Name("call"), object: nil, userInfo: .none)
-                
+                NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
                 let userInfo = ["serchBook": model.books[indexPath.row]]
                 NotificationCenter.default.post(name: .addBarcodeTumidokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
+                NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)
             }
+            
             alert.addAction(bookShelf)
             alert.addAction(willBookShelf)
             

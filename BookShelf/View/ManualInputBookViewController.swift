@@ -137,9 +137,8 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
             let bookInfo = ["title": titleTextView.text ?? "nil","author": authorTextView.text ?? "nil","thumnail": thumbnailView.image ?? UIImage()] as [String : Any]
             NotificationCenter.default.post(name:.addManyuaruKandokBookShelf, object: nil, userInfo: bookInfo as [AnyHashable : Any])
             navigationController?.popViewController(animated: true)
-            NotificationCenter.default.post(name: Notification.Name("call"), object: nil, userInfo: .none)
+            NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)
         }
-        
     }
     
     @objc func didTapDoneButton() {
@@ -151,7 +150,6 @@ class ManualInputBookViewController: UIViewController, UITextViewDelegate,UIImag
         let alert = UIAlertController(title: .none, message: "画像を追加する", preferredStyle: .actionSheet)
         let camera = UIAlertAction(title: "カメラで撮影", style: .default) { [self] (action) in
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                
             }
             let picker = UIImagePickerController()
             picker.sourceType = .camera

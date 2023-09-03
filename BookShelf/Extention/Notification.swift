@@ -13,5 +13,6 @@ extension Notification.Name {
     static let addBarcodeKandokBookShelf = Notification.Name("完読書へ追加(バーコード)")
     static let addBarcodeTumidokBookShelf = Notification.Name("積読書へ追加(バーコード)")
     static let addManyuaruKandokBookShelf = Notification.Name("積読書へ追加(マニュアル)")
+    static let addBookMessage = Notification.Name("本棚")
 }
 

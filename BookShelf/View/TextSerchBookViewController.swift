@@ -13,6 +13,7 @@ import RealmSwift
 class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
     private let searchmodel: TextSearchBookModel = .init()
     var bannerView: GADBannerView!
+    
     lazy var pencilButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
@@ -23,6 +24,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         u.contentVerticalAlignment = .fill
         return UIBarButtonItem(customView: u)
     }()
+    
     lazy var cameraButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
@@ -43,6 +45,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         s.placeholder = "本を検索"
         return s
     }()
+    
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
@@ -67,7 +70,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
         self.navigationController?.navigationBar.tintColor = .naviTintColor
 //        GoogleMobile()
-        NotificationCenter.default.addObserver(self, selector: #selector(call(_:)), name: Notification.Name("call"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addBookMsg(_:)), name: .addBookMessage, object: nil)
         
     }
     
@@ -81,12 +84,12 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         self.view.endEditing(true)
     }
     
-    @objc func call(_ notification: Notification) {
+    @objc func addBookMsg(_ notification: Notification) {
         let alert1 = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
         present(alert1, animated: true, completion: {
             let feedbackGenerator = UINotificationFeedbackGenerator()
             feedbackGenerator.notificationOccurred(.success)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 alert1.dismiss(animated: true, completion: nil)
             }
         })
@@ -209,7 +212,7 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
                 let feedbackGenerator = UINotificationFeedbackGenerator()
                 feedbackGenerator.notificationOccurred(.success)
                 present(alert, animated: true, completion: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         alert.dismiss(animated: true, completion: nil)
                     }
                 })
@@ -223,12 +226,13 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
                 let feedbackGenerator = UINotificationFeedbackGenerator()
                 feedbackGenerator.notificationOccurred(.success)
                 present(alert, animated: true, completion: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         alert.dismiss(animated: true, completion: nil)
                     }
                 })
                 
             }
+            
             alert.addAction(bookShelf)
             alert.addAction(willBookShelf)
             
