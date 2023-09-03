@@ -24,16 +24,11 @@ protocol BookMoveDelegate: AnyObject {
     func moveBook(id: String)
 }
 
-protocol BookFavoDelegate: AnyObject {
-    func favoSelect(id: String)
-
-}
 
 
 class BookSelectViewController: UIViewController,UIAdaptivePresentationControllerDelegate {
     weak var delegate: bookTextDelegate? = nil
     weak var deleteDelegate: BookShelfModelDeleteDelegate? = nil
-    weak var favoDeledate: BookFavoDelegate? = nil
     weak var moveBookDelegate: BookMoveDelegate? = nil
     let id: String
     let titleName: String
@@ -42,8 +37,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     let memo: String
     let saveTime: String
     let vc:Int
-    var favo:Int
-    init(titleName: String,authorName: String,imageData: Data,id: String,memo: String,saveTime: String,vc: Int,favo: Int) {
+    init(titleName: String,authorName: String,imageData: Data,id: String,memo: String,saveTime: String,vc: Int){
         self.id = id
         self.titleName = titleName
         self.authorName = authorName
@@ -51,7 +45,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         self.memo = memo
         self.saveTime = saveTime
         self.vc = vc
-        self.favo = favo
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -69,15 +62,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         u.contentVerticalAlignment = .fill
         return UIBarButtonItem(customView: u)
     }()
-    lazy var favButton: UIBarButtonItem = {
-        let u = UIButton()
-        u.frame = CGRect(x: 0, y: 0, width:25, height: 25)
-        u.addTarget(self, action: #selector(satrTaped), for: UIControl.Event.touchUpInside)
-        u.imageView?.contentMode = .scaleAspectFit
-        u.contentHorizontalAlignment = .fill
-        u.contentVerticalAlignment = .fill
-        return UIBarButtonItem(customView: u)
-    }()
+    
     var moveButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
@@ -130,18 +115,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         memoTextView.inputAccessoryView = toolbar
         memoTextView.text = memo
         self.navigationController?.navigationBar.tintColor = .naviTintColor
-        if let button = favButton.customView as? UIButton {
-            
-            if favo == 0 {
-                button.setImage(UIImage(systemName: "star.slash.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
-                
-            } else {
-                
-                button.setImage(UIImage(systemName: "star.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.orange])), for: UIControl.State.normal)
-            }
-        }
-        self.navigationItem.rightBarButtonItems = [usegeButton,favButton]
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdateFavo"), object: nil)
+        self.navigationItem.rightBarButtonItems = [usegeButton]
     }
     
     override func viewDidLayoutSubviews(){
@@ -150,29 +124,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         memoTextView.pin.below(of: collectionView).center().width(UIScreen.main.bounds.width * 0.95).height(UIScreen.main.bounds.width * 0.8).margin(30)
     }
    
-    @objc private func updateCollectionView1(_ notification: Notification) {
-        if let num = notification.userInfo?["favoKey"] as? Int {
-            self.favo = num
-        }
-        if let button = favButton.customView as? UIButton {
-            if favo == 0 {
-                button.setImage(UIImage(systemName: "star.slash.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: UIControl.State.normal)
-                
-                let favoAlert = UIAlertController(title: "お気に入り解除しました", message: .none, preferredStyle: .alert)
-                present(favoAlert, animated: true, completion: {
-                        favoAlert.dismiss(animated: true, completion: nil)
-                })
-                
-            } else {
-                button.setImage(UIImage(systemName: "star.fill",withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.orange])), for: UIControl.State.normal)
-                let favoAlert = UIAlertController(title: "お気に入りに追加しました", message: .none, preferredStyle: .alert)
-                present(favoAlert, animated: true, completion: {
-                        favoAlert.dismiss(animated: true, completion: nil)
-                })
-            }
-        }
-        self.navigationItem.rightBarButtonItems = [usegeButton,favButton]
-    }
     
     @objc func didTapDoneButton() {
         memoTextView.resignFirstResponder()
@@ -217,15 +168,6 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
         present(alert, animated: true, completion: nil)
     }
     
-    @objc func satrTaped(sender: UIButton) {
-        if favo == 0 {
-            favoDeledate?.favoSelect(id: self.id)
-            
-        } else {
-            favoDeledate?.favoSelect(id: self.id)
-        }
-    }
-    
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         print("モーダルから戻ったよ")
     }
@@ -239,7 +181,7 @@ extension BookSelectViewController: UICollectionViewDataSource,UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? BookSelectCell {
-            cell.BookSelectConfigure(imageData: imageData, titleName: titleName,authorName: authorName,saveTime: saveTime, memoCount: memoTextView.text.count, favoSelect: favo)
+            cell.BookSelectConfigure(imageData: imageData, titleName: titleName,authorName: authorName,saveTime: saveTime, memoCount: memoTextView.text.count)
             return cell
         }
         return UICollectionViewCell()
