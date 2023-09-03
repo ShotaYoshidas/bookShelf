@@ -10,8 +10,8 @@ import PinLayout
 import XLPagerTabStrip
 
 class TabBarViewController: UITabBarController {
-    let sb:SerchBookViewController = {
-        let sb = SerchBookViewController()
+    let sb:TextSerchBookViewController = {
+        let sb = TextSerchBookViewController()
         sb.tabBarItem = UITabBarItem(title: "本を探す", image: UIImage(systemName:"magnifyingglass.circle"), tag: 0)
         return sb
     }()

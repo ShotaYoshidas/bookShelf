@@ -11,7 +11,28 @@ protocol SearchBookModelDelegate: AnyObject {
     func updateCollectionView()
 }
 
-final class SearchBookModel {
+struct TopTier : Codable {
+    var kind: String?
+    var totalItems: Int?
+    var items: [Item]?
+}
+
+struct Item: Codable {
+    var volumeInfo: VolumeInfo?
+    
+}
+
+struct VolumeInfo: Codable {
+    var title: String?
+    var authors: [String]?
+    var imageLinks: ImageLinks?
+}
+struct ImageLinks: Codable {
+    var thumbnail:String?
+}
+
+
+final class TextSearchBookModel {
     weak var delegate: SearchBookModelDelegate? = nil //行き先未定
     private(set) var response: TopTier? = nil {
         didSet {

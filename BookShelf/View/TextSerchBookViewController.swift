@@ -10,31 +10,8 @@ import PinLayout
 import GoogleMobileAds
 import RealmSwift
 
-struct TopTier : Codable {
-    var kind: String?
-    var totalItems: Int?
-    var items: [Item]?
-}
-
-struct Item: Codable {
-    var volumeInfo: VolumeInfo?
-    
-}
-
-struct VolumeInfo: Codable {
-    var title: String?
-    //    var subtitle: String?
-    var authors: [String]?
-    var imageLinks: ImageLinks?
-    //    var int:Int?
-}
-struct ImageLinks: Codable {
-    var thumbnail:String?
-    // 中略
-}
-
-class SerchBookViewController: UIViewController,UISearchBarDelegate {
-    private let searchmodel: SearchBookModel = .init()
+class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
+    private let searchmodel: TextSearchBookModel = .init()
     var bannerView: GADBannerView!
     lazy var pencilButton: UIBarButtonItem = {
         let u = UIButton()
@@ -188,13 +165,13 @@ class SerchBookViewController: UIViewController,UISearchBarDelegate {
     }
 }
 
-extension SerchBookViewController: SearchBookModelDelegate {
+extension TextSerchBookViewController: SearchBookModelDelegate {
     func updateCollectionView() {
         collectionView.reloadData()
     }
 }
 
-extension SerchBookViewController: UICollectionViewDataSource {
+extension TextSerchBookViewController: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchmodel.response?.items?.count ?? 0
     }
@@ -266,7 +243,7 @@ extension SerchBookViewController: UICollectionViewDataSource {
     
 }
 
-extension SerchBookViewController: UICollectionViewDelegateFlowLayout {
+extension TextSerchBookViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.size.width * 0.95, height: view.frame.size.height * 0.2)
     }
