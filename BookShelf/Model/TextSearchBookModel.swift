@@ -14,6 +14,7 @@ protocol SearchBookModelDelegate: AnyObject {
 struct TopTier : Codable {
     var kind: String?
     var totalItems: Int?
+    //googleapisで取得結果が10がマストっぽい
     var items: [Item]?
 }
 
@@ -41,6 +42,8 @@ final class TextSearchBookModel {
             DispatchQueue.main.async {
                 if let collectonDelegate = self.searchBookDelegate{
                     collectonDelegate.updateCollectionView()
+                    print(self.response?.items?.count)
+                    
                 }
             }
         }
@@ -53,7 +56,8 @@ final class TextSearchBookModel {
             do {
                 //非同期処理が完了すると、その結果が response プロパティに設定される
                 self.response = try await googleBooksAPI.getBookData()
-                print(response)
+               
+                print(self.response)
                 //DispatchQueue.main.asyncでUI更新してgetBooks終了。
             } catch {
                 print(error)

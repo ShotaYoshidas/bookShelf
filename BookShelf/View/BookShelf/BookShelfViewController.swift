@@ -19,8 +19,8 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
     private let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
-        cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        cv.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "Gridcell")
+        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "listcell")
+        cv.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "gridcell")
         cv.showsHorizontalScrollIndicator = true
         cv.backgroundColor = .mainBackground
         return cv
@@ -114,12 +114,12 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
         guard model.roadBooks.count > indexPath.row else { return UICollectionViewCell() }
         switch layoutType {
         case .list:
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listcell", for: indexPath) as? ListCollectionViewCell {
                 cell.configure(imageData: model.roadBooks[indexPath.row].imageData, titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author,saveTime: model.roadBooks[indexPath.row].saveTime)
                 return cell
             }
         case .grid:
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Gridcell", for: indexPath) as? GridCollectionViewCell {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridcell", for: indexPath) as? GridCollectionViewCell {
                 cell.gridConfigure(imageData: model.roadBooks[indexPath.row].imageData)
                 return cell
             }

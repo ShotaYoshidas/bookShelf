@@ -15,8 +15,8 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
     private let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
-        cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        cv.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "Gridcell")
+        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "listcell")
+        cv.register(GridCollectionViewCell.self, forCellWithReuseIdentifier: "gridcell")
         cv.showsHorizontalScrollIndicator = true
         cv.backgroundColor = .systemGray6
         return cv
@@ -109,12 +109,12 @@ extension WillBookShelfViewController: UICollectionViewDataSource, UICollectionV
         switch layoutType {
             
         case .list:
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listcell", for: indexPath) as? ListCollectionViewCell {
                 cell.configure(imageData: WillModel.willBooks[indexPath.row].imageData, titleName: WillModel.willBooks[indexPath.row].title, authorName: WillModel.willBooks[indexPath.row].author,saveTime: WillModel.willBooks[indexPath.row].saveTime)
                 return cell
             }
         case .grid:
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Gridcell", for: indexPath) as? GridCollectionViewCell {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gridcell", for: indexPath) as? GridCollectionViewCell {
                 cell.gridConfigure(imageData: WillModel.willBooks[indexPath.row].imageData)
                 return cell
             }

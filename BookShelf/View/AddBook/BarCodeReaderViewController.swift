@@ -27,7 +27,7 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
-        cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.showsHorizontalScrollIndicator = true
         cv.backgroundColor = .mainBackground
         return cv
@@ -131,7 +131,7 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard model.books.count > indexPath.row else { return UICollectionViewCell() }
         
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? ListCollectionViewCell {
             cell.barCodeConfigure(image: model.books[indexPath.row].thumbnail, titleName: model.books[indexPath.row].title,authorName: model.books[indexPath.row].author)
             return cell
         }

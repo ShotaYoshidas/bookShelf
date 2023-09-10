@@ -95,7 +95,7 @@ class BookSelectViewController: UIViewController,UIAdaptivePresentationControlle
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = false
-        cv.register(BookSelectCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(ContentsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         cv.showsHorizontalScrollIndicator = false
         cv.backgroundColor = .clear
         return cv
@@ -180,7 +180,7 @@ extension BookSelectViewController: UICollectionViewDataSource,UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? BookSelectCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? ContentsCollectionViewCell {
             cell.BookSelectConfigure(imageData: imageData, titleName: titleName,authorName: authorName,saveTime: saveTime, memoCount: memoTextView.text.count)
             return cell
         }
