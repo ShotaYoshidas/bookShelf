@@ -10,9 +10,9 @@ import PinLayout
 import GoogleMobileAds
 import RealmSwift
 
-class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
-    private let searchmodel: TextSearchBookModel = .init()
-    var bannerView: GADBannerView!
+class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBookModelDelegate {
+    
+    private let textSearchBookModel: TextSearchBookModel = .init()
     
     lazy var pencilButton: UIBarButtonItem = {
         let u = UIButton()
@@ -35,6 +35,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         u.contentVerticalAlignment = .fill
         return UIBarButtonItem(customView: u)
     }()
+    
     var searchBooksField: UISearchBar = {
         let s = UISearchBar()
         s.showsCancelButton = true
@@ -63,13 +64,12 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         navigationBar15()
         view.addSubview(searchBooksField)
         searchBooksField.delegate = self
-        searchmodel.delegate = self
+        textSearchBookModel.searchBookDelegate = self
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
         self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
         self.navigationController?.navigationBar.tintColor = .naviTintColor
-//        GoogleMobile()
         NotificationCenter.default.addObserver(self, selector: #selector(addBookMsg(_:)), name: .addBookMessage, object: nil)
         
     }
@@ -94,39 +94,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
             }
         })
     }
-//    広告
-//    func GoogleMobile(){
-//        bannerView = GADBannerView(adSize: GADAdSizeBanner)
-//        addBannerViewToView(bannerView)
-//      bannerView.adUnitID = "ca-app-pub-3940256099942544/6300978111"
-////        bannerView.adUnitID = "ca-app-pub-1273760422540329/4032757853"
-//        //        テスト：ca-app-pub-3940256099942544/6300978111
-//        //        本番：ca-app-pub-1273760422540329/4032757853
-//        bannerView.rootViewController = self
-//        bannerView.load(GADRequest())
-//    }
-    
-    func addBannerViewToView(_ bannerView: GADBannerView) {
-        bannerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(bannerView)
-        view.addConstraints(
-            [NSLayoutConstraint(item: bannerView,
-                                attribute: .bottom,
-                                relatedBy: .equal,
-                                toItem: bottomLayoutGuide,
-                                attribute: .top,
-                                multiplier: 1,
-                                constant: 0),
-             NSLayoutConstraint(item: bannerView,
-                                attribute: .centerX,
-                                relatedBy: .equal,
-                                toItem: view,
-                                attribute: .centerX,
-                                multiplier: 1,
-                                constant: 0)
-            ])
-    }
-    
+        
     func navigationBar15(){
         if #available(iOS 15.0, *) {
             let appearance = UINavigationBarAppearance()
@@ -142,7 +110,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
         let encodedString = searchBar.text!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        searchmodel.getBooks(encodedString: encodedString ?? "")
+        textSearchBookModel.getBooks(encodedString: encodedString ?? "")
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -152,7 +120,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText.isEmpty {
-            searchmodel.bookIsEmpty()
+            textSearchBookModel.bookIsEmpty()
         }
     }
     
@@ -166,23 +134,22 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate {
         brVc.modalPresentationStyle = .automatic
         self.present(brVc, animated: true, completion: nil)
     }
-}
-
-extension TextSerchBookViewController: SearchBookModelDelegate {
+    
     func updateCollectionView() {
         collectionView.reloadData()
     }
+    
 }
 
 extension TextSerchBookViewController: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchmodel.response?.items?.count ?? 0
+        return textSearchBookModel.response?.items?.count ?? 0
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard searchmodel.response?.items?.count ?? 0 > indexPath.row else { return UICollectionViewCell() }
+        guard textSearchBookModel.response?.items?.count ?? 0 > indexPath.row else { return UICollectionViewCell() }
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
-            cell.searchConfigure(titleName: searchmodel.response?.items![indexPath.row].volumeInfo!.title! ?? "",authorName: searchmodel.response?.items![indexPath.row].volumeInfo!.authors?[0] ?? "",imageUrl:  searchmodel.response?.items![indexPath.row].volumeInfo?.imageLinks?.thumbnail ?? "")
+            cell.searchConfigure(titleName: textSearchBookModel.response?.items![indexPath.row].volumeInfo!.title! ?? "",authorName: textSearchBookModel.response?.items![indexPath.row].volumeInfo!.authors?[0] ?? "",imageUrl:  textSearchBookModel.response?.items![indexPath.row].volumeInfo?.imageLinks?.thumbnail ?? "")
             return cell
         }
         return UICollectionViewCell()
@@ -199,13 +166,13 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
         feedbackGenerator.impactOccurred()
         
         let realm = try! Realm()
-        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.searchmodel.response?.items![indexPath.row].volumeInfo!.title! && $0.author == searchmodel.response?.items![indexPath.row].volumeInfo!.authors?[0]}).first != nil){
+        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.textSearchBookModel.response?.items![indexPath.row].volumeInfo!.title! && $0.author == textSearchBookModel.response?.items![indexPath.row].volumeInfo!.authors?[0]}).first != nil){
             let registered = UIAlertAction(title: "本棚に追加済みです", style: .default) {_ in
             }
             alert.addAction(registered)
         } else {
             let bookShelf = UIAlertAction(title: "完読書に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
+                let userInfo = ["serchBook": textSearchBookModel.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: .addKandokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
@@ -216,10 +183,10 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
                         alert.dismiss(animated: true, completion: nil)
                     }
                 })
-                
             }
+            
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": searchmodel.response?.items![indexPath.row]]
+                let userInfo = ["serchBook": textSearchBookModel.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: .addTumidokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
