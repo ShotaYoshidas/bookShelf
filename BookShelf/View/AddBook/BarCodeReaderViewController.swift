@@ -7,23 +7,16 @@
 import UIKit
 import PinLayout
 import AVFoundation
-//import SwiftyJSON
 import RealmSwift
 
-struct Book {
-    let title:String
-    let publishDate:String
-    let author:String
-    let thumbnail:UIImage
-}
-
 class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
-    private let model: BarCodeReaderModel = .init()
+    private let barCodeReaderModel: BarCodeReaderModel = .init()
     public enum HUDContentType {
         case labeledSuccess(title: String?, subtitle: String?)
     }
     
     private let session = AVCaptureSession()
+    
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
@@ -32,23 +25,26 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         cv.backgroundColor = .mainBackground
         return cv
     }()
+    
     let aboveOverlay:UIView = {
         let ol = UIView()
         ol.backgroundColor = .mainBackground
         return ol
     }()
-    let closeBtn:UIButton = {
-        let cb = UIButton()
-        cb.setTitle("閉じる", for: UIControl.State.normal)
-        cb.backgroundColor = UIColor.clear
-        cb.setTitleColor(.naviTintColor, for: UIControl.State.normal)
-        cb.addTarget(nil, action: #selector(closeTaped(sender:)), for: .touchUpInside)
-        return cb
+
+    let symbolConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold)
+    
+    lazy var closeBtn:UIButton = {
+        let closeBtn = UIButton()
+        closeBtn.setImage(UIImage(systemName: "xmark.circle", withConfiguration: symbolConfig)?.withTintColor(.naviTintColor, renderingMode: .alwaysOriginal), for: .normal)
+        closeBtn.addTarget(nil, action: #selector(closeTaped(sender:)), for: .touchUpInside)
+        return closeBtn
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        model.delegate = self //トラックの配送先
+        navigationItem.title = "バーコード検索"
+        barCodeReaderModel.barCodeReaderModelDelegate = self
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,
                                                                 position: .back)
@@ -97,8 +93,7 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         let width = view.frame.size.width
-        let height = view.frame.size.height
-        closeBtn.pin.topLeft().size(CGSize(width: width * 0.3, height: height * 0.2))
+        closeBtn.pin.topRight().size(CGSize(width: width * 0.18, height: width * 0.18))
     }
    
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
@@ -108,7 +103,7 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
                 let api = APIProvider(isbn: metadata.stringValue!)
                 Task {
                     let book = try await api.getBookData()
-                    model.addNewBook(newBook: book)
+                    barCodeReaderModel.addNewBook(newBook: book)
                 }
                 self.session.stopRunning()
             }
@@ -126,13 +121,13 @@ extension BarCodeReaderViewController: BarCodeReaderModelDelegate {
 }
 extension BarCodeReaderViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return model.books.count
+        return barCodeReaderModel.books.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard model.books.count > indexPath.row else { return UICollectionViewCell() }
+        guard barCodeReaderModel.books.count > indexPath.row else { return UICollectionViewCell() }
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? ListCollectionViewCell {
-            cell.barCodeConfigure(image: model.books[indexPath.row].thumbnail, titleName: model.books[indexPath.row].title,authorName: model.books[indexPath.row].author)
+            cell.barCodeConfigure(image: barCodeReaderModel.books[indexPath.row].thumbnail, titleName: barCodeReaderModel.books[indexPath.row].title,authorName: barCodeReaderModel.books[indexPath.row].author)
             return cell
         }
         return UICollectionViewCell()
@@ -143,19 +138,19 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
         feedbackGenerator.impactOccurred()
         let alert = UIAlertController(title: .none, message: .none, preferredStyle: .actionSheet)
         let realm = try! Realm()
-        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.model.books[indexPath.row].title && $0.author == model.books[indexPath.row].author}).first != nil){
+        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.barCodeReaderModel.books[indexPath.row].title && $0.author == barCodeReaderModel.books[indexPath.row].author}).first != nil){
             let registered = UIAlertAction(title: "本棚に追加済みです", style: .default) {_ in
             }
             alert.addAction(registered)
         } else {
             let bookShelf = UIAlertAction(title: "本棚に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": model.books[indexPath.row]]
+                let userInfo = ["serchBook": barCodeReaderModel.books[indexPath.row]]
                 NotificationCenter.default.post(name:.addBarcodeKandokBookShelf, object: nil, userInfo: userInfo)
                 self.dismiss(animated: true, completion: nil)
                 NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": model.books[indexPath.row]]
+                let userInfo = ["serchBook": barCodeReaderModel.books[indexPath.row]]
                 NotificationCenter.default.post(name: .addBarcodeTumidokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)
@@ -170,11 +165,11 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
             alert.dismiss(animated: true, completion: nil)
         }
        
-       
         alert.addAction(cancel)
         present(alert, animated: true, completion: nil)
     }
 }
+
 extension BarCodeReaderViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)

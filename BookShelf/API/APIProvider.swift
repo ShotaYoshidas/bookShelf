@@ -9,6 +9,7 @@ import Foundation
 import SwiftyJSON
 
 class APIProvider {
+    //isbnでデータ取得
     private let baseURL = "https://api.openbd.jp/v1/get?isbn="
     enum OpenDBAPIError : Error {
         case invalidURLString
@@ -25,14 +26,12 @@ class APIProvider {
         guard let title = json["title"].string else {
             throw OpenDBAPIError.notFound
         }
-        let pubdate = json["pubdate"].string ?? "????????"
         let author = json["author"].string ?? "????"
         if let imageURL = json["cover"].string,
            let image = try? await downloadData(urlString: imageURL){
-            return Book(title: title, publishDate: pubdate, author: author, thumbnail: UIImage(data: image)!)
+            return Book(title: title,author: author, thumbnail: UIImage(data: image)!)
         }else{
-            print("画像ない")
-            return Book(title: title, publishDate: pubdate, author: author, thumbnail: UIImage())
+            return Book(title: title, author: author, thumbnail: UIImage())
         }
     }
     

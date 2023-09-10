@@ -130,9 +130,10 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     }
     
     @objc func camera(sender: UIButton) {
-        let brVc = BarCodeReaderViewController()
-        brVc.modalPresentationStyle = .automatic
-        self.present(brVc, animated: true, completion: nil)
+        let barCodeReaderViewController = BarCodeReaderViewController()
+        barCodeReaderViewController.modalPresentationStyle = .automatic
+        let navigationController = UINavigationController(rootViewController: barCodeReaderViewController)
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     func updateCollectionView() {

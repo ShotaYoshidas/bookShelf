@@ -6,16 +6,23 @@
 //
 
 import Foundation
+import UIKit
 
 protocol BarCodeReaderModelDelegate: AnyObject {
     func updateCollectionView()
 }
+struct Book {
+    let title:String
+    let author:String
+    let thumbnail:UIImage
+}
+
 final class BarCodeReaderModel {
-    weak var delegate: BarCodeReaderModelDelegate? = nil //行き先未定
+    weak var barCodeReaderModelDelegate: BarCodeReaderModelDelegate? = nil //行き先未定
     private(set) var books: [Book] = []
     
     func addNewBook(newBook: Book) {
         books.append(newBook)
-        delegate?.updateCollectionView()
+        barCodeReaderModelDelegate?.updateCollectionView()
     }
 }
