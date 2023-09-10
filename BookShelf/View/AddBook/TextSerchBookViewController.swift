@@ -47,10 +47,10 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
         return s
     }()
     
-    let collectionView: UICollectionView = {
+    let listcollectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         cv.alwaysBounceVertical = true
-        cv.register(CollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "listcell")
         cv.showsHorizontalScrollIndicator = true
         cv.backgroundColor = .mainBackground
         return cv
@@ -59,15 +59,15 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .mainBackground
-        collectionView.backgroundColor = .mainBackground
+        listcollectionView.backgroundColor = .mainBackground
         searchBooksField.backgroundColor = .mainBackground
         navigationBar15()
         view.addSubview(searchBooksField)
         searchBooksField.delegate = self
         textSearchBookModel.searchBookDelegate = self
-        view.addSubview(collectionView)
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        view.addSubview(listcollectionView)
+        listcollectionView.delegate = self
+        listcollectionView.dataSource = self
         self.navigationItem.rightBarButtonItems = [pencilButton,cameraButton]
         self.navigationController?.navigationBar.tintColor = .naviTintColor
         NotificationCenter.default.addObserver(self, selector: #selector(addBookMsg(_:)), name: .addBookMessage, object: nil)
@@ -77,7 +77,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     override func viewDidLayoutSubviews(){
         super.viewDidLayoutSubviews()
         searchBooksField.pin.top(UIScreen.main.bounds.height * 0.12).left(UIScreen.main.bounds.width * 0.01).right(UIScreen.main.bounds.width * 0.01).height(UIScreen.main.bounds.height * 0.05)
-        collectionView.pin.below(of: searchBooksField).all()
+        listcollectionView.pin.below(of: searchBooksField).all()
     }
     
     @objc func dismissKeyboard() {
@@ -130,13 +130,14 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     }
     
     @objc func camera(sender: UIButton) {
-        let brVc = BarCodeReaderViewController()
-        brVc.modalPresentationStyle = .automatic
-        self.present(brVc, animated: true, completion: nil)
+        let barCodeReaderViewController = BarCodeReaderViewController()
+        barCodeReaderViewController.modalPresentationStyle = .automatic
+        let navigationController = UINavigationController(rootViewController: barCodeReaderViewController)
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     func updateCollectionView() {
-        collectionView.reloadData()
+        listcollectionView.reloadData()
     }
     
 }
@@ -148,7 +149,7 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard textSearchBookModel.response?.items?.count ?? 0 > indexPath.row else { return UICollectionViewCell() }
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? CollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listcell", for: indexPath) as? ListCollectionViewCell {
             cell.searchConfigure(titleName: textSearchBookModel.response?.items![indexPath.row].volumeInfo!.title! ?? "",authorName: textSearchBookModel.response?.items![indexPath.row].volumeInfo!.authors?[0] ?? "",imageUrl:  textSearchBookModel.response?.items![indexPath.row].volumeInfo?.imageLinks?.thumbnail ?? "")
             return cell
         }

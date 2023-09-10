@@ -27,6 +27,7 @@ class GoogleBooksAPI {
         //※デコード(戻す)
         //JSON文字列をTopTierオブジェクトに変換する。仕組みどうなってる？すごい。
         let json = try! JSONDecoder().decode(TopTier.self, from: data)
+        
         return TopTier(kind:json.kind, totalItems: json.totalItems, items: json.items)
     }
     
@@ -34,6 +35,7 @@ class GoogleBooksAPI {
         guard let url = URL(string: urlString) else {
             throw GoogleBooksAPIError.invalidURLString
         }
+        print(url)
         //簡単にネットワーク通信できるやつ。例)https://www.googleapis.com/books/v1/volumes?q=SwiftをURLに打ち込んでる感じ
         let (data,_) = try await URLSession.shared.data(from: url)//Jsonをデータ型で返す。
         //(data,_)＝Data, URLResponseがリターンされる
