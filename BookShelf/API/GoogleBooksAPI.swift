@@ -20,10 +20,13 @@ class GoogleBooksAPI {
         self.keyword = "\(keyword)"
     }
     
+    //非同期関数であることを示すためにasyncを付ける。エラーもthrowできる。
     func getBookData() async throws -> TopTier {
-        let data = try await downloadData(urlString: baseURL + keyword)//detaRequest
-        let jsonString = String(data: data, encoding: .utf8)!//Data→String
-        let json = try! JSONDecoder().decode(TopTier.self, from: jsonString.data(using: .utf8)!)//JSON→Swift(TopTier)
+        let data = try await downloadData(urlString: baseURL + keyword)
+        //JSONDecoder=Jsonデータ(データ型)をデコードしてJson文字列にする
+        //※デコード(戻す)
+        //JSON文字列をTopTierオブジェクトに変換する。仕組みどうなってる？すごい。
+        let json = try! JSONDecoder().decode(TopTier.self, from: data)
         return TopTier(kind:json.kind, totalItems: json.totalItems, items: json.items)
     }
     
@@ -31,7 +34,8 @@ class GoogleBooksAPI {
         guard let url = URL(string: urlString) else {
             throw GoogleBooksAPIError.invalidURLString
         }
-        let (data,_) = try await URLSession.shared.data(from: url)
+        //簡単にネットワーク通信できるやつ。例)https://www.googleapis.com/books/v1/volumes?q=SwiftをURLに打ち込んでる感じ
+        let (data,_) = try await URLSession.shared.data(from: url)//Jsonをデータ型で返す。
         //(data,_)＝Data, URLResponseがリターンされる
         return data
     }

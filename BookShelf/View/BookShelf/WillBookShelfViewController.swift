@@ -9,10 +9,7 @@ import UIKit
 import XLPagerTabStrip
 import RealmSwift
 
-class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate, BookFavoDelegate {
-
-
-  
+class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTextDelegate,BookShelfModelDeleteDelegate, BookMoveDelegate {
     
     private let WillModel: BookShelfModel = .init()
     private let collectionView: UICollectionView = {
@@ -32,7 +29,7 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         collectionView.backgroundColor = .mainBackground
         collectionView.delegate = self
         collectionView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: Notification.Name("bookupdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView2), name: .reloadBookShelf, object: nil)
     }
     
     override func viewDidLayoutSubviews(){
@@ -80,24 +77,12 @@ class WillBookShelfViewController: UIViewController,IndicatorInfoProvider,bookTe
         collectionView.reloadData()
     }
     
-    func sort(favoFilter: FavoFilter){
-        WillModel.dateSort(favoFilter: favoFilter)
+    func sort(){
+        WillModel.dateSort()
     }
     
-    func dateRsort(favoFilter: FavoFilter){
-        WillModel.dateRsort(favoFilter: favoFilter)
-    }
-    
-    func favoSelect(id: String) {
-        WillModel.favoSelct(id: id)
-    }
-    
-    func favofilterTrue() {
-        WillModel.favofilterTrue()
-    }
-    
-    func favoFilterCancel() {
-        WillModel.favofilterCancel()
+    func dateRsort(){
+        WillModel.dateRsort()
     }
     
     func navigationBar15() {
@@ -138,12 +123,10 @@ extension WillBookShelfViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bs = BookSelectViewController(titleName: WillModel.willBooks[indexPath.row].title, authorName: WillModel.willBooks[indexPath.row].author, imageData: WillModel.willBooks[indexPath.row].imageData,id: WillModel.willBooks[indexPath.row].id,memo:WillModel.willBooks[indexPath.row].memo,saveTime: WillModel.willBooks[indexPath.row].saveTime, vc: 2,favo: WillModel.willBooks[indexPath.row].favoKey)
+        let bs = BookSelectViewController(titleName: WillModel.willBooks[indexPath.row].title, authorName: WillModel.willBooks[indexPath.row].author, imageData: WillModel.willBooks[indexPath.row].imageData,id: WillModel.willBooks[indexPath.row].id,memo:WillModel.willBooks[indexPath.row].memo,saveTime: WillModel.willBooks[indexPath.row].saveTime, vc: 2)
         bs.delegate = self
         bs.deleteDelegate = self
         bs.moveBookDelegate = self
-        bs.favoDeledate = self
-        
         navigationController?.pushViewController(bs, animated: true)
     }
     

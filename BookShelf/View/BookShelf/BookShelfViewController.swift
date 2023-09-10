@@ -13,7 +13,7 @@ import XLPagerTabStrip
 import RealmSwift
 
 
-class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate, BookFavoDelegate {
+class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModelDeleteDelegate,IndicatorInfoProvider, BookMoveDelegate, UIGestureRecognizerDelegate {
     weak var deleteDelegate: BookShelfModelDeleteDelegate? = nil
     private let model: BookShelfModel = .init()
     private let collectionView: UICollectionView = {
@@ -33,7 +33,8 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
         collectionView.backgroundColor = .mainBackground
         collectionView.delegate = self
         collectionView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: .reloadBookShelf, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateCollectionView1), name: Notification.Name("bookupdate"), object: nil)
     }
     
     override func viewDidLayoutSubviews(){
@@ -80,22 +81,11 @@ class BookShelfViewController: UIViewController, bookTextDelegate,BookShelfModel
     }
     
 //    datesort
-    func sort(favoFilter: FavoFilter){
-        model.dateSort(favoFilter: favoFilter)
+    func sort(){
+        model.dateSort()
     }
-    func dateRsort(favoFilter: FavoFilter){
-        model.dateRsort(favoFilter: favoFilter)
-    }
-//　　favosort
-    func favoSelect(id: String) {
-           model.favoSelct(id: id)
-        
-       }
-    func favofilterTrue() {
-        model.favofilterTrue()
-    }
-    func favoFilterCancel() {
-        model.favofilterCancel()
+    func dateRsort(){
+        model.dateRsort()
     }
     
 //    layout
@@ -145,14 +135,13 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let bs = BookSelectViewController(titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author, imageData: model.roadBooks[indexPath.row].imageData,id: model.roadBooks[indexPath.row].id,memo:model.roadBooks[indexPath.row].memo,saveTime: model.roadBooks[indexPath.row].saveTime,vc: 1,favo: model.roadBooks[indexPath.row].favoKey)
+        let bs = BookSelectViewController(titleName: model.roadBooks[indexPath.row].title, authorName: model.roadBooks[indexPath.row].author, imageData: model.roadBooks[indexPath.row].imageData,id: model.roadBooks[indexPath.row].id,memo:model.roadBooks[indexPath.row].memo,saveTime: model.roadBooks[indexPath.row].saveTime,vc: 1)
         
         navigationController?.pushViewController(bs, animated: true)
         
         bs.delegate = self
         bs.deleteDelegate = self
         bs.moveBookDelegate = self
-        bs.favoDeledate = self
     }
             
         func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -171,11 +160,9 @@ extension BookShelfViewController: UICollectionViewDataSource, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch layoutType {
         case .list:
-//            print("aaaa\(layoutType)")
             return CGSize(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.height * 0.2)
             
         case .grid:
-//            print("aaaa\(layoutType)")
             let w = UIScreen.main.bounds.width / 5
             return CGSize(width: w, height: w * 1.5)
         }
