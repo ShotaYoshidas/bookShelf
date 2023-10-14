@@ -15,85 +15,121 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         case labeledSuccess(title: String?, subtitle: String?)
     }
     
+    //そのセッションにどのようなInputがあってどのようにOutputするのかを設定するやつ
     private let session = AVCaptureSession()
     
     let collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        cv.alwaysBounceVertical = true
-        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        cv.showsHorizontalScrollIndicator = true
-        cv.backgroundColor = .mainBackground
-        return cv
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.alwaysBounceVertical = true
+        collectionView.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.showsHorizontalScrollIndicator = true
+        collectionView.backgroundColor = .mainBackground
+        return collectionView
+    }()
+    
+    let barcodeText: UILabel = {
+        let barcodeText = UILabel()
+        barcodeText.text = "'978'から始まるバーコードを読み取って下さい"
+        barcodeText.textColor = .naviTintColor
+        barcodeText.font = UIFont.systemFont(ofSize: 15)
+        barcodeText.textAlignment = NSTextAlignment.center
+        barcodeText.backgroundColor = .clear
+        return barcodeText
     }()
     
     let aboveOverlay:UIView = {
-        let ol = UIView()
-        ol.backgroundColor = .mainBackground
-        return ol
+        let aboveOverlay = UIView()
+        aboveOverlay.backgroundColor = .mainBackground
+        return aboveOverlay
     }()
-
-    let symbolConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold)
     
-    lazy var closeBtn:UIButton = {
-        let closeBtn = UIButton()
-        closeBtn.setImage(UIImage(systemName: "xmark.circle", withConfiguration: symbolConfig)?.withTintColor(.naviTintColor, renderingMode: .alwaysOriginal), for: .normal)
-        closeBtn.addTarget(nil, action: #selector(closeTaped(sender:)), for: .touchUpInside)
-        return closeBtn
+    lazy var detectionArea: UIView = {
+        let detectionArea = UIView()
+        detectionArea.frame = CGRect(x: view.frame.size.width * x, y: view.frame.size.height * y, width: view.frame.size.width * width, height: view.frame.size.height * height)
+        detectionArea.layer.borderColor = UIColor.white.cgColor
+        detectionArea.layer.borderWidth = 3
+        detectionArea.layer.cornerRadius = 15
+        return detectionArea
+    }()
+    
+    let x: CGFloat = 0.05
+    let y: CGFloat = 0.3
+    let width: CGFloat = 0.9
+    let height: CGFloat = 0.2
+    
+    lazy var closeBtn: UIBarButtonItem = {
+        let u = UIButton()
+        u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
+        u.setImage(UIImage.init(systemName: "xmark.circle", withConfiguration: UIImage.SymbolConfiguration(paletteColors:[.naviTintColor])), for: .normal)
+        u.addTarget(self, action: #selector(closeTaped), for: UIControl.Event.touchUpInside)
+        u.imageView?.contentMode = .scaleAspectFit
+        u.contentHorizontalAlignment = .fill
+        u.contentVerticalAlignment = .fill
+        return UIBarButtonItem(customView: u)
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "バーコード検索"
+        self.navigationItem.rightBarButtonItems = [closeBtn]
         barCodeReaderModel.barCodeReaderModelDelegate = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        setupAVCapture()
+    }
+    
+    override func viewDidLayoutSubviews(){
+        super.viewDidLayoutSubviews()
+        aboveOverlay.pin.top().above(of: detectionArea).marginBottom(15).width(100%)
+        collectionView.pin.below(of:  detectionArea).marginTop(15).width(100%).bottom()
+        barcodeText.pin.above(of: detectionArea).margin(17).width(90%).height(5%).center()
+    }
+    
+    func setupAVCapture() {
+        //入力（背面カメラ）カメラデバイスの管理を行うクラスを初期化
+        //スマホの背面カメラを見つけるよ！
         let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera],
                                                                 mediaType: .video,
                                                                 position: .back)
         let devices = discoverySession.devices
         if let backCamera = devices.first {
             do {
+                // 入力デバイスの接続(入力とAVCaptureSessionの仲介役)
                 let deviceInput = try AVCaptureDeviceInput(device: backCamera)
+                //AVCaptureSessionに入力デバイスを追加できるかどうかをチェック
                 if self.session.canAddInput(deviceInput) {
                     self.session.addInput(deviceInput)
+                    // 出力（メタデータ)を作成
                     let metadataOutput = AVCaptureMetadataOutput()
                     if self.session.canAddOutput(metadataOutput) {
                         self.session.addOutput(metadataOutput)
+                        // メタデータを検出した際のデリゲート設定
                         metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+                        // EAN-13コードの認識を設定(.ean13は本の書籍などに使用されるバーコード)
                         metadataOutput.metadataObjectTypes = [.ean13]
-                        let x: CGFloat = 0.05
-                        let y: CGFloat = 0.3
-                        let width: CGFloat = 0.9
-                        let height: CGFloat = 0.2
                         metadataOutput.rectOfInterest = CGRect(x: y, y: 1 - x - width, width: height, height: width)
+                        // 背面カメラの映像を画面に表示するためのレイヤーを生成
                         let previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
                         previewLayer.frame = self.view.bounds
                         previewLayer.videoGravity = .resizeAspectFill
+                        
                         self.view.layer.addSublayer(previewLayer)
-                        let detectionArea = UIView()
-                        detectionArea.frame = CGRect(x: view.frame.size.width * x, y: view.frame.size.height * y, width: view.frame.size.width * width, height: view.frame.size.height * height)
-                        detectionArea.layer.borderColor = UIColor.white.cgColor
-                        detectionArea.layer.borderWidth = 3
-                        detectionArea.layer.cornerRadius = 15
+                        
                         view.addSubview(detectionArea)
                         view.addSubview(aboveOverlay)
                         view.addSubview(collectionView)
-                        aboveOverlay.pin.top().above(of: detectionArea).marginBottom(15).width(100%)
-                        collectionView.pin.below(of:  detectionArea).marginTop(15).width(100%).bottom()
-                        collectionView.delegate = self
-                        collectionView.dataSource = self
-                        self.view.addSubview(closeBtn)
-                        self.session.startRunning()
+                        view.addSubview(barcodeText)
+                        print(Thread.current.isMainThread)
+                        // 読み取り開始
+                        DispatchQueue.global(qos: .userInitiated).async {
+                          self.session.startRunning()
+                        }
                     }
                 }
             } catch {
                 print("Error occured while creating video device input: \(error)")
             }
         }
-    }
-    
-    override func viewDidLayoutSubviews(){
-        super.viewDidLayoutSubviews()
-        let width = view.frame.size.width
-        closeBtn.pin.topRight().size(CGSize(width: width * 0.18, height: width * 0.18))
     }
    
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {

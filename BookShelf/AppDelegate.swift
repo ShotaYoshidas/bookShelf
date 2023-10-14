@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    let realm = try! Realm()
+//    let realm = try! Realm()
     
 }
 
