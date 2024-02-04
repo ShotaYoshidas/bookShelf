@@ -10,7 +10,7 @@ import PinLayout
 import GoogleMobileAds
 import RealmSwift
 
-class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBookModelDelegate {
+class TextFetchBookViewController: UIViewController,UISearchBarDelegate,SearchBookModelDelegate {
     
     private let fetchBooksDataUseCase:FetchBooksDataUseCase! = nil
      
@@ -130,9 +130,9 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     }
     
     @objc func camera(sender: UIButton) {
-        let barCodeReaderViewController = BarCodeReaderViewController()
-        barCodeReaderViewController.modalPresentationStyle = .automatic
-        let navigationController = UINavigationController(rootViewController: barCodeReaderViewController)
+        let barCodeFetchBookViewController = BarCodeFetchBookViewController()
+        barCodeFetchBookViewController.modalPresentationStyle = .automatic
+        let navigationController = UINavigationController(rootViewController: barCodeFetchBookViewController)
         self.present(navigationController, animated: true, completion: nil)
     }
     
@@ -142,7 +142,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     
 }
 
-extension TextSerchBookViewController: UICollectionViewDataSource {
+extension TextFetchBookViewController: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return fetchBooksDataUseCase.response?.items?.count ?? 0
     }
@@ -215,7 +215,7 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
     
 }
 
-extension TextSerchBookViewController: UICollectionViewDelegateFlowLayout {
+extension TextFetchBookViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.size.width * 0.95, height: view.frame.size.height * 0.2)
     }

@@ -9,7 +9,7 @@ import PinLayout
 import AVFoundation
 import RealmSwift
 
-class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
+class BarCodeFetchBookViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate, UICollectionViewDelegate {
     private let fetchBooksDataUseCase:FetchBooksDataUseCase! = nil
     
     public enum HUDContentType {
@@ -137,26 +137,23 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         for metadata in metadataObjects as! [AVMetadataMachineReadableCodeObject] {
             if metadata.stringValue == nil { continue }
             if metadata.stringValue!.starts(with: "978") {
-//                let api = GoogleBooksApi(isbn: metadata.stringValue!)
               fetchBooksDataUseCase.isbnFetchBooks(isbn: metadata.stringValue!)
-                    
-           
-            
                 self.session.stopRunning()
             }
         }
     }
+    
     @objc func closeTaped(sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
 }
-extension BarCodeReaderViewController: BarCodeReaderModelDelegate {
+extension BarCodeFetchBookViewController: BarCodeReaderModelDelegate {
     func updateCollectionView() {
         collectionView.reloadData()
     }
     
 }
-extension BarCodeReaderViewController: UICollectionViewDataSource {
+extension BarCodeFetchBookViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return fetchBooksDataUseCase.books.count
     }
@@ -207,7 +204,7 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
     }
 }
 
-extension BarCodeReaderViewController: UICollectionViewDelegateFlowLayout {
+extension BarCodeFetchBookViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.size.width * 0.85, height: view.frame.size.height * 0.2)
     }

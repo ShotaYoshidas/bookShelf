@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+// TODO: 共通化できそう
 protocol SearchBookModelDelegate: AnyObject {
     func updateCollectionView()
 }

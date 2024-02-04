@@ -14,7 +14,6 @@ protocol GoogleBooksApiRepository {
     func downloadData(urlString:String) async throws -> Data
     
     // 文字列
-    
     func getBookData() async throws -> TopTier
     func downloadData2(urlString:String) async throws -> Data 
     
