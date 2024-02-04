@@ -8,7 +8,7 @@
 import Foundation
 import SwiftyJSON
 
-class APIProvider {
+class GoogleBooksApi:GoogleBooksApiRepository {
     //isbnでデータ取得
     private let baseURL = "https://api.openbd.jp/v1/get?isbn="
     enum OpenDBAPIError : Error {
@@ -35,7 +35,7 @@ class APIProvider {
         }
     }
     
-    final func downloadData(urlString:String) async throws -> Data {
+    func downloadData(urlString:String) async throws -> Data {
         guard let url = URL(string: urlString) else {
             throw OpenDBAPIError.invalidURLString
         }

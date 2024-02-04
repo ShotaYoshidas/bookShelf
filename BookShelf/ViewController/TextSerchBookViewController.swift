@@ -12,8 +12,8 @@ import RealmSwift
 
 class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBookModelDelegate {
     
-    private let textSearchBookModel: TextSearchBookModel = .init()
-    
+    private let fetchBooksDataUseCase:FetchBooksDataUseCase! = nil
+     
     lazy var pencilButton: UIBarButtonItem = {
         let u = UIButton()
         u.frame = CGRect(x: 0, y: 0, width: 25, height: 25)
@@ -64,7 +64,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
         navigationBar15()
         view.addSubview(searchBooksField)
         searchBooksField.delegate = self
-        textSearchBookModel.searchBookDelegate = self
+        fetchBooksDataUseCase.searchBookDelegate = self
         view.addSubview(listcollectionView)
         listcollectionView.delegate = self
         listcollectionView.dataSource = self
@@ -110,7 +110,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         view.endEditing(true)
         let encodedString = searchBar.text!.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        textSearchBookModel.getBooks(encodedString: encodedString ?? "")
+        fetchBooksDataUseCase.fetchBooks(encodedString: encodedString ?? "")
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -120,7 +120,7 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText.isEmpty {
-            textSearchBookModel.bookIsEmpty()
+            fetchBooksDataUseCase.bookIsEmpty()
         }
     }
     
@@ -144,13 +144,13 @@ class TextSerchBookViewController: UIViewController,UISearchBarDelegate,SearchBo
 
 extension TextSerchBookViewController: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return textSearchBookModel.response?.items?.count ?? 0
+        return fetchBooksDataUseCase.response?.items?.count ?? 0
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard textSearchBookModel.response?.items?.count ?? 0 > indexPath.row else { return UICollectionViewCell() }
+        guard fetchBooksDataUseCase.response?.items?.count ?? 0 > indexPath.row else { return UICollectionViewCell() }
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "listcell", for: indexPath) as? ListCollectionViewCell {
-            cell.searchConfigure(titleName: textSearchBookModel.response?.items![indexPath.row].volumeInfo!.title! ?? "",authorName: textSearchBookModel.response?.items![indexPath.row].volumeInfo!.authors?[0] ?? "",imageUrl:  textSearchBookModel.response?.items![indexPath.row].volumeInfo?.imageLinks?.thumbnail ?? "")
+            cell.searchConfigure(titleName: fetchBooksDataUseCase.response?.items![indexPath.row].volumeInfo!.title! ?? "",authorName: fetchBooksDataUseCase.response?.items![indexPath.row].volumeInfo!.authors?[0] ?? "",imageUrl:  fetchBooksDataUseCase.response?.items![indexPath.row].volumeInfo?.imageLinks?.thumbnail ?? "")
             return cell
         }
         return UICollectionViewCell()
@@ -167,13 +167,13 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
         feedbackGenerator.impactOccurred()
         
         let realm = try! Realm()
-        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.textSearchBookModel.response?.items![indexPath.row].volumeInfo!.title! && $0.author == textSearchBookModel.response?.items![indexPath.row].volumeInfo!.authors?[0]}).first != nil){
+        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.fetchBooksDataUseCase.response?.items![indexPath.row].volumeInfo!.title! && $0.author == fetchBooksDataUseCase.response?.items![indexPath.row].volumeInfo!.authors?[0]}).first != nil){
             let registered = UIAlertAction(title: "本棚に追加済みです", style: .default) {_ in
             }
             alert.addAction(registered)
         } else {
             let bookShelf = UIAlertAction(title: "完読書に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": textSearchBookModel.response?.items![indexPath.row]]
+                let userInfo = ["serchBook": fetchBooksDataUseCase.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: .addKandokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)
@@ -187,7 +187,7 @@ extension TextSerchBookViewController: UICollectionViewDataSource {
             }
             
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": textSearchBookModel.response?.items![indexPath.row]]
+                let userInfo = ["serchBook": fetchBooksDataUseCase.response?.items![indexPath.row]]
                 NotificationCenter.default.post(name: .addTumidokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 let alert = UIAlertController(title: "本棚に追加しました！", message: .none, preferredStyle: .alert)

@@ -34,8 +34,7 @@ class GoogleBooksAPI {
     final func downloadData(urlString:String) async throws -> Data {
         guard let url = URL(string: urlString) else {
             throw GoogleBooksAPIError.invalidURLString
-        }
-        print(url)
+        }   
         //簡単にネットワーク通信できるやつ。例)https://www.googleapis.com/books/v1/volumes?q=SwiftをURLに打ち込んでる感じ
         let (data,_) = try await URLSession.shared.data(from: url)//Jsonをデータ型で返す。
         //(data,_)＝Data, URLResponseがリターンされる
