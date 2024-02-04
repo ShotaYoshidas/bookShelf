@@ -10,7 +10,8 @@ import AVFoundation
 import RealmSwift
 
 class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
-    private let barCodeReaderModel: BarCodeReaderModel = .init()
+    private let fetchBooksDataUseCase:FetchBooksDataUseCase! = nil
+    
     public enum HUDContentType {
         case labeledSuccess(title: String?, subtitle: String?)
     }
@@ -72,7 +73,7 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         super.viewDidLoad()
         navigationItem.title = "バーコード検索"
         self.navigationItem.rightBarButtonItems = [closeBtn]
-        barCodeReaderModel.barCodeReaderModelDelegate = self
+        fetchBooksDataUseCase.barCodeReaderModelDelegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
         setupAVCapture()
@@ -136,11 +137,11 @@ class BarCodeReaderViewController: UIViewController,AVCaptureMetadataOutputObjec
         for metadata in metadataObjects as! [AVMetadataMachineReadableCodeObject] {
             if metadata.stringValue == nil { continue }
             if metadata.stringValue!.starts(with: "978") {
-                let api = APIProvider(isbn: metadata.stringValue!)
-                Task {
-                    let book = try await api.getBookData()
-                    barCodeReaderModel.addNewBook(newBook: book)
-                }
+//                let api = GoogleBooksApi(isbn: metadata.stringValue!)
+              fetchBooksDataUseCase.isbnFetchBooks(isbn: metadata.stringValue!)
+                    
+           
+            
                 self.session.stopRunning()
             }
         }
@@ -157,13 +158,13 @@ extension BarCodeReaderViewController: BarCodeReaderModelDelegate {
 }
 extension BarCodeReaderViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return barCodeReaderModel.books.count
+        return fetchBooksDataUseCase.books.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard barCodeReaderModel.books.count > indexPath.row else { return UICollectionViewCell() }
+        guard fetchBooksDataUseCase.books.count > indexPath.row else { return UICollectionViewCell() }
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? ListCollectionViewCell {
-            cell.barCodeConfigure(image: barCodeReaderModel.books[indexPath.row].thumbnail, titleName: barCodeReaderModel.books[indexPath.row].title,authorName: barCodeReaderModel.books[indexPath.row].author)
+            cell.barCodeConfigure(image: fetchBooksDataUseCase.books[indexPath.row].thumbnail, titleName: fetchBooksDataUseCase.books[indexPath.row].title,authorName: fetchBooksDataUseCase.books[indexPath.row].author)
             return cell
         }
         return UICollectionViewCell()
@@ -174,19 +175,19 @@ extension BarCodeReaderViewController: UICollectionViewDataSource {
         feedbackGenerator.impactOccurred()
         let alert = UIAlertController(title: .none, message: .none, preferredStyle: .actionSheet)
         let realm = try! Realm()
-        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.barCodeReaderModel.books[indexPath.row].title && $0.author == barCodeReaderModel.books[indexPath.row].author}).first != nil){
+        if (realm.objects(BookObject.self).filter({ [self] in $0.title == self.fetchBooksDataUseCase.books[indexPath.row].title && $0.author == fetchBooksDataUseCase.books[indexPath.row].author}).first != nil){
             let registered = UIAlertAction(title: "本棚に追加済みです", style: .default) {_ in
             }
             alert.addAction(registered)
         } else {
             let bookShelf = UIAlertAction(title: "本棚に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": barCodeReaderModel.books[indexPath.row]]
+                let userInfo = ["serchBook": fetchBooksDataUseCase.books[indexPath.row]]
                 NotificationCenter.default.post(name:.addBarcodeKandokBookShelf, object: nil, userInfo: userInfo)
                 self.dismiss(animated: true, completion: nil)
                 NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)
             }
             let willBookShelf = UIAlertAction(title: "積読書に追加", style: .default) { [self] (action) in
-                let userInfo = ["serchBook": barCodeReaderModel.books[indexPath.row]]
+                let userInfo = ["serchBook": fetchBooksDataUseCase.books[indexPath.row]]
                 NotificationCenter.default.post(name: .addBarcodeTumidokBookShelf, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 self.dismiss(animated: true, completion: nil)
                 NotificationCenter.default.post(name: .addBookMessage, object: nil, userInfo: .none)

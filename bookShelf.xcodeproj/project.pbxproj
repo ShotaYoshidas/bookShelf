@@ -12,7 +12,6 @@
 		6A1170EE2AADCC5B0087D17B /* GridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1170ED2AADCC5B0087D17B /* GridCollectionViewCell.swift */; };
 		6A1170F02AADCCB40087D17B /* ContentsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1170EF2AADCCB40087D17B /* ContentsCollectionViewCell.swift */; };
 		6A1B35E728EF17F8002F6FE6 /* FetchBooksDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1B35E628EF17F8002F6FE6 /* FetchBooksDataUseCase.swift */; };
-		6A1B35E928F1078D002F6FE6 /* GoogleBooksAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1B35E828F1078D002F6FE6 /* GoogleBooksAPI.swift */; };
 		6A1B35EC290822CB002F6FE6 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1B35EB290822CB002F6FE6 /* UIImage.swift */; };
 		6A1B35EF29133AA7002F6FE6 /* MainBookShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1B35EE29133AA7002F6FE6 /* MainBookShelfViewController.swift */; };
 		6A1B35F229133AFE002F6FE6 /* WillBookShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1B35F129133AFE002F6FE6 /* WillBookShelfViewController.swift */; };
@@ -25,8 +24,7 @@
 		6A40178C28AA284A002E62C0 /* BookShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */; };
 		6A4F48A929963D1E0044DD7F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F48A829963D1E0044DD7F /* GoogleService-Info.plist */; };
 		6A4F48B129979BAF0044DD7F /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4F48B029979BAE0044DD7F /* UIColor.swift */; };
-		6A524FF728DD789600DDEC2A /* BarCodeReaderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */; };
-		6A524FFC28DD8AB000DDEC2A /* APIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */; };
+		6A524FFC28DD8AB000DDEC2A /* GoogleBooksApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A524FFB28DD8AB000DDEC2A /* GoogleBooksApi.swift */; };
 		6A52500128DEB16600DDEC2A /* BookSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A52500028DEB16600DDEC2A /* BookSelectViewController.swift */; };
 		6A52FE10291A849C002F31B9 /* ManualInputBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A52FE0F291A849C002F31B9 /* ManualInputBookViewController.swift */; };
 		6A67E57D28C4D2860005609A /* ListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A67E57C28C4D2860005609A /* ListCollectionViewCell.swift */; };
@@ -46,7 +44,6 @@
 		6A1170ED2AADCC5B0087D17B /* GridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCollectionViewCell.swift; sourceTree = "<group>"; };
 		6A1170EF2AADCCB40087D17B /* ContentsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsCollectionViewCell.swift; sourceTree = "<group>"; };
 		6A1B35E628EF17F8002F6FE6 /* FetchBooksDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBooksDataUseCase.swift; sourceTree = "<group>"; };
-		6A1B35E828F1078D002F6FE6 /* GoogleBooksAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksAPI.swift; sourceTree = "<group>"; };
 		6A1B35EB290822CB002F6FE6 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		6A1B35EE29133AA7002F6FE6 /* MainBookShelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainBookShelfViewController.swift; sourceTree = "<group>"; };
 		6A1B35F129133AFE002F6FE6 /* WillBookShelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WillBookShelfViewController.swift; sourceTree = "<group>"; };
@@ -61,8 +58,7 @@
 		6A40178B28AA284A002E62C0 /* BookShelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookShelfViewController.swift; sourceTree = "<group>"; };
 		6A4F48A829963D1E0044DD7F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6A4F48B029979BAE0044DD7F /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
-		6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarCodeReaderModel.swift; sourceTree = "<group>"; };
-		6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIProvider.swift; sourceTree = "<group>"; };
+		6A524FFB28DD8AB000DDEC2A /* GoogleBooksApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleBooksApi.swift; sourceTree = "<group>"; };
 		6A52500028DEB16600DDEC2A /* BookSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSelectViewController.swift; sourceTree = "<group>"; };
 		6A52FE0F291A849C002F31B9 /* ManualInputBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualInputBookViewController.swift; sourceTree = "<group>"; };
 		6A67E57C28C4D2860005609A /* ListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -149,9 +145,8 @@
 		6A524FFA28DD8A8300DDEC2A /* API */ = {
 			isa = PBXGroup;
 			children = (
-				6A524FFB28DD8AB000DDEC2A /* APIProvider.swift */,
+				6A524FFB28DD8AB000DDEC2A /* GoogleBooksApi.swift */,
 				6A8E37942B6F952600E9485E /* Repository */,
-				6A1B35E828F1078D002F6FE6 /* GoogleBooksAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -201,7 +196,6 @@
 		6AF409992AA49C70005A6480 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6A524FF628DD789600DDEC2A /* BarCodeReaderModel.swift */,
 				6A67E58228CD71C90005609A /* BookShelfModel.swift */,
 			);
 			path = Model;
@@ -359,15 +353,13 @@
 				6A33DAE02969914600265AA8 /* ExplanationViewController.swift in Sources */,
 				6A67E57D28C4D2860005609A /* ListCollectionViewCell.swift in Sources */,
 				6AB0AED828AB95BA00F4CAAF /* BarCodeReaderViewController.swift in Sources */,
-				6A524FF728DD789600DDEC2A /* BarCodeReaderModel.swift in Sources */,
 				6A40177428A935C4002E62C0 /* AppDelegate.swift in Sources */,
 				6A1B35E728EF17F8002F6FE6 /* FetchBooksDataUseCase.swift in Sources */,
 				6A67E58328CD71C90005609A /* BookShelfModel.swift in Sources */,
 				6A1170EE2AADCC5B0087D17B /* GridCollectionViewCell.swift in Sources */,
 				6A1B35EF29133AA7002F6FE6 /* MainBookShelfViewController.swift in Sources */,
-				6A1B35E928F1078D002F6FE6 /* GoogleBooksAPI.swift in Sources */,
 				6A0560A129D802170017FAC3 /* UserDefaults.swift in Sources */,
-				6A524FFC28DD8AB000DDEC2A /* APIProvider.swift in Sources */,
+				6A524FFC28DD8AB000DDEC2A /* GoogleBooksApi.swift in Sources */,
 				6AF409922AA4767C005A6480 /* Notification.swift in Sources */,
 				6A1170F02AADCCB40087D17B /* ContentsCollectionViewCell.swift in Sources */,
 				6A52500128DEB16600DDEC2A /* BookSelectViewController.swift in Sources */,
@@ -514,6 +506,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -534,6 +527,7 @@
 				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ShotaYoshida.bookShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -546,6 +540,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = WRKLNWD7PJ;
@@ -565,6 +560,7 @@
 				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ShotaYoshida.bookShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

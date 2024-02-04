@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import UIKit
 
 protocol SearchBookModelDelegate: AnyObject {
     func updateCollectionView()
 }
+protocol BarCodeReaderModelDelegate: AnyObject {
+    func updateCollectionView()
+}
 
+// MARK: テキスト検索時の取得データ構造
 struct TopTier : Codable {
     var kind: String?
     var totalItems: Int?
@@ -31,14 +36,31 @@ struct ImageLinks: Codable {
     var thumbnail:String?
 }
 
+// MARK: バーコード検索時の取得データ構造
+struct Book {
+    let title:String
+    let author:String
+    let thumbnail:UIImage
+}
+
+// MARK: 本のデータを取得するユースケース
 class FetchBooksDataUseCase {
-     private let googleBooksAPI: GoogleBooksAPI
-     
-     init(googleBooksAPI: GoogleBooksAPI) {
-         self.googleBooksAPI = googleBooksAPI
-     }
-            
+    private let googleBooksAPI: GoogleBooksApi
+    
+    init(googleBooksAPI: GoogleBooksApi) {
+        self.googleBooksAPI = googleBooksAPI
+    }
+    
+    
+    private(set) var books: [Book] = []
+    
+    func addNewBook(newBook: Book) {
+        books.append(newBook)
+        barCodeReaderModelDelegate?.updateCollectionView()
+    }
     weak var searchBookDelegate: SearchBookModelDelegate? = nil //行き先未定
+    weak var barCodeReaderModelDelegate: BarCodeReaderModelDelegate? = nil //行き先未定
+    
     //アクセス制限はするが読み取りは可能でprivateよりは制限弱い
     private(set) var response: TopTier? = nil {
         //プロパティ(response)の値が変更された後に呼びたい処理を記述
@@ -56,7 +78,7 @@ class FetchBooksDataUseCase {
     }
     
     func fetchBooks(encodedString: String) {
-        let googleBooksAPI = GoogleBooksAPI(keyword: encodedString)
+        let googleBooksAPI = GoogleBooksApi(keyword: encodedString)
         //アプリケーションの根源は同期環境から始まるのでasyncなメソッドを呼び出す際にどこかで必ずTaskを使う必要がある。
         Task {
             do {
@@ -68,9 +90,22 @@ class FetchBooksDataUseCase {
             }
         }
     }
+
+    func isbnFetchBooks(isbn:String){
+        Task {
+            do {
+                let newBook = try await googleBooksAPI.getBookData1(isbn: isbn)
+                books.append(newBook)
+            } catch {
+                print(error)
+            }
+            
+            barCodeReaderModelDelegate?.updateCollectionView()
+        }
+    }
     
     func bookIsEmpty() {
-       response = nil
+        response = nil
         self.searchBookDelegate?.updateCollectionView()
-    }
+        }
 }
