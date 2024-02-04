@@ -31,7 +31,13 @@ struct ImageLinks: Codable {
     var thumbnail:String?
 }
 
-final class TextSearchBookModel {
+class FetchBooksDataUseCase {
+     private let googleBooksAPI: GoogleBooksAPI
+     
+     init(googleBooksAPI: GoogleBooksAPI) {
+         self.googleBooksAPI = googleBooksAPI
+     }
+            
     weak var searchBookDelegate: SearchBookModelDelegate? = nil //行き先未定
     //アクセス制限はするが読み取りは可能でprivateよりは制限弱い
     private(set) var response: TopTier? = nil {
@@ -49,15 +55,13 @@ final class TextSearchBookModel {
         }
     }
     
-    func getBooks(encodedString: String) {
+    func fetchBooks(encodedString: String) {
         let googleBooksAPI = GoogleBooksAPI(keyword: encodedString)
         //アプリケーションの根源は同期環境から始まるのでasyncなメソッドを呼び出す際にどこかで必ずTaskを使う必要がある。
         Task {
             do {
                 //非同期処理が完了すると、その結果が response プロパティに設定される
                 self.response = try await googleBooksAPI.getBookData()
-               
-                print(self.response)
                 //DispatchQueue.main.asyncでUI更新してgetBooks終了。
             } catch {
                 print(error)
